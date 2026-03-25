@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 
 const slides = [
-  '/img/foto_noiva1.png',
+  '/img/noiva1.png',
   '/img/formanda1.png'
 ]
 
@@ -15,6 +15,8 @@ function nextSlide() {
 function prevSlide() {
   index.value = (index.value - 1 + slides.length) % slides.length
 }
+
+setInterval(nextSlide, 3000)
 </script>
 
 <template>
@@ -34,10 +36,10 @@ function prevSlide() {
 
 <style scoped>
 .carrossel-principal {
-  position: relative;
+  position: absolute;
   width: 100%;
-  max-width: 600px;
-  height: 400px;
+  max-width: 100%;
+  height: 100%;
   margin: 0 auto;
   overflow: hidden;
   display: flex;
@@ -46,7 +48,7 @@ function prevSlide() {
 }
 
 img {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -62,7 +64,7 @@ button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
+  background: none;
   color: white;
   border: none;
   padding: 10px;
