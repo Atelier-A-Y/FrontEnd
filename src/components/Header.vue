@@ -4,9 +4,9 @@
 
 <template>
 
-    <header>
+    <header class="header">
 
-        <img src="/img/android-chrome-512x512.png" alt="">
+        <img src="/img/android-chrome-512x512.png" width="75" height="75" alt="">
 
     </header>
 
@@ -14,10 +14,11 @@
 
 <style scoped>
 
-header{
-    color: #F5E9E0;
-    position: fixed;
-    
+.header{
+  position: fixed;
+  background: #F5E9E0;
+  width: 100%;
+  padding-left: 2.5vw;
 }
 
 </style>
