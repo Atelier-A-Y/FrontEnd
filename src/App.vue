@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import HomeView from './views/HomeView.vue';
+import CarrosselComponent from './components/icons/CarrosselComponent.vue';
 </script>
 
 <template>
-  <HomeView />
+  <CarrosselComponent />
 </template>
