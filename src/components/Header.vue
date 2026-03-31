@@ -36,7 +36,7 @@
         
             <li class="globo">
             
-            <button></button>
+            <a href=""><img src="/public/img/v2_watermarked-83d3f09e-1569-4298-b0a2-001ef2c9d07f.jpg" alt="" width="40" height="40"></a>
             
             </li>
         
