@@ -57,9 +57,15 @@ const onInput = () => {
 
         <ul class="direito">
         
-            <li class="globo">
+            <li>
             
-            <a href=""><img src="/public/img/v2_watermarked-83d3f09e-1569-4298-b0a2-001ef2c9d07f.jpg" alt="" width="40" height="40"></a>
+            <button class="globo"><img src="/public/img/v2_watermarked-83d3f09e-1569-4298-b0a2-001ef2c9d07f.jpg" alt="" width="40" height="40"></button>
+            
+            </li>
+
+            <li class="user">
+            
+                <button></button>
             
             </li>
         
@@ -151,6 +157,16 @@ padding-left: 1.8vw;
 .direito{
 
 list-style-type: none;
+
+}
+
+.globo{
+
+background-color: transparent;
+  border: none;
+  text-decoration: none;
+  outline: none;
+  box-shadow: none;
 
 }
 
