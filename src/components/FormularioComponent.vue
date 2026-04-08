@@ -13,14 +13,14 @@ function entrar(){
   <form @submit.prevent="entrar">
     <div class="fundo">
 
-    <img src="/public/css/modelo2.png" alt="bg modelo2">
-    <img src="/public/css/modelo3.png" alt="bg modelo3">
-    <img src="/public/css/modelo5.png" alt="bg modelo5">
-    <img src="/public/css/modelo8.png" alt="bg modelo8">
-    <img src="/public/css/modelo10.png" alt="bg modelo10">
-    <img src="/public/css/modelo11.png" alt="bg modelo11">
-    <img src="/public/css/modelo12.png" alt="bg modelo12">
-    <img src="/public/css/modelo13.png" alt="bg modelo13">
+    <img src="/css/modelo2.png" class="bg modelo2">
+    <img src="/css/modelo3.png" class="bg modelo3">
+    <img src="/css/modelo5.png" class="bg modelo5">
+    <img src="/css/modelo8.png" class="bg modelo8">
+    <img src="/css/modelo10.png" class="bg modelo10">
+    <img src="/css/modelo11.png" class="bg modelo11">
+    <img src="/css/modelo12.png" class="bg modelo12">
+    <img src="/css/modelo13.png" class="bg modelo13">
 
       <div class="formulario">
         <div for="email">
@@ -51,50 +51,92 @@ function entrar(){
 
 .fundo {
   position: relative;
-  width: 100%;
-  height: 100vh;
+  width: 1532px;
+  height: 780px;
   overflow: hidden;
-  background: #cfc5bc;
+  background: black;
 }
 
 .bg {
   position: absolute;
   object-fit: cover;
+  opacity: 0.9;
+  z-index: 1;
 }
 
+/* topo esquerda */
 .modelo2 {
-  width: 300px;
-  top: -50px;
-  left: -80px;
+  width: 260px;
+  top: -23.27px;
+  left: 643.62px;
 }
 
+/* topo direita */
 .modelo3 {
-  width: 350px;
-  top: 100px;
-  right: -100px;
+  width: 450px;
+  top: -140.85px;
+  right: -80px;
 }
 
+/* meio esquerda */
 .modelo5 {
-  width: 280px;
-  bottom: -60px;
-  left: 100px;
+  width: 700px;
+  top: -400px;
+  left: 530px;
 }
 
+/* meio direita */
 .modelo8 {
-  width: 320px;
-  bottom: 0;
-  right: 50px;
+  width: 260px;
+  top: 220px;
+  right: -60px;
+}
+
+/* baixo esquerda */
+.modelo10 {
+  width: 280px;
+  bottom: -40px;
+  left: 40px;
+}
+
+/* baixo direita */
+.modelo11 {
+  width: 260px;
+  bottom: -20px;
+  right: 20px;
+}
+
+/* fundo espalhado */
+.modelo12 {
+  width: 220px;
+  bottom: 100px;
+  left: 200px;
+}
+
+/* outro fundo */
+.modelo13 {
+  width: 220px;
+  top: 120px;
+  right: 200px;
 }
 
 .overlay {
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.4);
+  z-index: 2;
 }
 
 .formulario{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #F5E9E0;
-  padding: 20vw;
+  padding: 40px;
+  border-radius: 20px;
+  width: 350px;
+  z-index: 3;
 }
 
 div {
