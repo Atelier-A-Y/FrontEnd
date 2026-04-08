@@ -10,6 +10,7 @@ function entrar(){
 </script>
 
 <template>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <form @submit.prevent="entrar">
     <div class="fundo">
 
@@ -22,7 +23,15 @@ function entrar(){
     <img src="/css/modelo12.png" class="bg modelo12">
     <img src="/css/modelo13.png" class="bg modelo13">
 
+    <div class="overlay"></div>
+
       <div class="formulario">
+
+        <div class="logo">
+        <p class="nome1">ATELIER</p>
+        <p class="nome2">A.Y</p>
+      </div>
+
         <div for="email">
           <input
             id="email"
@@ -43,11 +52,21 @@ function entrar(){
 
         <button type="submit">Entrar</button>
       </div>
-    </div>
+      </div>
   </form>
 </template>
 
 <style scoped>
+
+
+.nome1{
+  color: rgb(110, 29, 19);
+  font-size: 18px;
+  font-family: "Bodoni Moda", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
 
 .fundo {
   position: relative;
@@ -64,79 +83,85 @@ function entrar(){
   z-index: 1;
 }
 
-/* topo esquerda */
 .modelo2 {
-  width: 260px;
-  top: -23.27px;
-  left: 643.62px;
+  width: 600px;
+  top: 300px;
+  left: 360px;
 }
 
-/* topo direita */
 .modelo3 {
   width: 450px;
-  top: -140.85px;
-  right: -80px;
+  top: -310.85px;
+  right: -70px;
 }
 
-/* meio esquerda */
 .modelo5 {
   width: 700px;
-  top: -400px;
-  left: 530px;
+  top: -420px;
+  left: 570px;
 }
 
-/* meio direita */
 .modelo8 {
-  width: 260px;
-  top: 220px;
-  right: -60px;
+  width: 700px;
+  top: 280px;
+  right: -20px;
 }
 
-/* baixo esquerda */
 .modelo10 {
-  width: 280px;
-  bottom: -40px;
-  left: 40px;
+  width: 600px;
+  bottom: -80px;
+  left: 1350px;
 }
 
-/* baixo direita */
 .modelo11 {
-  width: 260px;
-  bottom: -20px;
-  right: 20px;
+  width: 550px;
+  bottom: 350px;
+  right: 1300px;
 }
 
-/* fundo espalhado */
 .modelo12 {
-  width: 220px;
-  bottom: 100px;
-  left: 200px;
+  width: 550px;
+  bottom: 400px;
+  left: 150px;
 }
 
-/* outro fundo */
 .modelo13 {
-  width: 220px;
-  top: 120px;
-  right: 200px;
+  width: 650px;
+  top: 380px;
+  right: 1040px;
 }
 
 .overlay {
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(245, 233, 224, 0.6);
+  backdrop-filter: blur(0.3px);
   z-index: 2;
 }
 
-.formulario{
+.formulario {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -40%);
   background-color: #F5E9E0;
-  padding: 40px;
+  padding: 60px;
   border-radius: 20px;
   width: 350px;
   z-index: 3;
+  opacity: 0;
+  animation: aparecer 0.8s ease forwards;
+}
+
+@keyframes aparecer {
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
 }
 
 div {
