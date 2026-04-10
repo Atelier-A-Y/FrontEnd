@@ -57,15 +57,27 @@ function entrar(){
 </template>
 
 <style scoped>
-
+.logo{
+  padding: 0 0 3vw 4.5vw;
+}
 
 .nome1{
   color: rgb(110, 29, 19);
-  font-size: 18px;
+  font-size: 15px;
   font-family: "Bodoni Moda", serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+}
+
+.nome2{
+  color: rgb(110, 29, 19);
+  font-size: 12px;
+  font-family: "Bodoni Moda", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  padding: 0 0 0 1vw;
 }
 
 .fundo {
