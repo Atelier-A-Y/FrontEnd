@@ -82,8 +82,8 @@ function entrar(){
 
 .fundo {
   position: relative;
-  width: 1532px;
-  height: 780px;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
   background: black;
 }
@@ -91,56 +91,58 @@ function entrar(){
 .bg {
   position: absolute;
   object-fit: cover;
+  max-width: none;
+  height: auto;
   opacity: 0.9;
   z-index: 1;
 }
 
 .modelo2 {
-  width: 600px;
-  top: 300px;
-  left: 360px;
+  width: 40vw;
+  top: 35vh;
+  right: 37vw;
 }
 
 .modelo3 {
-  width: 450px;
-  top: -310.85px;
-  right: -70px;
+  width: 40vw;
+  bottom: 73vh;
+  left: 71vw;
 }
 
 .modelo5 {
-  width: 700px;
-  top: -420px;
-  left: 570px;
+  width: 47vw;
+  bottom: 46vh;
+  left: 36vw;
 }
 
 .modelo8 {
-  width: 700px;
-  top: 280px;
-  right: -20px;
+  width: 47vw;
+  top: 35vh;
+  left: 55vw;
 }
 
 .modelo10 {
-  width: 600px;
-  bottom: -80px;
-  left: 1350px;
+  width: 40vw;
+  top: 14vh;
+  left: 88vw;
 }
 
 .modelo11 {
-  width: 550px;
-  bottom: 350px;
-  right: 1300px;
+  width: 40vw;
+  bottom: 43vh;
+  right: 85vw;
 }
 
 .modelo12 {
-  width: 550px;
-  bottom: 400px;
-  left: 150px;
+  width: 37vw;
+  bottom: 52vh;
+  right: 54.5vw;
 }
 
 .modelo13 {
-  width: 650px;
-  top: 380px;
-  right: 1040px;
+  width: 40vw;
+  top: 45vh;
+  right: 68vw;
 }
 
 .overlay {
@@ -159,12 +161,22 @@ function entrar(){
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -40%);
+  transform: translate(-50%, -50%);
+
   background-color: #F5E9E0;
-  padding: 60px;
+
+  width: 90%;
+  max-width: 380px;
+
+  padding: clamp(20px, 4vw, 60px);
   border-radius: 20px;
-  width: 350px;
+
   z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
   opacity: 0;
   animation: aparecer 0.8s ease forwards;
 }
