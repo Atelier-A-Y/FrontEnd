@@ -28,11 +28,12 @@ function entrar(){
       <div class="formulario">
 
         <div class="logo">
+        <img src="/css/logo.png" alt="logo.png" width="76" height="77">
         <p class="nome1">ATELIER</p>
         <p class="nome2">A.Y</p>
       </div>
 
-        <div for="email">
+        <div class="campo">
           <input
             id="email"
             type="email"
@@ -41,7 +42,7 @@ function entrar(){
           />
         </div>
 
-        <div for="senha">
+        <div class="campo">
           <input
             id="senha"
             type="password"
@@ -51,6 +52,10 @@ function entrar(){
         </div>
 
         <button type="submit">Entrar</button>
+
+        <div class="cadastro-link">
+        <p>Não possui uma conta? Clique <a href="..">Aqui!</a></p>
+        </div>
       </div>
       </div>
   </form>
@@ -58,7 +63,8 @@ function entrar(){
 
 <style scoped>
 .logo{
-  padding: 0 0 3vw 4.5vw;
+  text-align: center;
+  padding-bottom: 10px;
 }
 
 .nome1{
@@ -77,7 +83,6 @@ function entrar(){
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  padding: 0 0 0 1vw;
 }
 
 .fundo {
@@ -158,80 +163,89 @@ function entrar(){
 }
 
 .formulario {
+  align-items: stretch;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   background-color: #F5E9E0;
-
   width: 90%;
+  padding: 40px 30px;
   max-width: 380px;
-
-  padding: clamp(20px, 4vw, 60px);
   border-radius: 20px;
-
   z-index: 3;
-
   display: flex;
   flex-direction: column;
   gap: 15px;
-
   opacity: 0;
-  animation: aparecer 0.8s ease forwards;
+  animation: entrada 0.3s ease forwards;
+  animation-delay: 0.3s;
+  box-shadow: 0 4px 2px 0 #1e1e1e7c;
 }
 
-@keyframes aparecer {
+@keyframes entrada {
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
   }
 }
 
-div {
-  margin-bottom: 15px;
+.campo {
   display: flex;
   flex-direction: column;
-}
-
-label {
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #333;
+  gap: 5px;
+  padding: 5px;
 }
 
 input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
   font-size: 14px;
-  transition: border 0.2s, box-shadow 0.2s;
+  background: #fff;
 }
 
-input:focus{
-  border-color: #3b82f6;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+input:focus {
+  box-shadow: 0 0 0 2px rgba(110, 29, 19, 0.15);
 }
 
 button {
-  padding: 10px;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
+  background-color: #F5E9E0;
+  color: #311111;
+  border-radius: 8px;
+  width: auto;
+  align-self: center;
+  padding: 10px 25px;
+  font-weight: 500;
+  transition: 0.2s;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 button:hover {
-  background-color: #2563eb;
+  background-color: #311111;
+  color: #F5E9E0;
+  border-color: #F5E9E0;
 }
 
 p {
   font-size: 13px;
   margin-top: -10px;
   margin-bottom: 10px;
+}
+
+.cadastro-link{
+  text-align: center;
+}
+
+.cadastro-link p{
+  color: #595858;
+  font-size: 13px;
+  padding: 10px 0 0 0;
+}
+
+.cadastro-link a{
+  color: #311111;
+  text-decoration: none;
 }
 </style>
