@@ -8,27 +8,25 @@ const senha = ref('')
 
 async function cadastrar(){
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/registro/', {
+    await axios.post('http://127.0.0.1:8000/api/registro/', {
       name: nome.value,
       email: email.value,
       password: senha.value,
     })
 
-    console.log(response.data)
+    const response = await axios.post('http://127.0.0.1:8000/api/token/', {
+      email: email.value,
+      password: senha.value
+    })
 
-    alert('Cadastro realizado com sucesso!')
+    const token = response.data.access
+    localStorage.setItem('token', token)
 
-    // opcional: redirecionar para login
-    window.location.href = '/login'
+    window.location.href = '/home'
 
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error(error.response?.data)
-      alert('Erro ao cadastrar')
-    } else {
-      console.error(error)
-      alert('Erro inesperado')
-    }
+  } catch (error) {
+    console.error(error)
+    alert('Erro no cadastro')
   }
 }
 </script>
@@ -84,7 +82,10 @@ async function cadastrar(){
           />
         </div>
 
-        <button type="submit">Entrar</button>
+        <div class="btn-cadastro">
+          <button type="submit">Entrar</button>
+          <button type="reset">Limpar</button>
+        </div>
       </div>
     </div>
   </form>
@@ -197,7 +198,7 @@ async function cadastrar(){
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #F5E9E0;
+  background-color: #F5E6DE;
   width: 90%;
   padding: 40px 30px;
   max-width: 380px;
@@ -239,8 +240,14 @@ input:focus {
   box-shadow: 0 0 0 2px rgba(110, 29, 19, 0.15);
 }
 
+.btn-cadastro{
+  margin-top: 2vw;
+  display: flex;
+  justify-content: space-between;
+}
+
 button {
-  background-color: #F5E9E0;
+  background-color: #F5E6DE;
   color: #311111;
   border-radius: 8px;
   width: auto;
@@ -253,28 +260,13 @@ button {
 
 button:hover {
   background-color: #311111;
-  color: #F5E9E0;
-  border-color: #F5E9E0;
+  color: #F5E6DE;
+  border-color: #F5E6DE;
 }
 
 p {
   font-size: 13px;
   margin-top: -10px;
   margin-bottom: 10px;
-}
-
-.cadastro-link{
-  text-align: center;
-}
-
-.cadastro-link p{
-  color: #595858;
-  font-size: 13px;
-  padding: 10px 0 0 0;
-}
-
-.cadastro-link a{
-  color: #311111;
-  text-decoration: none;
 }
 </style>

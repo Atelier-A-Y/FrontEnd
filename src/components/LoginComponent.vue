@@ -16,7 +16,7 @@ const token = response.data.access
 
 localStorage.setItem('token', token)
 
-alert('Login feito com sucesso!')
+window.location.href = '/home'
   } catch (error: unknown) {
   if (axios.isAxiosError(error)) {
     console.error(error.response?.data)
@@ -73,7 +73,7 @@ alert('Login feito com sucesso!')
         <button type="submit">Entrar</button>
 
         <div class="cadastro-link">
-        <p>Não possui uma conta? Clique <a href="../components/CadastroComponent.vue">Aqui!</a></p>
+        <p>Não possui uma conta? Clique <router-link to="/cadastrar">Aqui!</router-link></p>
         </div>
       </div>
       </div>
@@ -187,7 +187,7 @@ alert('Login feito com sucesso!')
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #F5E9E0;
+  background-color: #F5E6DE;
   width: 90%;
   padding: 40px 30px;
   max-width: 380px;
@@ -230,7 +230,7 @@ input:focus {
 }
 
 button {
-  background-color: #F5E9E0;
+  background-color: #F5E6DE;
   color: #311111;
   border-radius: 8px;
   width: auto;
@@ -243,8 +243,8 @@ button {
 
 button:hover {
   background-color: #311111;
-  color: #F5E9E0;
-  border-color: #F5E9E0;
+  color: #F5E6DE;
+  border-color: #F5E6DE;
 }
 
 p {

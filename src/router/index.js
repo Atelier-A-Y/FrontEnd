@@ -9,6 +9,10 @@ const routes = [
   {
     path: '/cadastrar',
     component: () => import('../components/CadastroComponent.vue')
+  },
+  {
+    path: '/home',
+    component: () => import('../components/HomeComponent.vue')
   }
 ]
 
