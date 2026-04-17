@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import FormularioComponent from "./components/FormularioComponent.vue";
+import LoginComponent from "./components/LoginComponent.vue";
 </script>
 
 <template>
-  <FormularioComponent />
+  <LoginComponent />
 </template>

@@ -1,17 +1,41 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import axios from 'axios'
 
+const nome = ref('');
 const email = ref('');
 const senha = ref('')
 
-function entrar(){
-  console.log({ Email: email.value, Senha: senha.value})
+async function cadastrar(){
+  try {
+    const response = await axios.post('http://127.0.0.1:8000/api/registro/', {
+      name: nome.value,
+      email: email.value,
+      password: senha.value,
+    })
+
+    console.log(response.data)
+
+    alert('Cadastro realizado com sucesso!')
+
+    // opcional: redirecionar para login
+    window.location.href = '/login'
+
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error(error.response?.data)
+      alert('Erro ao cadastrar')
+    } else {
+      console.error(error)
+      alert('Erro inesperado')
+    }
+  }
 }
 </script>
 
 <template>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <form @submit.prevent="entrar">
+  <form @submit.prevent="cadastrar">
     <div class="fundo">
 
     <img src="/css/modelo2.png" class="bg modelo2">
@@ -34,6 +58,15 @@ function entrar(){
       </div>
 
         <div class="campo">
+        <input
+            id="nome"
+            type="text"
+            v-model="nome"
+            placeholder="Digite seu nome..."
+          />
+        </div>
+
+        <div class="campo">
           <input
             id="email"
             type="email"
@@ -44,7 +77,7 @@ function entrar(){
 
         <div class="campo">
           <input
-            id="senha"
+            id="password"
             type="password"
             v-model="senha"
             placeholder="Digite sua senha..."
@@ -52,12 +85,8 @@ function entrar(){
         </div>
 
         <button type="submit">Entrar</button>
-
-        <div class="cadastro-link">
-        <p>Não possui uma conta? Clique <a href="..">Aqui!</a></p>
-        </div>
       </div>
-      </div>
+    </div>
   </form>
 </template>
 
