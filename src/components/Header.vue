@@ -3,6 +3,8 @@ import { ref, computed } from "vue";
 
 const keyword = ref("");
 
+const showDropdown = ref(false);
+
 const data = ref(["Casamento", "Madrinha", "Baile", "Noiva", "Festa", "Formatura"]);
 
 const filteredResults = computed(() => {
@@ -16,41 +18,45 @@ const filteredResults = computed(() => {
 const selectResult = (result) => {
   keyword.value = result;
 };
-
-const onInput = () => {};
 </script>
 
 <template>
-  <header class="header">
-    <div>
+  <header>
+    <div class="header">
       <div class="logo">
         <img src="/public/img/logo.png" width="85" height="85" alt="img-logo" />
         <div class="texto">
           <p class="titulo">Atelier</p>
-           <p class="sigla">A.Y.</p>
+          <p class="sigla">A.Y.</p>
         </div>
       </div>
 
-      <ul class="icones">
-        <li>
-          <a href="#" class="globo">
-            <img src="/public/img/globo.jpg" alt="img-globo" width="40" height="40"
-          /></a>
-        </li>
-        <li class="user">
-          <a href="#">
-            <img src="/public/img/user.png" alt="usuário" width="40" height="40"
-          /></a>
-        </li>
-      </ul>
-
+      <div class="dropdown" @click="showDropdown = !showDropdown">
+        <a href="#" class="globo">
+          <img src="/public/img/globo.jpg" alt="img-globo" width="40" height="40"
+        /></a>
+        <div v-if="showDropdown" class="submenu">
+          <ul class="cima">
+            <li><RouterLink to="/">Àfrica</RouterLink></li>
+            <li><RouterLink to="/">América</RouterLink></li>
+            <li><RouterLink to="/">Àsia</RouterLink></li>
+          </ul>
+          <ul class="baixo">
+            <li><RouterLink to="/">Europa</RouterLink></li>
+            <li><RouterLink to="/">Oceania</RouterLink></li>
+          </ul>
+        </div>
+      </div>
+      
       <div class="search-container">
         <input
           type="text"
           v-model="keyword"
-          placeholder="O que você procura?"
+          placeholder="Buscar..."
           class="search-input"
         />
+
+        <img src="/public/img/lupa.png" alt="pesquisa" width="38" height="38" />
 
         <ul v-if="filteredResults.length > 0" class="results-list">
           <li
@@ -59,90 +65,162 @@ const onInput = () => {};
             @click="selectResult(result)"
             class="result-item"
           >
-            <span class="item-icon">✨</span>
+            <span class="item-icon"
+              ><img src="/public/img/lupa.png" alt="lupinha" width="20" height="20"
+            /></span>
             <span class="item-text">{{ result }}</span>
           </li>
         </ul>
       </div>
+
+      <ul class="icones">
+        <li class="user">
+          <a href="#">
+            <img src="/public/img/user.png" alt="usuário" width="41" height="41" />
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <img
+              src="/public/img/minha-sacola-de-compras.png"
+              alt="sacola-de-compras"
+              width="39"
+              height="39"
+            />
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <img
+              src="/public/img/coracao.png"
+              alt="pag-favoritos"
+              width="39"
+              height="39"
+            />
+          </a>
+        </li>
+      </ul>
     </div>
   </header>
 </template>
 
 <style scoped>
-.header {
+header {
   position: fixed;
   background: #f5e6de;
   width: 100%;
   padding-left: 2.5vw;
+  align-items: center;
 }
 
-div {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-img {
-  margin-top: 0.9vw;
-}
-
-div.texto {
-  margin-top: 1.3vw;
-  margin-bottom: 1vw;
-  color: #84453d;
-  font-family: "Playfair Display", serif;
-  margin-left: -2vw;
+.logo {
   display: flex;
 }
 
+.logo img {
+  margin-top: 0.7vw;
+  margin-bottom: 0.7vw;
+}
+
+.texto {
+  margin-top: 1.2vw;
+}
+
 .titulo {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   color: #84453d;
-  font-family: "Libre Bodoni", serif;
+  font-family: "Playfair Display", serif;
   font-weight: 100;
 }
 
 .sigla {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #84453d;
-  font-family: "Libre Bodoni", serif;
+  font-family: "Playfair Display", serif;
   font-weight: 100;
-  letter-spacing: 0.11em;
-  list-style-type: none;
-  margin-top: -1vw;
-  padding-left: 1.8vw;
+  margin-top: -0.5vw;
+  margin-left: 0.9vw;
 }
 
 .icones {
   list-style-type: none;
   display: flex;
   justify-content: space-between;
+  margin-right: 6vw;
 }
 
-.globo {
-  background-color: transparent;
-  border: none;
+.icones li a {
+  margin-right: 2vw;
+}
+
+div a.globo {
+  margin-left: 34vw;
+  margin-right: -2vw;
+}
+
+.submenu {
+  position: absolute;
+  top: 5vw;
+  left: 50vw;
+  background: white;
+  margin: 0;
+  padding: 8px 25px 8px 10px;
+  border-radius: 6px;
+  min-width: 180px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cima {
+  display: flex;
+}
+
+.baixo {
+  display: flex;
+}
+
+.submenu li {
+  padding: 8px 25px;
+  margin-left: 1vw;
+
+}
+
+.submenu li a {
+  color: #311111;
+  font-weight: 500;
+  display: block;
   text-decoration: none;
-  outline: none;
-  box-shadow: none;
+}
+
+.submenu li a:hover {
+  background: #f1f1f1;
+  color: #311111;
+  font-weight: bold;
 }
 
 .search-container {
-  position: absolute;
+  display: flex;
+  margin: 0 -10vw 0 -6vw;
   right: 80px;
   top: 30px;
-  width: 250px;
+  width: 350px;
   font-family: "Libre Bodoni", serif;
 }
 
 .search-input {
   width: 100%;
-  padding: 10px 15px;
-  border: 1px solid #84453d;
-  border-radius: 20px;
+  padding: 10px 5px;
+  border: none;
+  border-bottom: 1px solid #84453d;
   background: transparent;
   color: #84453d;
   outline: none;
+  font-size: 1.1rem;
 }
 
 .search-input::placeholder {
@@ -151,8 +229,8 @@ div.texto {
 
 .results-list {
   position: absolute;
-  width: 100%;
-  margin-top: 5px;
+  width: 16%;
+  margin-top: 3vw;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
