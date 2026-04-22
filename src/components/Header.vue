@@ -160,7 +160,7 @@ header {
 }
 
 div a.globo {
-  margin-left: 34vw;
+  margin-left: 30vw;
   margin-right: -2vw;
 }
 

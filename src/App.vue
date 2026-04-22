@@ -1,7 +1,17 @@
 <script setup>
-import Header from './components/Header.vue'
+import Teste from './components/Teste.vue'
 </script>
 
 <template>
-  <Header />
+  <Teste />
+  <main class="content">
+     <RouterView />
+  </main>
 </template>
+
+<style>
+.content {
+  margin-top: 10vw; 
+  padding: 20px;
+}
+</style>
