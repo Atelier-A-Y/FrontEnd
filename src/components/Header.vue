@@ -1,30 +1,59 @@
 <script setup>
 import { ref, computed } from "vue";
-
-const keyword = ref("");
+import { useRouter } from "vue-router";
 
 const showDropdown = ref(false);
+const router = useRouter();
+const pesquisa = ref("");
+const indexAtivo = ref(-1);
 
-const data = ref(["Casamento", "Madrinha", "Baile", "Noiva", "Festa", "Formatura"]);
+const navegacao = ref([
+  { id: "1", nome: "Casamento", rota: "/casamento" },
+  { id: "2", nome: "Formatura", rota: "/" },
+  { id: "3", nome: "Festa", rota: "/" },
+  { id: "4", nome: "Madrinha", rota: "/" },
+  { id: "5", nome: "Baile", rota: "/" },
+  { id: "6", nome: "Noiva", rota: "/" },
+]);
 
-const filteredResults = computed(() => {
-  if (keyword.value === "") return [];
-
-  return data.value.filter((item) =>
-    item.toLowerCase().includes(keyword.value.toLowerCase())
-  );
+const resultados = computed(() => {
+  const termo = pesquisa.value.trim().toLowerCase();
+  if (!termo) return [];
+  return navegacao.value.filter((o) => o.nome.toLowerCase().includes(termo));
 });
 
-const selectResult = (result) => {
-  keyword.value = result;
-};
+function abrirNavegacao(item) {
+  if (!item) return;
+  router.push(item.rota);
+  pesquisa.value = "";
+  indexAtivo.value = -1;
+}
+
+function navegar(e) {
+  if (resultados.value.length === 0) return;
+
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    indexAtivo.value = (indexAtivo.value + 1) % resultados.value.length;
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    indexAtivo.value = (indexAtivo.value - 1 + resultados.value.length) % resultados.value.length;
+  } else if (e.key === "Enter") {
+    e.preventDefault();
+    if (indexAtivo.value >= 0) {
+      abrirNavegacao(resultados.value[indexAtivo.value]);
+    } else {
+      abrirNavegacao(resultados.value[0]);
+    }
+  }
+}
 </script>
 
 <template>
   <header>
     <div class="header">
       <div class="logo">
-        <img src="/public/img/logo.png" width="85" height="85" alt="img-logo" />
+        <img src="/img/logo.png" width="85" height="85" alt="img-logo" />
         <div class="texto">
           <p class="titulo">Atelier</p>
           <p class="sigla">A.Y.</p>
@@ -33,13 +62,13 @@ const selectResult = (result) => {
 
       <div class="dropdown" @click="showDropdown = !showDropdown">
         <a href="#" class="globo">
-          <img src="/public/img/globo.jpg" alt="img-globo" width="40" height="40"
-        /></a>
+          <img src="/img/globo.jpg" alt="img-globo" width="40" height="40" />
+        </a>
         <div v-if="showDropdown" class="submenu">
           <ul class="cima">
-            <li><RouterLink to="/">Àfrica</RouterLink></li>
+            <li><RouterLink to="/">África</RouterLink></li>
             <li><RouterLink to="/">América</RouterLink></li>
-            <li><RouterLink to="/">Àsia</RouterLink></li>
+            <li><RouterLink to="/">Ásia</RouterLink></li>
           </ul>
           <ul class="baixo">
             <li><RouterLink to="/">Europa</RouterLink></li>
@@ -47,57 +76,43 @@ const selectResult = (result) => {
           </ul>
         </div>
       </div>
-      
+
       <div class="search-container">
         <input
           type="text"
-          v-model="keyword"
+          v-model="pesquisa"
           placeholder="Buscar..."
-          class="search-input"
-        />
-
-        <img src="/public/img/lupa.png" alt="pesquisa" width="38" height="38" />
-
-        <ul v-if="filteredResults.length > 0" class="results-list">
-          <li
-            v-for="(result, index) in filteredResults"
-            :key="index"
-            @click="selectResult(result)"
-            class="result-item"
-          >
-            <span class="item-icon"
-              ><img src="/public/img/lupa.png" alt="lupinha" width="20" height="20"
-            /></span>
-            <span class="item-text">{{ result }}</span>
-          </li>
-        </ul>
+          @keydown="navegar"
+          class="search-input" 
+        /><img src="/img/lupa.png" alt="pesquisa" width="38" height="38" />
+        
+        <div class="results-list" v-if="resultados.length">
+          <ul>
+            <li
+              v-for="(item, index) in resultados"
+              :key="item.id"
+              :class="{ ativo: index === indexAtivo }"
+              @click="abrirNavegacao(item)"
+              class="result-item"
+            >
+              <span class="item-icon">
+                <img src="/img/lupa.png" alt="lupinha" width="20" height="20" />
+              </span>
+              <span class="item-text">{{ item.nome }}</span>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <ul class="icones">
         <li class="user">
-          <a href="#">
-            <img src="/public/img/user.png" alt="usuário" width="41" height="41" />
-          </a>
+          <a href="#"><img src="/img/user.png" alt="usuário" width="41" height="41" /></a>
         </li>
         <li>
-          <a href="#">
-            <img
-              src="/public/img/minha-sacola-de-compras.png"
-              alt="sacola-de-compras"
-              width="39"
-              height="39"
-            />
-          </a>
+          <a href="#"><img src="/img/minha-sacola-de-compras.png" alt="sacola" width="39" height="39" /></a>
         </li>
         <li>
-          <a href="#">
-            <img
-              src="/public/img/coracao.png"
-              alt="pag-favoritos"
-              width="39"
-              height="39"
-            />
-          </a>
+          <a href="#"><img src="/img/coracao.png" alt="favoritos" width="39" height="39" /></a>
         </li>
       </ul>
     </div>
@@ -107,10 +122,12 @@ const selectResult = (result) => {
 <style scoped>
 header {
   position: fixed;
+  top: 0;
+  left: 0;
   background: #f5e6de;
   width: 100%;
-  padding-left: 2.5vw;
-  align-items: center;
+  padding: 0 2.5vw;
+  z-index: 999;
 }
 
 .header {
@@ -187,7 +204,6 @@ div a.globo {
 .submenu li {
   padding: 8px 25px;
   margin-left: 1vw;
-
 }
 
 .submenu li a {
