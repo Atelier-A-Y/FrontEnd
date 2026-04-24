@@ -79,50 +79,50 @@ setInterval(nextSlide, 4000)
 
 .marca1-noiva{
   position: absolute;
-  bottom: 64%;
-  right: 68%;
+  bottom: 73%;
+  right: 67%;
   color: rgb(255, 255, 255);
-  font-size: 2rem;
+  font-size: clamp(1.5vw, 1.5vw, 1.5vw);
   z-index: 2;
   font-family: "Noto Rashi Hebrew", serif;
   font-optical-sizing: auto;
   font-style: normal;
-  text-shadow: 3.5px 0px 5px #f9bc8a;
+  text-shadow: 0.2vw 0vw 0.2vw #f9bc8a;
 }
 
 .marca2-noiva{
   position: absolute;
-  bottom: 60%;
-  right: 71%;
+  bottom: 70%;
+  right: 69%;
   color: white;
-  font-size: 1.7rem;
+  font-size: clamp(1.3vw, 1.3vw, 1.3vw);
   z-index: 2;
   font-family: "Noto Rashi Hebrew", serif;
   font-optical-sizing: auto;
   font-style: normal;
-  text-shadow: 3.5px 0px 5px #f9bc8a;
+  text-shadow: 0.2vw 0vw 0.2vw #f9bc8a;
 }
 
 .texto-noiva {
   position: absolute;
-  bottom: 42%;
+  bottom: 52%;
   right: 50%;
   color: rgb(255, 244, 232);
-  font-size: 6rem;
+  font-size: clamp(6vw, 6vw, 6vw);
   z-index: 2;
   font-family: "Lexend Deca", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  letter-spacing: 4px;
-  text-shadow: 0px 4px 20px #f8ceac;
+  letter-spacing: 0.2vw;
+  text-shadow: 0vw 0.2vw 1.5vw #f8ceac;
 }
 
 .subtexto-noiva{
   position: absolute;
-  bottom: 40%;
-  right: 58%;
+  bottom: 50%;
+  right: 57%;
   color: #e7d3c3;
-  font-size: 2rem;
+  font-size: clamp(2vw, 2vw, 2vw);
   z-index: 2;
   font-family: "Nanum Myeongjo", serif;
   font-weight: 400;
@@ -135,48 +135,48 @@ setInterval(nextSlide, 4000)
 
 .marca1-formanda{
   position: absolute;
-  bottom: 64%;
+  bottom: 73%;
   right: 67%;
   color: rgb(255, 255, 255);
-  font-size: 2rem;
+  font-size: clamp(1.5vw, 1.5vw, 1.5vw);
   z-index: 2;
   font-family: "Noto Rashi Hebrew", serif;
   font-optical-sizing: auto;
   font-style: normal;
-  text-shadow: 3.5px 0px 5px #8a8af9;
+  text-shadow: 0.2vw 0vw 0.2vw #8a8af9;
 }
 
 .marca2-formanda{
   position: absolute;
-  bottom: 60%;
-  right: 70%;
+  bottom: 70%;
+  right: 69%;
   color: white;
-  font-size: 1.7rem;
+  font-size: clamp(1.3vw, 1.3vw, 1.3vw);
   z-index: 2;
   font-family: "Noto Rashi Hebrew", serif;
   font-optical-sizing: auto;
   font-style: normal;
-  text-shadow: 3.5px 0px 5px #8a8af9;
+  text-shadow: 0.2vw 0vw 0.2vw #8a8af9;
 }
 
 .texto-formanda {
   position: absolute;
-  bottom: 42%;
+  bottom: 52%;
   right: 50%;
   color: #ffffff;
-  font-size: 6rem;
+  font-size: clamp(6vw, 6vw, 6vw);
   z-index: 2;
   font-family: 'Antic Didone', serif;
-  letter-spacing: 8px;
-  text-shadow: 0px 4px 20px #2736a5;
+  letter-spacing: 0.4vw;
+  text-shadow: 0vw 0.2vw 1.5vw #2736a5;
 }
 
 .subtexto-formanda{
   position: absolute;
-  bottom: 40%;
-  right: 62%;
-  color: #2e366e;
-  font-size: 2rem;
+  bottom: 50%;
+  right: 60%;
+  color: #3d4899;
+  font-size: clamp(2vw, 2vw, 2vw);
   z-index: 2;
   font-family: "Nanum Myeongjo", serif;
   font-weight: 400;
@@ -188,10 +188,10 @@ setInterval(nextSlide, 4000)
 =========================*/
 
 .carrossel-principal {
-  position: absolute;
-  width: 198vh;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
   max-width: 100%;
-  height: 90vh;
   margin: 0 auto;
   overflow: hidden;
   display: flex;
@@ -202,16 +202,23 @@ setInterval(nextSlide, 4000)
 .carrossel-principal::after {
   content: "";
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 80vh;
+  transform: translate(-50%, -63%);
   background: rgba(117, 67, 36, 0.317);
   z-index: 1;
 }
 
 img {
   position: absolute;
-  width: 195vh;
-  height: 95vh;
-  object-position: center -1vh;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 80vh;
+  object-fit: cover;
+  transform: translate(-50%, -63%);
   opacity: 0;
   transition: opacity 0.5s ease;
   z-index: 0;
@@ -223,7 +230,7 @@ img.active {
 
 button {
   position: absolute;
-  top: 50%;
+  top: 40%;
   transform: translateY(-50%);
   background: none;
   color: white;

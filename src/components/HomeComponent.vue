@@ -16,7 +16,17 @@ main{
   background-color: white;
 }
 
-.btn-grandes{
+.bnt-grandes {
   display: flex;
+}
+
+.madrinhas,
+.praia {
+  width: 50%;
+}
+
+.madrinhas img{
+  width: 70%;
+  border-radius: 2vw;
 }
 </style>
