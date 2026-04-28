@@ -175,7 +175,7 @@ setInterval(nextSlide, 4000)
   position: absolute;
   bottom: 50%;
   right: 60%;
-  color: #3d4899;
+  color: #2f3776;
   font-size: clamp(2vw, 2vw, 2vw);
   z-index: 2;
   font-family: "Nanum Myeongjo", serif;
@@ -186,6 +186,10 @@ setInterval(nextSlide, 4000)
 /*=========================
           GERAL
 =========================*/
+
+main{
+  background-color: white;
+}
 
 .carrossel-principal {
   position: relative;
