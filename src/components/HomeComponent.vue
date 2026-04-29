@@ -3,7 +3,11 @@
 <div class="bnt-grandes">
   <div class="madrinhas">
     <img src="/img/modelo8.png" alt="madrinha">
+    <div class="titulo-madri">
+      <h1>MADRINHAS</h1>
+    </div>
   </div>
+
   <div class="praia">
     <img src="/img/praiana.png" alt="praiana">
   </div>
@@ -23,8 +27,9 @@ main{
 
 .madrinhas,
 .praia {
-  width: 70%;
-  margin-left: 2vw;
+  width: 45%;
+  margin-left: 9vw;
+  position: relative;
 }
 
 img {
@@ -34,18 +39,46 @@ img {
 }
 
 .madrinhas img{
-  width: 95%;
-  border-radius: 2vw;
+  width: 100%;
+  border-radius: 1.4vw;
 }
 
+.titulo-madri {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.4vw;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 55%,
+    rgba(217, 217, 217, 0.5) 75%,
+    rgb(223, 199, 189) 100%
+  );
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+}
+
+.titulo-madri h1{
+  color: white;
+  font-family: "Kaisei Decol", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 3.2vw;
+}
+
+/*===========================
+          PRAIANA
+============================*/
+
 .praia{
-  margin-right: -5vw;
+  margin-right: 4vw;
 }
 
 .praia img{
-  width: 85%;
+  width: 90%;
   background-color: #F9EBE7;
   padding: 1vw;
-  border-radius: 2vw;
+  border-radius: 1.4vw;
 }
 </style>
