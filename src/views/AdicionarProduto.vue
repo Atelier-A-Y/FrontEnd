@@ -1,76 +1,140 @@
+<script setup>
+
+import { ref } from 'vue'
+
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const produto = ref({
+
+  categoria: "",
+  continente: "",
+  nome: "",
+  tamanho: "",
+  cor: "",
+  preco: "",
+  descricao: ""
+
+})
+
+function salvarProduto() {
+
+  const produtosSalvos =
+    JSON.parse(localStorage.getItem("produtos")) || []
+
+  produtosSalvos.push({
+
+    ...produto.value
+
+  })
+
+  localStorage.setItem(
+    "produtos",
+    JSON.stringify(produtosSalvos)
+  )
+
+  router.push('/produtos')
+
+}
+
+</script>
+
 <template>
 
-<main>
+   <main>
+    <h1>Adicionar Produto</h1>
 
-<h1>Adicionar Produto</h1>
+    <section class="fundo">
+      <form class="form-container" @submit.prevent="salvarProduto">
+        <div class="input-group">
+          <label>Categoria:</label>
 
-<section class="fundo">
+          <select v-model="produto.categoria">
+            <option>Vestidos de Festas</option>
+            <option>Vestidos de Madrinhas</option>
+            <option>Vestidos de Casamento</option>
+            <option>Vestidos de Formatura</option>
+            <option>Ternos Femininos</option>
+          </select>
+        </div>
 
-<form class="form-container">
 
-  <div class="input-group">
-    <input type="text" maxlength="100" placeholder="Categoria">
-  </div>
+        <div class="input-group">
+          <label>Continente:</label>
 
-  <div class="input-group">
-    <input type="text" maxlength="100" placeholder="Continente">
-  </div>
+          <select v-model="produto.continente">
+            <option>América</option>
+            <option>África</option>
+            <option>Ásia</option>
+            <option>Europa</option>
+            <option>Oceania</option>
+          </select>
+        </div>
 
-  <div class="input-group">
-    <input type="text" maxlength="100" placeholder="Nome">
-  </div>
+        <div class="input-group">
+          <input type="text" maxlength="100" placeholder="Nome" v-model="produto.nome" />
+        </div>
 
-  <div class="input-group">
-    <input type="text" maxlength="10" placeholder="Tamanho">
-  </div>
+        <div class="input-group">
+          <label>Tamanho:</label>
 
-  <div class="input-group">
-    <input type="text" maxlength="30" placeholder="Cor">
-  </div>
+          <select v-model="produto.tamanho">
+            <option>PP</option>
+            <option>P</option>
+            <option>M</option>
+            <option>G</option>
+            <option>GG</option>
+            <option>XG</option>
+            <option>XGG</option>
+            <option>EG</option>
+            <option>EGG</option>
+          </select>
+        </div>
 
-  <div class="input-group">
-    <input type="number" step="0.01" placeholder="Preço">
-  </div>
+        <div class="input-group">
+          <input type="text" maxlength="30" placeholder="Cor" v-model="produto.cor" />
+        </div>
 
-  <div class="input-group">
-    <textarea placeholder="Descrição"></textarea>
-  </div>
+        <div class="input-group">
+          <input type="number" step="0.01" placeholder="Preço" v-model="produto.preco" />
+        </div>
 
-  <div class="buttons">
-    <button type="reset">Excluir</button>
-    <button type="submit">Salvar</button>
-  </div>
+        <div class="input-group">
+          <textarea placeholder="Descrição" v-model="produto.descricao"></textarea>
+        </div>
 
-</form>
+        <div class="buttons">
+          <button type="reset">Limpar</button>
 
-</section>
+          <button type="submit"> Salvar</button>
+        </div>
+      </form>
+    </section>
 
-</main>
+  </main>
 
 </template>
 
 <style scoped>
 
-h1{
-
-color: #311111;
-font-weight: bold;
-margin-top: 3vw;
-margin-bottom: 3vw;
-text-align: center;
-
+h1 {
+  color: #311111;
+  font-weight: bold;
+  margin-top: 3vw;
+  margin-bottom: 3vw;
+  text-align: center;
 }
 
-.fundo{
-
-background-color: #F5E9E0;
-border: #311111 solid 0.8px;
-border-radius: 1.7rem;
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 40px 30px 40px 30px;
-margin: 0vw 13vw 1.2vw 13vw;
+.fundo {
+  background-color: #f5e9e0;
+  border: #311111 solid 0.8px;
+  border-radius: 1.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 30px;
+  margin: 0vw 13vw 1.2vw 13vw;
 
 }
 
@@ -78,53 +142,50 @@ margin: 0vw 13vw 1.2vw 13vw;
   width: 350px;
 }
 
- .input-group {
+.input-group {
   margin-bottom: 15px;
 }
 
 input,
 textarea,
+select,
 button {
   font-family: Arial, sans-serif;
 }
 
-  input, textarea {
-    width: 100%;
-    padding: 12px 15px;
-    border: none;
-    border-radius: 12px;
-    background-color: #fefefe;
-    font-size: 14px;
-    outline: none;
-    transition: 0.2s;
-  }
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 12px;
+  background-color: #fefefe;
+  font-size: 14px;
+  outline: none;
+}
 
-  input:focus, textarea:focus {
-    background-color: #e7e7e7;
-  }
+textarea {
+  resize: none;
+  height: 80px;
+}
 
-  textarea {
-    resize: none;
-    height: 80px;
-  }
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
 
-  .buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
+button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #5a3d36;
+  background-color: transparent;
+  cursor: pointer;
+}
 
-  button {
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: 1px solid #5a3d36;
-    background-color: transparent;
-    cursor: pointer;
-    font-size: 14px;
-  }
-
-  button:hover {
-    background-color: #e7e7e7;
-  }
+button:hover {
+  background-color: #e7e7e7;
+}
 
 </style>
