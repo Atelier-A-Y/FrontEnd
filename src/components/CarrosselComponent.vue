@@ -188,7 +188,7 @@ setInterval(nextSlide, 4000)
 =========================*/
 
 main{
-  background-color: white;
+  background-color: rgb(255, 251, 247);
 }
 
 .carrossel-principal {

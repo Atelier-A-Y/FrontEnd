@@ -17,7 +17,7 @@
 
 <style scoped>
 main{
-  background-color: white;
+  background-color: rgb(255, 251, 247);
   margin-top: -9vw;
 }
 
@@ -51,7 +51,7 @@ img {
     to bottom,
     rgba(255, 255, 255, 0) 55%,
     rgba(217, 217, 217, 0.5) 75%,
-    rgb(223, 199, 189) 100%
+    rgb(201, 180, 171) 100%
   );
   display: flex;
   align-items: flex-end;
