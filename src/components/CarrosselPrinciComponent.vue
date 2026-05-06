@@ -187,10 +187,13 @@ setInterval(nextSlide, 4000)
           GERAL
 =========================*/
 
+<<<<<<< HEAD:src/components/CarrosselComponent.vue
 main{
   background-color: rgb(255, 251, 247);
 }
 
+=======
+>>>>>>> 16d362e740faf27e7dfe6ba4928e6c91af51bacd:src/components/CarrosselPrinciComponent.vue
 .carrossel-principal {
   position: relative;
   width: 100vw;

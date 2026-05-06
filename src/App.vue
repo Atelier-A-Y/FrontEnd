@@ -1,9 +1,11 @@
-<script setup lang="ts">
-import CarrosselComponent from './components/CarrosselComponent.vue';
-import HomeComponent from './components/HomeComponent.vue';
-</script>
-
 <template>
-  <CarrosselComponent />
-  <HomeComponent />
+  <main>
+  <RouterView />
+  </main>
 </template>
+
+<style scoped>
+  main{
+    background-color: white;
+  }
+</style>

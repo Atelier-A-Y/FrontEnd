@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import BannerComponent from '../components/BannerComponent.vue';
+import CarrosselPrinciComponent from '../components/CarrosselPrinciComponent.vue';
+import CarrosselSecunComponent from '../components/CarrosselSecunComponent.vue';
+import HomeComponent from '../components/HomeComponent.vue';
+
+</script>
+
 <template>
-  <h1>00</h1>
+  <CarrosselPrinciComponent />
+  <HomeComponent />
+  <BannerComponent />
+  <CarrosselSecunComponent />
 </template>
