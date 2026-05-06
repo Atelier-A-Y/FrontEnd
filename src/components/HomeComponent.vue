@@ -1,24 +1,24 @@
 <template>
 <main>
 <div class="bnt-grandes">
-  <div class="madrinhas">
+  <router-link to="/casamento" class="madrinhas">
     <img src="/img/modelo8.png" alt="madrinha">
     <div class="titulo-madri">
       <h1>MADRINHAS</h1>
     </div>
-  </div>
+  </router-link>
 
-  <div class="praia">
+  <router-link to="/praia" class="praia">
     <img src="/img/praiana.png" alt="praiana">
-  </div>
+  </router-link>
 </div>
 </main>
 </template>
 
 <style scoped>
 main{
-  background-color: white;
   margin-top: -9vw;
+  margin-bottom: 2vw;
 }
 
 .bnt-grandes {
@@ -30,6 +30,14 @@ main{
   width: 45%;
   margin-left: 9vw;
   position: relative;
+  cursor: pointer;
+  display: block;
+}
+
+.madrinhas:hover,
+.praia:hover {
+  transform: scale(1.02);
+  transition: 0.3s;
 }
 
 img {
@@ -37,6 +45,10 @@ img {
   height: auto;
   display: block;
 }
+
+/*===========================
+          MADRINHAS
+============================*/
 
 .madrinhas img{
   width: 100%;
@@ -65,6 +77,7 @@ img {
   font-weight: 400;
   font-style: normal;
   font-size: 3.2vw;
+  -webkit-text-stroke: 1px rgb(237, 236, 236);
 }
 
 /*===========================

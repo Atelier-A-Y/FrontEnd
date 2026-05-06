@@ -187,10 +187,6 @@ setInterval(nextSlide, 4000)
           GERAL
 =========================*/
 
-main{
-  background-color: white;
-}
-
 .carrossel-principal {
   position: relative;
   width: 100vw;
