@@ -1,20 +1,24 @@
 <template>
   <main>
-    <div class="banner">
-    <img src="/img/formanda_banner.png" alt="banner">
+    <router-link to="/formatura" class="banner">
+      <img src="/img/formanda_banner.png" alt="banner">
 
-    <div class="overlay">
-      <div class="texto">
-        <span class="topo1">ATELIER</span>
-        <span class="topo2">A.Y.</span>
-        <h2>50% OFF<br>PARA<br>FORMANDOS</h2>
+      <div class="overlay">
+        <div class="marca">
+          <span class="marca1">ATELIER</span>
+          <span class="marca2">A.Y.</span>
+        </div>
+        <div class="texto">
+          <h2>50% OFF<br>PARA<br>FORMANDOS</h2>
+        </div>
       </div>
-    </div>
-  </div>
+    </router-link>
   </main>
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+
 .banner {
   position: relative;
   width: 100%;
@@ -44,27 +48,39 @@
 .texto {
   color: white;
   text-align: left;
-  margin-right: 15vw;
-}
-
-.topo1 {
-  font-size: 0.8vw;
-  letter-spacing: 0.1vw;
-  display: block;
-  margin-bottom: 0.5vw;
-}
-
-.topo2 {
-  font-size: 0.8vw;
-  letter-spacing: 0.1vw;
-  display: block;
-  margin-bottom: 0.5vw;
+  margin-right: 18vw;
 }
 
 .texto h2 {
-  font-family: "Kaisei Decol", serif;
-  font-size: 5vw;
-  font-weight: 400;
+  font-family: "Playfair", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  width: 100;
+  font-size: 4.5vw;
   line-height: 1.2;
+}
+
+.marca{
+  position: absolute;
+  left: 90vw;
+  bottom: 21vw;
+  transform: translateY(-50%);
+  color: white;
+  font-family: "Noto Rashi Hebrew", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.marca1 {
+  font-size: 1.2vw;
+  letter-spacing: 0.1vw;
+  display: block;
+}
+
+.marca2 {
+  font-size: 1.1vw;
+  letter-spacing: 0.1vw;
+  display: block;
+  margin-left: 1.5vw;
 }
 </style>

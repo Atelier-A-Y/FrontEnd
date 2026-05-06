@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import BannerComponent from '../components/BannerComponent.vue';
-import CarrosselComponent from '../components/CarrosselComponent.vue';
+import CarrosselPrinciComponent from '../components/CarrosselPrinciComponent.vue';
+import CarrosselSecunComponent from '../components/CarrosselSecunComponent.vue';
 import HomeComponent from '../components/HomeComponent.vue';
 
 </script>
 
 <template>
-  <CarrosselComponent />
+  <CarrosselPrinciComponent />
   <HomeComponent />
   <BannerComponent />
+  <CarrosselSecunComponent />
 </template>
