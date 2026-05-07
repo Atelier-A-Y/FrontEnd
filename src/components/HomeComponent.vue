@@ -17,10 +17,6 @@
 
 <style scoped>
 main{
-<<<<<<< HEAD
-  background-color: rgb(255, 251, 247);
-=======
->>>>>>> 16d362e740faf27e7dfe6ba4928e6c91af51bacd
   margin-top: -9vw;
   margin-bottom: 2vw;
 }

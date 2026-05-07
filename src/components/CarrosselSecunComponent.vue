@@ -1,151 +1,244 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const carousel = ref<HTMLElement | null>(null)
-
-const items = [
-  '/img/modelo3.png',
-  '/img/modelo7.png',
-  '/img/modelo12.png',
-  '/img/modelo17.png',
-  '/img/modelo18.png'
+const slides = [
+  { img: '/img/modelo2.png' },
+  { img: '/img/modelo3.png' },
+  { img: '/img/modelo4.png' },
+  { img: '/img/modelo5.png' },
+  { img: '/img/modelo6.png' },
+  { img: '/img/modelo7.png' },
+  { img: '/img/modelo17.png' },
+  { img: '/img/modelo18.png' },
+  { img: '/img/modelo12.png' }
 ]
 
-const activeIndex = ref(2)
+const index = ref(2)
 
-function scrollToIndex(index: number) {
-  const el = carousel.value?.children[index] as HTMLElement
-
-  if (!el) return
-
-  el.scrollIntoView({
-    behavior: 'smooth',
-    inline: 'center'
-  })
-
-  activeIndex.value = index
+function nextSlide() {
+  index.value = (index.value + 1) % slides.length
 }
 
-function scrollLeft() {
-  const next = Math.max(0, activeIndex.value - 1)
-  scrollToIndex(next)
+function prevSlide() {
+  index.value =
+    (index.value - 1 + slides.length) % slides.length
 }
 
-function scrollRight() {
-  const next = Math.min(items.length - 1, activeIndex.value + 1)
-  scrollToIndex(next)
+function getOffset(i: number) {
+  const total = slides.length
+
+  let diff = i - index.value
+
+  // LOOP INFINITO
+  if (diff > total / 2) {
+    diff -= total
+  }
+
+  if (diff < -total / 2) {
+    diff += total
+  }
+
+  return diff * 180
 }
 </script>
 
 <template>
   <main>
-    <div class="carousel-container">
-  <button class="arrow left" @click="scrollLeft">‹</button>
+    <div class="carrossel-container">
 
-  <div class="carousel" ref="carousel">
-    <div
-      v-for="(item, index) in items"
-      :key="index"
-      class="card"
-      :class="{ active: index === activeIndex }"
-    >
-      <img :src="item" alt="look">
-    </div>
+      <button class="voltar" @click="prevSlide">
+        ❮
+      </button>
+
+<div class="carrossel">
+      <div class="carrossel-track">
+  <div
+    v-for="(slide, i) in slides"
+    :key="i"
+    class="card"
+    :class="{ active: i === index }"
+    :style="{
+  transform: `
+    translate(-50%, -50%)
+    translateX(${getOffset(i)}px)
+  `,
+  scale: i === index ? '1' : '0.92',
+  opacity: i === index ? 1 : 0.45,
+  zIndex: i === index ? 5 : 1
+}"
+  >
+    <img :src="slide.img" />
   </div>
-
-  <button class="arrow right" @click="scrollRight">›</button>
 </div>
+</div>
+
+      <button class="seguir" @click="nextSlide">
+        ❯
+      </button>
+
+    </div>
   </main>
 </template>
 
 <style scoped>
-.carousel-container {
+main{
+  background: #E6D6C5;
+  padding: 2vw 0;
+}
+
+.carrossel-container{
   position: relative;
+  width: 100%;
+  overflow: hidden;
 }
 
-/* fade esquerda */
-.carousel-container::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 120px;
-  height: 100%;
-  background: linear-gradient(to right, #eae4dc, transparent);
-  z-index: 2;
-}
+/*=========================
+        CARROSSEL
+=========================*/
 
-/* fade direita */
-.carousel-container::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 120px;
-  height: 100%;
-  background: linear-gradient(to left, #eae4dc, transparent);
-  z-index: 2;
-}
+.carrossel{
+  position: relative;
 
-/* área scroll */
-.carousel {
-  display: flex;
-  gap: 24px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 40px 120px;
-}
+  width: 100%;
+  height: 420px;
 
-.carousel::-webkit-scrollbar {
-  display: none;
-}
-
-.card {
-  flex: 0 0 auto;
-  width: 180px;
-  height: 260px;
-  border-radius: 20px;
   overflow: hidden;
 
-  scroll-snap-align: center;
-
-  transition: all 0.4s ease;
-  opacity: 0.4;
-  transform: scale(0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.card img {
+.carrossel-track{
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+}
+
+/*=========================
+          CARD
+=========================*/
+
+.card{
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 140px;
+  height: 230px;
+
+  border-radius: 1.3vw;
+  overflow: hidden;
+
+  opacity: 0.45;
+
+  transform:
+    translate(-50%, -50%)
+    scale(0.92);
+
+  transition: opacity 0.5s ease,
+    scale 0.5s ease;
+
+  z-index: 1;
+}
+
+/*=========================
+      CARD ATIVO
+=========================*/
+
+.card.active{
+  width: 220px;
+  height: 340px;
+
+  opacity: 1;
+
+  transform:
+    translate(-50%, -50%)
+    scale(1);
+
+  z-index: 5;
+}
+
+/*=========================
+          IMG
+=========================*/
+
+.card img{
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-/* ITEM CENTRAL */
-.card.active {
-  width: 260px;
-  height: 360px;
-  opacity: 1;
-  transform: scale(1);
-}
+/*=========================
+          SETAS
+=========================*/
 
-/* setas */
-.arrow {
+.voltar, .seguir{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+
   background: transparent;
   border: none;
-  font-size: 40px;
+
+  color: white;
+  font-size: 3rem;
+
   cursor: pointer;
-  color: #999;
+
+  z-index: 10;
+}
+
+.voltar{
+  left: 1vw;
+}
+
+.seguir{
+  right: 1vw;
+}
+
+/*=========================
+        FADE
+=========================*/
+
+.carrossel-container::before{
+  content: "";
+
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 120px;
+  height: 100%;
+
+  background: linear-gradient(
+    to right,
+    #E6D6C5,
+    transparent
+  );
+
   z-index: 2;
 }
 
-.arrow.left {
-  left: 10px;
-}
+.carrossel-container::after{
+  content: "";
 
-.arrow.right {
-  right: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  width: 120px;
+  height: 100%;
+
+  background: linear-gradient(
+    to left,
+    #E6D6C5,
+    transparent
+  );
+
+  z-index: 2;
 }
 </style>

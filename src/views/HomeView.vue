@@ -7,7 +7,9 @@ import HomeComponent from '../components/HomeComponent.vue';
 </script>
 
 <template>
+  <header>
   <CarrosselPrinciComponent />
+  </header>
   <HomeComponent />
   <BannerComponent />
   <CarrosselSecunComponent />
