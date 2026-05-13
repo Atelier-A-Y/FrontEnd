@@ -38,7 +38,7 @@ function getOffset(i: number) {
     diff += total
   }
 
-  return diff * 180
+  return diff * 300
 }
 </script>
 
@@ -83,7 +83,7 @@ function getOffset(i: number) {
 <style scoped>
 main{
   background: #E6D6C5;
-  padding: 2vw 0;
+  margin: 2vw 0 2vw 0;
 }
 
 .carrossel-container{
@@ -92,18 +92,11 @@ main{
   overflow: hidden;
 }
 
-/*=========================
-        CARROSSEL
-=========================*/
-
 .carrossel{
   position: relative;
-
   width: 100%;
-  height: 420px;
-
+  height: 30vw;
   overflow: hidden;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,59 +104,36 @@ main{
 
 .carrossel-track{
   position: relative;
-
   width: 100%;
   height: 100%;
 }
 
-/*=========================
-          CARD
-=========================*/
-
 .card{
   position: absolute;
-
   top: 50%;
   left: 50%;
-
-  width: 140px;
-  height: 230px;
-
+  width: 14vw;
+  height: 24vw;
   border-radius: 1.3vw;
   overflow: hidden;
-
   opacity: 0.45;
-
   transform:
     translate(-50%, -50%)
     scale(0.92);
-
   transition: opacity 0.5s ease,
     scale 0.5s ease;
-
   z-index: 1;
 }
 
-/*=========================
-      CARD ATIVO
-=========================*/
-
 .card.active{
-  width: 220px;
-  height: 340px;
-
+  width: 16vw;
+  height: 26vw;
   opacity: 1;
-
   transform:
     translate(-50%, -50%)
     scale(1);
-
   z-index: 5;
 }
-
-/*=========================
-          IMG
-=========================*/
 
 .card img{
   width: 100%;
@@ -172,23 +142,15 @@ main{
   display: block;
 }
 
-/*=========================
-          SETAS
-=========================*/
-
 .voltar, .seguir{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-
   background: transparent;
   border: none;
-
   color: white;
   font-size: 3rem;
-
   cursor: pointer;
-
   z-index: 10;
 }
 
@@ -200,45 +162,33 @@ main{
   right: 1vw;
 }
 
-/*=========================
-        FADE
-=========================*/
-
 .carrossel-container::before{
   content: "";
-
   position: absolute;
   left: 0;
   top: 0;
-
-  width: 120px;
+  width: 10vw;
   height: 100%;
-
   background: linear-gradient(
     to right,
     #E6D6C5,
     transparent
   );
-
   z-index: 2;
 }
 
 .carrossel-container::after{
   content: "";
-
   position: absolute;
   right: 0;
   top: 0;
-
-  width: 120px;
+  width: 15vw;
   height: 100%;
-
   background: linear-gradient(
     to left,
     #E6D6C5,
     transparent
   );
-
   z-index: 2;
 }
 </style>

@@ -26,7 +26,7 @@
 }
 
 .banner img {
-  width: 70%;
+  width: 57%;
   display: block;
 }
 
@@ -36,7 +36,7 @@
   background: linear-gradient(
     to right,
     rgba(0, 0, 0, 0.39) 30%,
-    rgb(0, 0, 0) 55%,
+    rgb(0, 0, 0) 48%,
     rgb(0, 0, 0) 100%
   );
 
@@ -48,7 +48,7 @@
 .texto {
   color: white;
   text-align: left;
-  margin-right: 18vw;
+  margin-right: 24vw;
 }
 
 .texto h2 {
@@ -62,8 +62,8 @@
 
 .marca{
   position: absolute;
-  left: 90vw;
-  bottom: 21vw;
+  left: 92vw;
+  bottom: 17vw;
   transform: translateY(-50%);
   color: white;
   font-family: "Noto Rashi Hebrew", serif;
@@ -72,13 +72,13 @@
 }
 
 .marca1 {
-  font-size: 1.2vw;
+  font-size: 1vw;
   letter-spacing: 0.1vw;
   display: block;
 }
 
 .marca2 {
-  font-size: 1.1vw;
+  font-size: 0.9vw;
   letter-spacing: 0.1vw;
   display: block;
   margin-left: 1.5vw;
