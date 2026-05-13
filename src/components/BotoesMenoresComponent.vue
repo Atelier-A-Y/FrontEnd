@@ -1,92 +1,144 @@
 <template>
-<main>
-<div class="bnt-grandes">
-  <router-link to="/casamento" class="madrinhas">
-    <img src="/img/modelo8.png" alt="madrinha">
-    <div class="titulo-madri">
-      <h1>MADRINHAS</h1>
-    </div>
-  </router-link>
+  <main>
+    <div class="bnt-pequenos">
 
-  <router-link to="/praia" class="praia">
-    <img src="/img/praiana.png" alt="praiana">
-  </router-link>
-</div>
-</main>
+      <router-link to="/terno" class="card">
+        <img src="/img/modelo15.png" alt="terno">
+
+        <div class="overlay">
+          <h1>TERNOS<br>FEMININOS</h1>
+        </div>
+      </router-link>
+
+      <router-link to="/casual" class="card-reverso">
+        <img src="/img/modelo16.png" alt="curto">
+
+        <div class="overlay-reverso">
+          <h1>VESTIDOS <br> CURTOS</h1>
+        </div>
+      </router-link>
+
+    </div>
+  </main>
 </template>
 
 <style scoped>
-.bnt-grandes {
+
+.bnt-pequenos{
+  width: 100%;
   display: flex;
+  justify-content: center;
+  gap: 5vw;
+  margin-top: 2vw;
 }
 
-.madrinhas,
-.praia {
-  width: 45%;
-  margin-left: 9vw;
+.card{
+  width: 35%;
+  height: 14vw;
   position: relative;
-  cursor: pointer;
-  display: block;
+  overflow: hidden;
+  border-radius: 0.5vw;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1b0f0f;
 }
 
-.madrinhas:hover,
-.praia:hover {
-  transform: scale(1.02);
-  transition: 0.3s;
+.card img{
+  position: absolute;
+  right: 15.06VW;
+  top: 0vw;
+  width: 57%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.4s;
 }
 
-img {
-  width: 100%;
-  height: auto;
-  display: block;
+.card:hover img{
+  transform: scale(1.03);
 }
 
-/*===========================
-          MADRINHAS
-============================*/
-
-.madrinhas img{
-  width: 100%;
-  border-radius: 1.4vw;
-}
-
-.titulo-madri {
+.overlay{
   position: absolute;
   inset: 0;
-  border-radius: 1.4vw;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0) 55%,
-    rgba(217, 217, 217, 0.5) 75%,
-    rgb(201, 180, 171) 100%
-  );
   display: flex;
-  align-items: flex-end;
+  align-items: end;
   justify-content: center;
-
+  padding-bottom: 2vw;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.39) 20%,
+    rgb(0, 0, 0) 43%,
+    rgb(0, 0, 0) 100%
+  );
 }
 
-.titulo-madri h1{
+.overlay h1{
+  text-align: right;
+  z-index: 2;
   color: white;
-  font-family: "Kaisei Decol", serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 3.2vw;
-  -webkit-text-stroke: 1px rgb(237, 236, 236);
+  font-size: 2.5vw;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  margin-left: 15vw;
+  margin-bottom: 1vw;
 }
 
-/*===========================
-          PRAIANA
-============================*/
+/*==============================
+          REVERSO
+==============================*/
 
-.praia{
-  margin-right: 4vw;
+.card-reverso{
+  width: 35%;
+  height: 14vw;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5vw;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1b0f0f;
 }
 
-.praia img{
-  width: 90%;
-  background-color: #F9EBE7;
-  padding: 1vw;
-  border-radius: 1.4vw;
+.card-reverso img{
+  position: absolute;
+  left: 19.06VW;
+  top: 0vw;
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.4s;
+}
+
+.card-reverso:hover img{
+  transform: scale(1.03);
+}
+
+.overlay-reverso{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  padding-bottom: 2vw;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.39) 20%,
+    rgb(0, 0, 0) 43%,
+    rgb(0, 0, 0) 100%
+  );
+}
+
+.overlay-reverso h1{
+  text-align: left;
+  z-index: 2;
+  color: white;
+  font-size: 2.5vw;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  margin-right: 16vw;
+  margin-bottom: 1vw;
 }
 </style>
