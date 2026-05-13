@@ -66,7 +66,7 @@ function navegar(e) {
         </a>
         <div v-if="showDropdown" class="submenu">
           <ul class="cima">
-            <li><RouterLink to="/">África</RouterLink></li>
+            <li><RouterLink to="/home">África</RouterLink></li>
             <li><RouterLink to="/">América</RouterLink></li>
             <li><RouterLink to="/">Ásia</RouterLink></li>
           </ul>
@@ -83,9 +83,9 @@ function navegar(e) {
           v-model="pesquisa"
           placeholder="Buscar..."
           @keydown="navegar"
-          class="search-input" 
+          class="search-input"
         /><img src="/img/lupa.png" alt="pesquisa" width="38" height="38" />
-        
+
         <div class="results-list" v-if="resultados.length">
           <ul>
             <li
@@ -177,7 +177,7 @@ header {
 }
 
 div a.globo {
-  margin-left: 30vw;
+  margin-left: 28vw;
   margin-right: -2vw;
 }
 
