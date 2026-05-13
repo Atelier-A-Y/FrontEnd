@@ -40,6 +40,22 @@ function getOffset(i: number) {
 
   return diff * 300
 }
+
+const hover = ref(false)
+
+const hovertext = ref("")
+
+const showHover = (i) => {
+  hover.value = true
+  hovertext.value = i
+
+}
+
+const hideHover = (i) => {
+  hover.value = false
+  hovertext.value = ""
+}
+
 </script>
 
 <template>
@@ -50,27 +66,24 @@ function getOffset(i: number) {
         ❮
       </button>
 
-<div class="carrossel">
-      <div class="carrossel-track">
-  <div
-    v-for="(slide, i) in slides"
-    :key="i"
-    class="card"
-    :class="{ active: i === index }"
-    :style="{
-  transform: `
+      <div class="carrossel">
+        <div class="carrossel-track">
+          <div v-for="(slide, i) in slides" :key="i" class="card" :class="{ active: i === index }" :style="{
+            transform: `
     translate(-50%, -50%)
     translateX(${getOffset(i)}px)
   `,
-  scale: i === index ? '1' : '0.92',
-  opacity: i === index ? 1 : 0.45,
-  zIndex: i === index ? 5 : 1
-}"
-  >
-    <img :src="slide.img" />
-  </div>
-</div>
-</div>
+            scale: i === index ? '1' : '0.92',
+            opacity: i === index ? 1 : 0.45,
+            zIndex: i === index ? 5 : 1
+          }">
+            <img :src="slide.img" @mouseenter="showHover(i)" @mouseleave="hideHover(i)"/>
+          </div>
+          <div class="mod" v-if="hover">
+           ================= {{ hovertext }}
+          </div>
+        </div>
+      </div>
 
       <button class="seguir" @click="nextSlide">
         ❯
@@ -81,18 +94,26 @@ function getOffset(i: number) {
 </template>
 
 <style scoped>
-main{
+
+.mod {
+  /* position: ; */
+  z-index: 20;
+  background-color: red;
+  width: 200px;
+  height: 200px;
+}
+main {
   background: #E6D6C5;
   margin: 2vw 0 2vw 0;
 }
 
-.carrossel-container{
+.carrossel-container {
   position: relative;
   width: 100%;
   overflow: hidden;
 }
 
-.carrossel{
+.carrossel {
   position: relative;
   width: 100%;
   height: 30vw;
@@ -102,13 +123,13 @@ main{
   justify-content: center;
 }
 
-.carrossel-track{
+.carrossel-track {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-.card{
+.card {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -118,31 +139,30 @@ main{
   overflow: hidden;
   opacity: 0.45;
   transform:
-    translate(-50%, -50%)
-    scale(0.92);
+    translate(-50%, -50%) scale(0.92);
   transition: opacity 0.5s ease,
     scale 0.5s ease;
   z-index: 1;
 }
 
-.card.active{
+.card.active {
   width: 16vw;
   height: 26vw;
   opacity: 1;
   transform:
-    translate(-50%, -50%)
-    scale(1);
+    translate(-50%, -50%) scale(1);
   z-index: 5;
 }
 
-.card img{
+.card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.voltar, .seguir{
+.voltar,
+.seguir {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -154,41 +174,37 @@ main{
   z-index: 10;
 }
 
-.voltar{
+.voltar {
   left: 1vw;
 }
 
-.seguir{
+.seguir {
   right: 1vw;
 }
 
-.carrossel-container::before{
+.carrossel-container::before {
   content: "";
   position: absolute;
   left: 0;
   top: 0;
   width: 10vw;
   height: 100%;
-  background: linear-gradient(
-    to right,
-    #E6D6C5,
-    transparent
-  );
+  background: linear-gradient(to right,
+      #E6D6C5,
+      transparent);
   z-index: 2;
 }
 
-.carrossel-container::after{
+.carrossel-container::after {
   content: "";
   position: absolute;
   right: 0;
   top: 0;
   width: 15vw;
   height: 100%;
-  background: linear-gradient(
-    to left,
-    #E6D6C5,
-    transparent
-  );
+  background: linear-gradient(to left,
+      #E6D6C5,
+      transparent);
   z-index: 2;
 }
 </style>
