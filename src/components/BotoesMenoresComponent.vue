@@ -68,9 +68,9 @@
   padding-bottom: 2vw;
   background: linear-gradient(
     to right,
-    rgba(0, 0, 0, 0.39) 20%,
-    rgb(0, 0, 0) 43%,
-    rgb(0, 0, 0) 100%
+    rgba(26, 17, 17, 0.39) 26%,
+    rgb(26, 17, 17) 45%,
+    rgb(26, 17, 17) 100%
   );
 }
 
@@ -83,6 +83,9 @@
   letter-spacing: 1px;
   margin-left: 15vw;
   margin-bottom: 1vw;
+  font-family: "Kaisei Decol", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /*==============================
@@ -125,9 +128,9 @@
   padding-bottom: 2vw;
   background: linear-gradient(
     to left,
-    rgba(0, 0, 0, 0.39) 20%,
-    rgb(0, 0, 0) 43%,
-    rgb(0, 0, 0) 100%
+    rgba(26, 17, 17, 0.39) 26%,
+    rgb(26, 17, 17) 45%,
+    rgb(26, 17, 17) 100%
   );
 }
 
@@ -140,5 +143,8 @@
   letter-spacing: 1px;
   margin-right: 16vw;
   margin-bottom: 1vw;
+  font-family: "Kaisei Decol", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 </style>
