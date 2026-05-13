@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import axios from 'axios'
-
 import Header from '../components/Header.vue'
+import axios from 'axios'
 
 onMounted(async () => {
   try {
@@ -32,19 +31,16 @@ function logout() {
 <template>
   <Header />
   <main>
-  <div class="container">
-    <h1>Bem-vindo!</h1>
-    <p>Você está logado 🎉</p>
+    <div class="container">
+      <h1>Bem-vindo!</h1>
+      <p>Você está logado 🎉</p>
 
-    <button @click="logout">Sair</button>
-  </div>
+      <button @click="logout">Sair</button>
+    </div>
   </main>
 </template>
 
 <style scoped>
-main {
-  margin-top: 6vw;
-}
 .container {
   height: 100vh;
   display: flex;
