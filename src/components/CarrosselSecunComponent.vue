@@ -2,15 +2,15 @@
 import { ref } from 'vue'
 
 const slides = [
-  { img: '/img/modelo2.png' },
-  { img: '/img/modelo3.png' },
-  { img: '/img/modelo4.png' },
-  { img: '/img/modelo5.png' },
-  { img: '/img/modelo6.png' },
-  { img: '/img/modelo7.png' },
-  { img: '/img/modelo17.png' },
-  { img: '/img/modelo18.png' },
-  { img: '/img/modelo12.png' }
+  { img: '/img/modelo2.png', nome: 'Vestido Marsala' },
+  { img: '/img/modelo3.png', nome: 'Elegance Red' },
+  { img: '/img/modelo4.png', nome: 'Midnight Blue' },
+  { img: '/img/modelo5.png', nome: 'African Gold' },
+  { img: '/img/modelo6.png', nome: 'Lavender Night' },
+  { img: '/img/modelo7.png', nome: 'Classic Black' },
+  { img: '/img/modelo17.png', nome: 'Golden Shine' },
+  { img: '/img/modelo18.png', nome: 'Royal Green' },
+  { img: '/img/modelo12.png', nome: 'White Pearl' }
 ]
 
 const index = ref(2)
@@ -29,7 +29,6 @@ function getOffset(i: number) {
 
   let diff = i - index.value
 
-  // LOOP INFINITO
   if (diff > total / 2) {
     diff -= total
   }
@@ -42,20 +41,32 @@ function getOffset(i: number) {
 }
 
 const hover = ref(false)
+const hoverItem = ref<any>(null)
 
-const hovertext = ref("")
+const mouseX = ref(0)
+const mouseY = ref(0)
 
-const showHover = (i) => {
+function showHover(item: any) {
   hover.value = true
-  hovertext.value = i
-
+  hoverItem.value = item
 }
 
-const hideHover = (i) => {
+function hideHover() {
   hover.value = false
-  hovertext.value = ""
 }
 
+function moveHover(e: MouseEvent) {
+
+  const cardWidth = 320
+
+  if (window.innerWidth - e.clientX < cardWidth) {
+    mouseX.value = e.clientX - 120
+  } else {
+    mouseX.value = e.clientX + 40
+  }
+
+  mouseY.value = e.clientY
+}
 </script>
 
 <template>
@@ -68,20 +79,29 @@ const hideHover = (i) => {
 
       <div class="carrossel">
         <div class="carrossel-track">
-          <div v-for="(slide, i) in slides" :key="i" class="card" :class="{ active: i === index }" :style="{
-            transform: `
-    translate(-50%, -50%)
-    translateX(${getOffset(i)}px)
-  `,
-            scale: i === index ? '1' : '0.92',
-            opacity: i === index ? 1 : 0.45,
-            zIndex: i === index ? 5 : 1
-          }">
-            <img :src="slide.img" @mouseenter="showHover(i)" @mouseleave="hideHover(i)"/>
+
+          <div
+            v-for="(slide, i) in slides"
+            :key="i"
+            class="card"
+            :class="{ active: i === index }"
+            :style="{
+              transform: `
+                translate(-50%, -50%)
+                translateX(${getOffset(i)}px)
+              `,
+              opacity: i === index ? 1 : 0.45,
+              zIndex: i === index ? 5 : 1
+            }"
+          >
+            <img
+              :src="slide.img"
+              @mouseenter="showHover(slide)"
+              @mouseleave="hideHover"
+              @mousemove="moveHover"
+            />
           </div>
-          <div class="mod" v-if="hover">
-           ================= {{ hovertext }}
-          </div>
+
         </div>
       </div>
 
@@ -89,22 +109,34 @@ const hideHover = (i) => {
         ❯
       </button>
 
+      <!-- HOVER PREMIUM -->
+      <Transition name="fade">
+        <div
+          v-if="hover"
+          class="hover-card"
+          :style="{
+            left: mouseX + 'px',
+            top: mouseY + 'px'
+          }"
+        >
+          <img :src="hoverItem.img" />
+
+          <div class="hover-info">
+            <h2>{{ hoverItem.nome }}</h2>
+            <p>Nova coleção 2026</p>
+          </div>
+        </div>
+      </Transition>
+
     </div>
   </main>
 </template>
 
 <style scoped>
 
-.mod {
-  /* position: ; */
-  z-index: 20;
-  background-color: red;
-  width: 200px;
-  height: 200px;
-}
 main {
   background: #E6D6C5;
-  margin: 2vw 0 2vw 0;
+  margin: 2vw 0;
 }
 
 .carrossel-container {
@@ -133,24 +165,21 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
+
   width: 14vw;
   height: 24vw;
+
   border-radius: 1.3vw;
   overflow: hidden;
-  opacity: 0.45;
-  transform:
-    translate(-50%, -50%) scale(0.92);
-  transition: opacity 0.5s ease,
-    scale 0.5s ease;
-  z-index: 1;
+
+  transition:
+    opacity .35s ease;
 }
 
 .card.active {
   width: 16vw;
   height: 26vw;
   opacity: 1;
-  transform:
-    translate(-50%, -50%) scale(1);
   z-index: 5;
 }
 
@@ -159,7 +188,58 @@ main {
   height: 100%;
   object-fit: cover;
   display: block;
+  cursor: pointer;
 }
+
+/* HOVER */
+
+.hover-card {
+  position: fixed;
+  width: 12vw;
+  min-width: 240px;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255,255,255,0.2);
+
+  border-radius: 1.5vw;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 999;
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.2);
+
+  animation: floatIn .25s ease;
+}
+
+.hover-card img {
+  width: 100%;
+  height: 14vw;
+  min-height: 280px;
+  object-fit: cover;
+}
+
+.hover-info {
+  padding: 1vw;
+}
+
+.hover-info h2 {
+  font-size: 1.1vw;
+  color: #fff;
+  margin-bottom: .3vw;
+}
+
+.hover-info p {
+  font-size: .8vw;
+  color: rgba(255,255,255,0.8);
+}
+
+/* BOTÕES */
 
 .voltar,
 .seguir {
@@ -181,6 +261,8 @@ main {
 .seguir {
   right: 1vw;
 }
+
+/* DEGRADÊ */
 
 .carrossel-container::before {
   content: "";
@@ -206,5 +288,29 @@ main {
       #E6D6C5,
       transparent);
   z-index: 2;
+}
+
+/* ANIMAÇÕES */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: scale(.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style>

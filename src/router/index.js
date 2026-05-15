@@ -17,6 +17,14 @@ const routes = [
     path: '/praia',
     component: () => import('../views/PraiaView.vue')
   },
+  {
+    path: '/casual',
+    component: () => import('../views/CasualView.vue')
+  },
+  {
+    path: '/terno',
+    component: () => import('../views/TernoView.vue')
+  },
 ]
 
 const router = createRouter({

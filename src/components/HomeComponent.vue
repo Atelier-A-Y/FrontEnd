@@ -85,11 +85,11 @@ img {
 ============================*/
 
 .praia{
-  margin-right: 4vw;
+  margin-right: 8vw;
 }
 
 .praia img{
-  width: 90%;
+  width: 100%;
   background-color: #F9EBE7;
   padding: 1vw;
   border-radius: 1.4vw;
