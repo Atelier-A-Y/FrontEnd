@@ -1,13 +1,5 @@
-<script setup lang="ts">
-import Footer from './components/Footer.vue';
-
-</script>
-
 <template>
- <Footer />
- 
+  <main>
+    <RouterView />
+  </main>
 </template>
-
-<style scoped>
-
-</style>

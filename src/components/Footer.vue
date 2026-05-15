@@ -22,13 +22,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Klee+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Klee+One&display=swap');
 
-footer {
-    background-color: #F5E9E0;
-    text-align: center;
-    width: 100%;
-    padding-top: 2vw;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column; /* organiza header/content/footer verticalmente */
 }
 
+main {
+  flex: 1; /* ocupa todo o espaço disponível */
+}
+
+footer {
+  width: 100%;
+  background-color: #f5ede7; /* cor do rodapé */
+  color: #000;
+  padding: 20px 0;
+  text-align: center;
+  margin-bottom: -10vw;
+}
 div {
     display: flex;
     color: rgb(5, 5, 5);
@@ -60,6 +73,6 @@ a {
     background: #311111;
     color: white;
     text-align: center;
-    padding: 2vw;
+    padding: 2vw;;
 }
 </style>
