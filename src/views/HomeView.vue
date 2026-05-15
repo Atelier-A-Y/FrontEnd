@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import Header from '../components/Header.vue'
 import axios from 'axios'
+import Footer from '../components/Footer.vue'
 
 onMounted(async () => {
   try {
@@ -38,6 +39,7 @@ function logout() {
       <button @click="logout">Sair</button>
     </div>
   </main>
+  <Footer />
 </template>
 
 <style scoped>
