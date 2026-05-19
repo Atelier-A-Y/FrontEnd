@@ -230,13 +230,13 @@ main {
 
 .hover-info h2 {
   font-size: 1.1vw;
-  color: #fff;
+  color: #000000;
   margin-bottom: .3vw;
 }
 
 .hover-info p {
   font-size: .8vw;
-  color: rgba(255,255,255,0.8);
+  color: rgba(0, 0, 0, 0.8);
 }
 
 /* BOTÕES */
