@@ -25,6 +25,18 @@ const routes = [
     path: '/terno',
     component: () => import('../views/TernoView.vue')
   },
+  {
+    path: '/login',
+    component: () => import('../views/LoginView.vue')
+  },
+  {
+    path: '/cadastrar',
+    component: () => import('../views/CadastroView.vue')
+  },
+  {
+    path: '/home',
+    component: () => import('../views/HomeView.vue')
+  },
 ]
 
 const router = createRouter({
