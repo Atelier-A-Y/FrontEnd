@@ -1,11 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 
 const showDropdown = ref(false);
-const router = useRouter();
 const pesquisa = ref("");
 const indexAtivo = ref(-1);
+
+const router = useRouter();
 
 const navegacao = ref([
   { id: "1", nome: "Casamento", rota: "/casamento" },
@@ -19,25 +20,29 @@ const navegacao = ref([
 const resultados = computed(() => {
   const termo = pesquisa.value.trim().toLowerCase();
   if (!termo) return [];
-  return navegacao.value.filter((o) => o.nome.toLowerCase().includes(termo));
+  return navegacao.value.filter((o) =>
+    o.nome.toLowerCase().includes(termo)
+  );
 });
 
-function abrirNavegacao(item) {
+function abrirNavegacao(item: any) {
   if (!item) return;
   router.push(item.rota);
   pesquisa.value = "";
   indexAtivo.value = -1;
 }
 
-function navegar(e) {
-  if (resultados.value.length === 0) return;
+function navegar(e: KeyboardEvent) {
+  if (!resultados.value.length) return;
 
   if (e.key === "ArrowDown") {
     e.preventDefault();
     indexAtivo.value = (indexAtivo.value + 1) % resultados.value.length;
   } else if (e.key === "ArrowUp") {
     e.preventDefault();
-    indexAtivo.value = (indexAtivo.value - 1 + resultados.value.length) % resultados.value.length;
+    indexAtivo.value =
+      (indexAtivo.value - 1 + resultados.value.length) %
+      resultados.value.length;
   } else if (e.key === "Enter") {
     e.preventDefault();
     if (indexAtivo.value >= 0) {
@@ -52,17 +57,19 @@ function navegar(e) {
 <template>
   <header>
     <div class="header">
+      <!-- Logo -->
       <div class="logo">
-        <img src="/img/logo.png" width="85" height="85" alt="img-logo" />
+        <img src="/img/logo.png" alt="Logo Atelier" />
         <div class="texto">
           <p class="titulo">Atelier</p>
           <p class="sigla">A.Y.</p>
         </div>
       </div>
 
+      <!-- Dropdown do globo -->
       <div class="dropdown" @click="showDropdown = !showDropdown">
         <a href="#" class="globo">
-          <img src="/img/globo.jpg" alt="img-globo" width="40" height="40" />
+          <img src="/img/globo.jpg" alt="Globo" />
         </a>
         <div v-if="showDropdown" class="submenu">
           <ul class="cima">
@@ -77,6 +84,7 @@ function navegar(e) {
         </div>
       </div>
 
+      <!-- Busca -->
       <div class="search-container">
         <input
           type="text"
@@ -84,7 +92,8 @@ function navegar(e) {
           placeholder="Buscar..."
           @keydown="navegar"
           class="search-input"
-        /><img src="/img/lupa.png" alt="pesquisa" width="38" height="38" />
+        />
+        <img src="/img/lupa.png" alt="Pesquisar" class="icon-lupa" />
 
         <div class="results-list" v-if="resultados.length">
           <ul>
@@ -93,10 +102,9 @@ function navegar(e) {
               :key="item.id"
               :class="{ ativo: index === indexAtivo }"
               @click="abrirNavegacao(item)"
-              class="result-item"
             >
               <span class="item-icon">
-                <img src="/img/lupa.png" alt="lupinha" width="20" height="20" />
+                <img src="/img/lupa.png" alt="Lupa" />
               </span>
               <span class="item-text">{{ item.nome }}</span>
             </li>
@@ -104,177 +112,155 @@ function navegar(e) {
         </div>
       </div>
 
+      <!-- Ícones -->
       <ul class="icones">
-        <li class="user">
-          <a href="#"><img src="/img/user.png" alt="usuário" width="41" height="41" /></a>
-        </li>
-        <li>
-          <a href="#"><img src="/img/minha-sacola-de-compras.png" alt="sacola" width="39" height="39" /></a>
-        </li>
-        <li>
-          <a href="#"><img src="/img/coracao.png" alt="favoritos" width="39" height="39" /></a>
-        </li>
+        <li><a href="#"><img src="/img/user.png" alt="Usuário" /></a></li>
+        <li><a href="#"><img src="/img/minha-sacola-de-compras.png" alt="Sacola" /></a></li>
+        <li><a href="#"><img src="/img/coracao.png" alt="Favoritos" /></a></li>
       </ul>
     </div>
   </header>
 </template>
 
 <style scoped>
+/* Header fixo e menor */
 header {
   position: fixed;
   top: 0;
   left: 0;
-  background: #f5e6de;
   width: 100%;
-  padding: 0 2.5vw;
+  height: 80px;
+  background: #f5e6de;
+  display: flex;
+  align-items: center;
   z-index: 999;
+  padding: 0 2vw;
 }
 
 .header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.logo {
-  display: flex;
-}
-
+/* Logo */
 .logo img {
-  margin-top: 0.7vw;
-  margin-bottom: 0.7vw;
+  width: 60px;
+  height: auto;
+  margin: 0;
 }
-
 .texto {
-  margin-top: 1.2vw;
+  margin-top: 0.5vw;
 }
-
 .titulo {
-  font-size: 1.7rem;
-  color: #84453d;
-  font-family: "Playfair Display", serif;
-  font-weight: 100;
+  font-size: 1.3rem;
 }
-
 .sigla {
-  font-size: 1.5rem;
-  color: #84453d;
-  font-family: "Playfair Display", serif;
-  font-weight: 100;
-  margin-top: -0.5vw;
-  margin-left: 0.9vw;
+  font-size: 1.1rem;
+  margin-top: -0.3vw;
+  margin-left: 0.5vw;
 }
 
+/* Ícones */
 .icones {
-  list-style-type: none;
   display: flex;
-  justify-content: space-between;
-  margin-right: 6vw;
+  list-style: none;
+  gap: 15px;
+}
+.icones li img {
+  width: 30px;
+  height: auto;
 }
 
-.icones li a {
-  margin-right: 2vw;
+/* Main */
+main {
+  padding-top: 80px;
 }
 
-div a.globo {
-  margin-left: 28vw;
-  margin-right: -2vw;
+/* Dropdown do globo */
+div a.globo img {
+  width: 40px;
+  height: auto;
 }
-
 .submenu {
   position: absolute;
   top: 5vw;
-  left: 50vw;
+  left: 50%;
+  transform: translateX(-50%);
   background: white;
-  margin: 0;
-  padding: 8px 25px 8px 10px;
   border-radius: 6px;
   min-width: 180px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 8px 20px;
+  z-index: 1000;
 }
-
-.cima {
+.cima, .baixo {
   display: flex;
 }
-
-.baixo {
-  display: flex;
-}
-
 .submenu li {
-  padding: 8px 25px;
+  padding: 8px 15px;
   margin-left: 1vw;
 }
-
 .submenu li a {
   color: #311111;
-  font-weight: 500;
-  display: block;
   text-decoration: none;
 }
-
 .submenu li a:hover {
-  background: #f1f1f1;
-  color: #311111;
   font-weight: bold;
+  background: #f1f1f1;
 }
 
+/* Busca */
 .search-container {
+  position: relative;
+  width: 250px;
   display: flex;
-  margin: 0 -10vw 0 -6vw;
-  right: 80px;
-  top: 30px;
-  width: 350px;
-  font-family: "Libre Bodoni", serif;
+  align-items: center;
 }
-
 .search-input {
   width: 100%;
-  padding: 10px 5px;
+  padding: 8px 5px;
   border: none;
   border-bottom: 1px solid #84453d;
   background: transparent;
-  color: #84453d;
   outline: none;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  color: #84453d;
 }
-
 .search-input::placeholder {
   color: rgba(132, 69, 61, 0.6);
 }
-
+.icon-lupa {
+  width: 20px;
+  height: auto;
+  margin-left: 5px;
+}
 .results-list {
   position: absolute;
-  width: 16%;
-  margin-top: 3vw;
+  top: 120%;
+  left: 0;
+  width: 100%;
   background: #fff;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  list-style: none;
   padding: 5px 0;
-  z-index: 1000;
-  overflow: hidden;
   border: 1px solid rgba(132, 69, 61, 0.1);
+  z-index: 1000;
 }
-
 .result-item {
-  padding: 12px 15px;
-  cursor: pointer;
+  padding: 10px 15px;
   display: flex;
   align-items: center;
+  cursor: pointer;
   transition: all 0.2s ease;
-  color: #84453d;
-  font-size: 0.9rem;
 }
-
-.result-item:hover {
+.result-item:hover, .result-item.ativo {
   background-color: #f5e9e0;
   padding-left: 20px;
 }
-
 .item-icon {
   margin-right: 10px;
-  font-size: 0.8rem;
   opacity: 0.7;
 }
 </style>

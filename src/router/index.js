@@ -33,10 +33,6 @@ const routes = [
     path: '/cadastrar',
     component: () => import('../views/CadastroView.vue')
   },
-  {
-    path: '/home',
-    component: () => import('../views/HomeView.vue')
-  },
 ]
 
 const router = createRouter({

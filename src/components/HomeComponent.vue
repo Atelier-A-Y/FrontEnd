@@ -16,10 +16,6 @@
 </template>
 
 <style scoped>
-main{
-  margin-top: -9vw;
-  margin-bottom: 2vw;
-}
 
 .bnt-grandes {
   display: flex;
