@@ -1,5 +1,11 @@
 <template>
   <main>
-    <RouterView />
+  <RouterView />
   </main>
 </template>
+
+<style scoped>
+  main{
+    background-color: white;
+  }
+</style>
