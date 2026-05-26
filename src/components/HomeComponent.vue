@@ -17,6 +17,10 @@
 
 <style scoped>
 
+main{
+  margin-top: -8vw;
+}
+
 .bnt-grandes {
   display: flex;
 }

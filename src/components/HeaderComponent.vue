@@ -57,7 +57,7 @@ function navegar(e: KeyboardEvent) {
 <template>
   <header>
     <div class="header">
-      <!-- Logo -->
+
       <div class="logo">
         <img src="/img/logo.png" alt="Logo Atelier" />
         <div class="texto">
@@ -66,7 +66,6 @@ function navegar(e: KeyboardEvent) {
         </div>
       </div>
 
-      <!-- Dropdown do globo -->
       <div class="dropdown" @click="showDropdown = !showDropdown">
         <a href="#" class="globo">
           <img src="/img/globo.jpg" alt="Globo" />
@@ -112,7 +111,7 @@ function navegar(e: KeyboardEvent) {
         </div>
       </div>
 
-      <!-- Ícones -->
+
       <ul class="icones">
         <li><a href="#"><img src="/img/user.png" alt="Usuário" /></a></li>
         <li><a href="#"><img src="/img/minha-sacola-de-compras.png" alt="Sacola" /></a></li>
@@ -123,18 +122,17 @@ function navegar(e: KeyboardEvent) {
 </template>
 
 <style scoped>
-/* Header fixo e menor */
 header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 6vw;
   background: #f5e6de;
   display: flex;
   align-items: center;
   z-index: 999;
-  padding: 0 2vw;
+  padding: 2vw;
 }
 
 .header {
@@ -144,63 +142,59 @@ header {
   align-items: center;
 }
 
-/* Logo */
 .logo img {
-  width: 60px;
-  height: auto;
-  margin: 0;
-}
-.texto {
-  margin-top: 0.5vw;
-}
-.titulo {
-  font-size: 1.3rem;
-}
-.sigla {
-  font-size: 1.1rem;
-  margin-top: -0.3vw;
-  margin-left: 0.5vw;
+  width: 5vw;
+  height: 5vw;
+  margin: 8.5vw 0 0 4vw;
 }
 
-/* Ícones */
+.texto {
+  margin-top: 9.5vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.titulo {
+  font-size: 1rem;
+}
+
+.sigla {
+  font-size: 0.8rem;
+}
+
 .icones {
   display: flex;
   list-style: none;
-  gap: 15px;
+  gap: 2vw;
+  margin: 3vw 4vw 0 0;
 }
+
 .icones li img {
-  width: 30px;
+  width: 2vw;
   height: auto;
 }
 
-/* Main */
-main {
-  padding-top: 80px;
-}
-
-/* Dropdown do globo */
 div a.globo img {
-  width: 40px;
+  width: 2vw;
   height: auto;
+  margin-top: 6.5vw;
+  margin-left: 20vw;
 }
+
 .submenu {
   position: absolute;
-  top: 5vw;
-  left: 50%;
+  top: 4.3vw;
+  left: 44%;
   transform: translateX(-50%);
   background: white;
-  border-radius: 6px;
-  min-width: 180px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 8px 20px;
+  border-radius: 1vw;
+  text-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.2);
+  padding: 1.5vw 2vw;
   z-index: 1000;
 }
-.cima, .baixo {
-  display: flex;
-}
 .submenu li {
-  padding: 8px 15px;
-  margin-left: 1vw;
+  padding: 0.5vw 2vw;
+  font-size: 1rem;
 }
 .submenu li a {
   color: #311111;
@@ -211,18 +205,23 @@ div a.globo img {
   background: #f1f1f1;
 }
 
-/* Busca */
 .search-container {
   position: relative;
-  width: 250px;
+  width: 20vw;
   display: flex;
   align-items: center;
+  margin-top: 5vw;
 }
+
+.search-container img{
+  max-width: 1vw;
+}
+
 .search-input {
   width: 100%;
-  padding: 8px 5px;
+  padding: 1vw 0;
   border: none;
-  border-bottom: 1px solid #84453d;
+  border-bottom: 0.1vw solid #84453d;
   background: transparent;
   outline: none;
   font-size: 1rem;
@@ -231,36 +230,48 @@ div a.globo img {
 .search-input::placeholder {
   color: rgba(132, 69, 61, 0.6);
 }
+
 .icon-lupa {
-  width: 20px;
-  height: auto;
-  margin-left: 5px;
+  object-fit: contain;
+  margin-left: 1vw;
 }
+
 .results-list {
   position: absolute;
-  top: 120%;
-  left: 0;
+  top: 110%;
+  right: 0.8vw;
   width: 100%;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 5px 0;
-  border: 1px solid rgba(132, 69, 61, 0.1);
+  border-radius: 1vw;
+  box-shadow: 0 2vw 4vw rgba(0, 0, 0, 0.1);
+  padding: 1vw 0;
+  border: 0.1vw solid rgba(132, 69, 61, 0.1);
   z-index: 1000;
 }
+
+.results-list ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.results-list li{
+  list-style: none;
+}
+
 .result-item {
-  padding: 10px 15px;
   display: flex;
-  align-items: center;
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 .result-item:hover, .result-item.ativo {
   background-color: #f5e9e0;
   padding-left: 20px;
 }
+
 .item-icon {
-  margin-right: 10px;
+  margin-right: 1vw;
   opacity: 0.7;
 }
 </style>

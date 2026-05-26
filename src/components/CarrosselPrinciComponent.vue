@@ -73,6 +73,10 @@ setInterval(nextSlide, 4000)
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Antic+Didone&display=swap');
 
+main{
+  margin-top: 6vw;
+}
+
 /*==============================
           CASAMENTO
 ==============================*/

@@ -16,6 +16,5 @@ import FooterComponent from './components/FooterComponent.vue';
 <style scoped>
 main {
   background-color: white;
-  padding-top: 120px;
 }
 </style>
