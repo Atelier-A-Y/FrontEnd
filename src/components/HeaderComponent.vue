@@ -1,8 +1,32 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import {
+  ref,
+  computed,
+  onMounted,
+  onUnmounted
+} from "vue";
+
 import { useRouter } from "vue-router";
 
+/* HEADER TRANSPARENTE */
+const headerAtivo = ref(false);
+
+function handleScroll() {
+  headerAtivo.value = window.scrollY > 50;
+}
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+
+/* DROPDOWN */
 const showDropdown = ref(false);
+
+/* BUSCA */
 const pesquisa = ref("");
 const indexAtivo = ref(-1);
 
@@ -19,7 +43,9 @@ const navegacao = ref([
 
 const resultados = computed(() => {
   const termo = pesquisa.value.trim().toLowerCase();
+
   if (!termo) return [];
+
   return navegacao.value.filter((o) =>
     o.nome.toLowerCase().includes(termo)
   );
@@ -27,7 +53,9 @@ const resultados = computed(() => {
 
 function abrirNavegacao(item: any) {
   if (!item) return;
+
   router.push(item.rota);
+
   pesquisa.value = "";
   indexAtivo.value = -1;
 }
@@ -37,14 +65,20 @@ function navegar(e: KeyboardEvent) {
 
   if (e.key === "ArrowDown") {
     e.preventDefault();
-    indexAtivo.value = (indexAtivo.value + 1) % resultados.value.length;
+
+    indexAtivo.value =
+      (indexAtivo.value + 1) % resultados.value.length;
+
   } else if (e.key === "ArrowUp") {
     e.preventDefault();
+
     indexAtivo.value =
       (indexAtivo.value - 1 + resultados.value.length) %
       resultados.value.length;
+
   } else if (e.key === "Enter") {
     e.preventDefault();
+
     if (indexAtivo.value >= 0) {
       abrirNavegacao(resultados.value[indexAtivo.value]);
     } else {
@@ -55,36 +89,52 @@ function navegar(e: KeyboardEvent) {
 </script>
 
 <template>
-  <header>
-    <div class="header">
+  <header :class="{ scrolled: headerAtivo }">
 
       <div class="logo">
+
         <img src="/img/logo.png" alt="Logo Atelier" />
+
         <div class="texto">
           <p class="titulo">Atelier</p>
           <p class="sigla">A.Y.</p>
         </div>
+
       </div>
 
-      <div class="dropdown" @click="showDropdown = !showDropdown">
+      <!-- GLOBO -->
+      <div
+        class="dropdown"
+        @click="showDropdown = !showDropdown"
+      >
         <a href="#" class="globo">
-          <img src="/img/globo.jpg" alt="Globo" />
+          <img
+              :src="headerAtivo
+                ? '/img/globo-solido.png'
+                : '/img/globo.png'"
+              alt="Globo"
+            />
         </a>
+
         <div v-if="showDropdown" class="submenu">
+
           <ul class="cima">
-            <li><RouterLink to="/home">África</RouterLink></li>
+            <li><RouterLink to="/">África</RouterLink></li>
             <li><RouterLink to="/">América</RouterLink></li>
             <li><RouterLink to="/">Ásia</RouterLink></li>
           </ul>
+
           <ul class="baixo">
             <li><RouterLink to="/">Europa</RouterLink></li>
             <li><RouterLink to="/">Oceania</RouterLink></li>
           </ul>
+
         </div>
       </div>
 
-      <!-- Busca -->
+      <!-- BUSCA -->
       <div class="search-container">
+
         <input
           type="text"
           v-model="pesquisa"
@@ -92,186 +142,365 @@ function navegar(e: KeyboardEvent) {
           @keydown="navegar"
           class="search-input"
         />
-        <img src="/img/lupa.png" alt="Pesquisar" class="icon-lupa" />
 
-        <div class="results-list" v-if="resultados.length">
+        <img
+          :src="headerAtivo
+            ? '/img/lupa-solido.png'
+            : '/img/lupa.png'"
+          alt="Pesquisar"
+          class="icon-lupa"
+        />
+
+        <div
+          class="results-list"
+          v-if="resultados.length"
+        >
           <ul>
+
             <li
               v-for="(item, index) in resultados"
               :key="item.id"
               :class="{ ativo: index === indexAtivo }"
               @click="abrirNavegacao(item)"
+              class="result-item"
             >
+
               <span class="item-icon">
                 <img src="/img/lupa.png" alt="Lupa" />
               </span>
-              <span class="item-text">{{ item.nome }}</span>
+
+              <span class="item-text">
+                {{ item.nome }}
+              </span>
+
             </li>
+
           </ul>
         </div>
+
       </div>
 
-
+      <!-- ÍCONES -->
       <ul class="icones">
-        <li><a href="#"><img src="/img/user.png" alt="Usuário" /></a></li>
-        <li><a href="#"><img src="/img/minha-sacola-de-compras.png" alt="Sacola" /></a></li>
-        <li><a href="#"><img src="/img/coracao.png" alt="Favoritos" /></a></li>
+
+        <li>
+          <a href="#">
+            <img
+              :src="headerAtivo
+                ? '/img/user-solido.png'
+                : '/img/user.png'"
+              alt="User"
+            />
+          </a>
+        </li>
+
+        <li>
+          <a href="#">
+            <img
+              :src="headerAtivo
+                ? '/img/bolsa-solido.png'
+                : '/img/bolsa.png'"
+              alt="Sacola"
+            />
+          </a>
+        </li>
+
+        <li>
+          <a href="#">
+            <img
+              :src="headerAtivo
+                ? '/img/coracao-solido.png'
+                : '/img/coracao.png'"
+              alt="Favoritos"
+            />
+          </a>
+        </li>
+
       </ul>
-    </div>
+
   </header>
 </template>
 
 <style scoped>
+
+/* HEADER */
+
 header {
   position: fixed;
+
   top: 0;
   left: 0;
+
   width: 100%;
   height: 6vw;
-  background: #f5e6de;
+
   display: flex;
   align-items: center;
+
+  padding: 0 2vw;
+
   z-index: 999;
-  padding: 2vw;
+
+  background: transparent;
+
+  transition:
+    background 0.4s ease,
+    backdrop-filter 0.4s ease,
+    box-shadow 0.4s ease;
+
+  justify-content: space-between;
 }
 
-.header {
-  width: 100%;
+/* HEADER QUANDO DESCE */
+
+header.scrolled {
+  background: rgba(245, 230, 222, 0.95);
+
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 0.2vw 1vw rgba(0, 0, 0, 0.08);
+}
+
+/* LOGO */
+
+.logo {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 1vw;
+  position: fixed;
+  top: 0  ;
 }
 
 .logo img {
-  width: 5vw;
-  height: 5vw;
-  margin: 8.5vw 0 0 4vw;
+  width: 4vw;
+  height: 4vw;
 }
 
 .texto {
-  margin-top: 9.5vw;
   display: flex;
   flex-direction: column;
 }
 
 .titulo {
   font-size: 1rem;
+  color: white;
 }
 
 .sigla {
   font-size: 0.8rem;
+  color: white;
 }
 
-.icones {
+/* MENU */
+
+.menu {
   display: flex;
-  list-style: none;
   gap: 2vw;
-  margin: 3vw 4vw 0 0;
+
+  list-style: none;
 }
 
-.icones li img {
-  width: 2vw;
-  height: auto;
+.menu li a {
+  text-decoration: none;
+
+  color: white;
+
+  font-size: 0.9rem;
+
+  transition: 0.3s;
 }
 
-div a.globo img {
-  width: 2vw;
-  height: auto;
-  margin-top: 6.5vw;
-  margin-left: 20vw;
+.menu li a:hover {
+  opacity: 0.7;
+}
+
+/* DROPDOWN */
+
+.globo img {
+  width: 1.8vw;
+  margin-left: 35vw;
+  top: 0;
 }
 
 .submenu {
   position: absolute;
-  top: 4.3vw;
-  left: 44%;
+
+  top: 5vw;
+  left: 50%;
+
   transform: translateX(-50%);
+
   background: white;
+
   border-radius: 1vw;
-  text-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.2);
-  padding: 1.5vw 2vw;
-  z-index: 1000;
+
+  padding: 1vw 2vw;
+
+  box-shadow:
+    0 1vw 2vw rgba(0, 0, 0, 0.15);
 }
+
+.submenu ul {
+  list-style: none;
+}
+
 .submenu li {
-  padding: 0.5vw 2vw;
-  font-size: 1rem;
+  margin: 0.5vw 0;
 }
+
 .submenu li a {
-  color: #311111;
   text-decoration: none;
+  color: #311111;
 }
-.submenu li a:hover {
-  font-weight: bold;
-  background: #f1f1f1;
-}
+
+/* BUSCA */
 
 .search-container {
   position: relative;
-  width: 20vw;
+  top: 0;
+  width: 18vw;
+
   display: flex;
   align-items: center;
-  margin-top: 5vw;
-}
 
-.search-container img{
-  max-width: 1vw;
+  gap: 1vw;
 }
 
 .search-input {
   width: 100%;
-  padding: 1vw 0;
+
   border: none;
-  border-bottom: 0.1vw solid #84453d;
+  border-bottom: 0.1vw solid white;
+
   background: transparent;
+
+  padding: 0.5vw 0;
+
   outline: none;
+
+  color: white;
+
   font-size: 1rem;
-  color: #84453d;
+
+  transition: 0.3s;
 }
+
 .search-input::placeholder {
-  color: rgba(132, 69, 61, 0.6);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .icon-lupa {
-  object-fit: contain;
-  margin-left: 1vw;
+  width: 1vw;
+  height: 1vw;
 }
+
+/* RESULTADOS */
 
 .results-list {
   position: absolute;
-  top: 110%;
-  right: 0.8vw;
+
+  top: 120%;
+  left: 0;
+
   width: 100%;
-  background: #fff;
+
+  background: white;
+
   border-radius: 1vw;
-  box-shadow: 0 2vw 4vw rgba(0, 0, 0, 0.1);
-  padding: 1vw 0;
-  border: 0.1vw solid rgba(132, 69, 61, 0.1);
-  z-index: 1000;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 1vw 2vw rgba(0, 0, 0, 0.1);
 }
 
-.results-list ul{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.results-list li{
+.results-list ul {
   list-style: none;
 }
 
 .result-item {
   display: flex;
+  align-items: center;
+
+  gap: 1vw;
+
+  padding: 1vw;
+
   cursor: pointer;
-  transition: all 0.2s ease;
+
+  transition: 0.3s;
 }
 
-.result-item:hover, .result-item.ativo {
-  background-color: #f5e9e0;
-  padding-left: 20px;
+.result-item:hover,
+.result-item.ativo {
+  background: #f5e9e0;
 }
 
-.item-icon {
-  margin-right: 1vw;
-  opacity: 0.7;
+.item-icon img {
+  width: 1vw;
 }
+
+/* ÍCONES */
+
+.icones {
+  display: flex;
+
+  align-items: center;
+
+  gap: 1.5vw;
+
+  list-style: none;
+}
+
+.icones li img {
+  width: 1.7vw;
+}
+
+/* QUANDO O HEADER FICA SÓLIDO */
+
+header.scrolled .titulo,
+header.scrolled .sigla,
+header.scrolled .menu li a {
+  color: #311111;
+}
+
+header.scrolled .search-input {
+  color: #311111;
+
+  border-bottom:
+    0.1vw solid #84453d;
+}
+
+header.scrolled .search-input::placeholder {
+  color: rgba(49, 17, 17, 0.5);
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 768px) {
+
+  header {
+    height: 14vw;
+    padding: 0 5vw;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .logo img {
+    width: 10vw;
+    height: 10vw;
+  }
+
+  .search-container {
+    width: 30vw;
+  }
+
+  .icones li img {
+    width: 4vw;
+  }
+}
+
 </style>
