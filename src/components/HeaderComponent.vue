@@ -93,10 +93,13 @@ function navegar(e: KeyboardEvent) {
 
       <div class="logo">
 
-        <img src="/img/logo.png" alt="Logo Atelier" />
+        <img :src="headerAtivo
+                ? '/img/logo-solido.png'
+                : '/img/logo.png'"
+                alt="Logo Atelier" />
 
         <div class="texto">
-          <p class="titulo">Atelier</p>
+          <p class="titulo">ATELIER</p>
           <p class="sigla">A.Y.</p>
         </div>
 
@@ -166,7 +169,7 @@ function navegar(e: KeyboardEvent) {
             >
 
               <span class="item-icon">
-                <img src="/img/lupa.png" alt="Lupa" />
+                <img src="/img/lupa-solido.png" alt="Lupa" />
               </span>
 
               <span class="item-text">
@@ -234,14 +237,18 @@ header {
   width: 100%;
   height: 6vw;
 
+  padding: 0 2vw;
   display: flex;
   align-items: center;
 
-  padding: 0 2vw;
+  z-index: 99;
 
-  z-index: 999;
-
-  background: transparent;
+  background: linear-gradient(
+    to top,
+    rgba(63, 44, 25, 0) 30%,
+    rgba(63, 44, 25, 0.233) 50%,
+    rgba(63, 44, 25, 0.486) 90%
+  );
 
   transition:
     background 0.4s ease,
@@ -269,25 +276,30 @@ header.scrolled {
   align-items: center;
   gap: 1vw;
   position: fixed;
-  top: 0  ;
+  top: 0;
 }
 
 .logo img {
-  width: 4vw;
-  height: 4vw;
+  width: 4.5vw;
+  height: 6vw;
+  margin-top: -2.5vw;
 }
 
 .texto {
   display: flex;
   flex-direction: column;
+  font-family: "Playfair", serif;
+  font-optical-sizing: auto;
 }
 
 .titulo {
+  margin-top: 1.5vw;
   font-size: 1rem;
   color: white;
 }
 
 .sigla {
+  margin-top: -1vw;
   font-size: 0.8rem;
   color: white;
 }
@@ -320,7 +332,7 @@ header.scrolled {
 .globo img {
   width: 1.8vw;
   margin-left: 35vw;
-  top: 0;
+  margin-top: 3.5vw;
 }
 
 .submenu {
@@ -358,8 +370,8 @@ header.scrolled {
 
 .search-container {
   position: relative;
-  top: 0;
-  width: 18vw;
+  margin-top: 3vw;
+  width: 20vw;
 
   display: flex;
   align-items: center;
@@ -391,8 +403,8 @@ header.scrolled {
 }
 
 .icon-lupa {
-  width: 1vw;
-  height: 1vw;
+  width: 1.5vw;
+  height: 1.5vw;
 }
 
 /* RESULTADOS */
@@ -417,18 +429,15 @@ header.scrolled {
 
 .results-list ul {
   list-style: none;
+  margin-left: -8vw;
 }
 
 .result-item {
   display: flex;
   align-items: center;
-
   gap: 1vw;
-
   padding: 1vw;
-
   cursor: pointer;
-
   transition: 0.3s;
 }
 
@@ -445,16 +454,14 @@ header.scrolled {
 
 .icones {
   display: flex;
-
+  margin-right: 5vw;
   align-items: center;
-
-  gap: 1.5vw;
-
+  gap: 2vw;
   list-style: none;
 }
 
 .icones li img {
-  width: 1.7vw;
+  width: 2vw;
 }
 
 /* QUANDO O HEADER FICA SÓLIDO */

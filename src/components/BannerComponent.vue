@@ -39,7 +39,7 @@
     rgb(0, 0, 0) 48%,
     rgb(0, 0, 0) 100%
   );
-
+    height: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -63,7 +63,7 @@
 .marca{
   position: absolute;
   left: 92vw;
-  bottom: 17vw;
+  bottom: 16vw;
   transform: translateY(-50%);
   color: white;
   font-family: "Noto Rashi Hebrew", serif;

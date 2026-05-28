@@ -62,13 +62,11 @@ img {
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0) 55%,
-    rgba(217, 217, 217, 0.5) 75%,
+    rgba(217, 217, 217, 0.801) 80%,
     rgb(201, 180, 171) 100%
   );
-  display: flex;
   align-items: flex-end;
-  justify-content: center;
-
+  height: 100%;
 }
 
 .titulo-madri h1{
@@ -77,7 +75,6 @@ img {
   font-weight: 400;
   font-style: normal;
   font-size: 3.2vw;
-  -webkit-text-stroke: 1px rgb(237, 236, 236);
 }
 
 /*===========================
@@ -89,7 +86,7 @@ img {
 }
 
 .praia img{
-  width: 100%;
+  width: 98%;
   background-color: #F9EBE7;
   padding: 1vw;
   border-radius: 1.4vw;

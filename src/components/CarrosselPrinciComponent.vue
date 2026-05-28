@@ -79,7 +79,7 @@ setInterval(nextSlide, 4000)
 
 .marca1-noiva{
   position: absolute;
-  bottom: 73%;
+  bottom: 65%;
   right: 67%;
   color: rgb(255, 255, 255);
   font-size: clamp(1.5vw, 1.5vw, 1.5vw);
@@ -92,7 +92,7 @@ setInterval(nextSlide, 4000)
 
 .marca2-noiva{
   position: absolute;
-  bottom: 70%;
+  bottom: 62%;
   right: 69%;
   color: white;
   font-size: clamp(1.3vw, 1.3vw, 1.3vw);
@@ -105,7 +105,7 @@ setInterval(nextSlide, 4000)
 
 .texto-noiva {
   position: absolute;
-  bottom: 52%;
+  bottom: 46%;
   right: 50%;
   color: rgb(255, 244, 232);
   font-size: clamp(6vw, 6vw, 6vw);
@@ -119,7 +119,7 @@ setInterval(nextSlide, 4000)
 
 .subtexto-noiva{
   position: absolute;
-  bottom: 50%;
+  bottom: 42%;
   right: 57%;
   color: #e7d3c3;
   font-size: clamp(2vw, 2vw, 2vw);
@@ -135,7 +135,7 @@ setInterval(nextSlide, 4000)
 
 .marca1-formanda{
   position: absolute;
-  bottom: 73%;
+  bottom: 65%;
   right: 67%;
   color: rgb(255, 255, 255);
   font-size: clamp(1.5vw, 1.5vw, 1.5vw);
@@ -148,7 +148,7 @@ setInterval(nextSlide, 4000)
 
 .marca2-formanda{
   position: absolute;
-  bottom: 70%;
+  bottom: 62%;
   right: 69%;
   color: white;
   font-size: clamp(1.3vw, 1.3vw, 1.3vw);
@@ -161,7 +161,7 @@ setInterval(nextSlide, 4000)
 
 .texto-formanda {
   position: absolute;
-  bottom: 52%;
+  bottom: 46%;
   right: 50%;
   color: #ffffff;
   font-size: clamp(6vw, 6vw, 6vw);
@@ -173,7 +173,7 @@ setInterval(nextSlide, 4000)
 
 .subtexto-formanda{
   position: absolute;
-  bottom: 50%;
+  bottom: 42%;
   right: 60%;
   color: #2f3776;
   font-size: clamp(2vw, 2vw, 2vw);

@@ -27,16 +27,16 @@ html, body {
   padding: 0;
   height: 100%;
   display: flex;
-  flex-direction: column; /* organiza header/content/footer verticalmente */
+  flex-direction: column;
 }
 
 main {
-  flex: 1; /* ocupa todo o espaço disponível */
+  flex: 1;
 }
 
 footer {
   width: 100%;
-  background-color: #f5ede7; /* cor do rodapé */
+  background-color: #f5ede7;
   color: #000;
   padding: 20px 0;
   text-align: center;
