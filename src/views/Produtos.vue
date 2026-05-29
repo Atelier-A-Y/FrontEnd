@@ -4,7 +4,6 @@ import { ref, onMounted } from 'vue'
 
 const produtos = ref([])
 
-// carregar produtos
 onMounted(() => {
 
   const produtosSalvos =
@@ -20,7 +19,7 @@ onMounted(() => {
 })
 
 // excluir produto
-function excluirProduto(index) {
+/*function excluirProduto(index) {
 
   produtos.value.splice(index, 1)
 
@@ -29,7 +28,7 @@ function excluirProduto(index) {
     JSON.stringify(produtos.value)
   )
 
-}
+}*/
 
 </script>
 
@@ -38,8 +37,6 @@ function excluirProduto(index) {
   <main>
 
     <h1>Produtos</h1>
-
-    <!-- LISTA DE PRODUTOS -->
 
     <section
       class="container-produtos"
@@ -103,15 +100,13 @@ function excluirProduto(index) {
 
         </p>
 
-        <button @click="excluirProduto(index)">
+        <!--<button @click="excluirProduto(index)">
           Excluir
-        </button>
+        </button>-->
 
       </div>
 
     </section>
-
-    <!-- SEM PRODUTOS -->
 
     <section
       v-else
