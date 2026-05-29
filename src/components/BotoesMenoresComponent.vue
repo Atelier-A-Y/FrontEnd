@@ -65,7 +65,7 @@
   display: flex;
   align-items: end;
   justify-content: center;
-  padding-bottom: 2vw;
+  padding-bottom: 2.5vw;
   background: linear-gradient(
     to right,
     rgba(26, 17, 17, 0.39) 26%,
@@ -125,7 +125,7 @@
   display: flex;
   align-items: end;
   justify-content: center;
-  padding-bottom: 2vw;
+  padding-bottom: 2.5vw;
   background: linear-gradient(
     to left,
     rgba(26, 17, 17, 0.39) 26%,

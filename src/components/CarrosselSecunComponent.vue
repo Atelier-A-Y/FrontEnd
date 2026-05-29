@@ -136,7 +136,7 @@ function moveHover(e: MouseEvent) {
 
 main {
   background: #E6D6C5;
-  margin: 2vw 0;
+  margin: 4vw 0;
 }
 
 .carrossel-container {

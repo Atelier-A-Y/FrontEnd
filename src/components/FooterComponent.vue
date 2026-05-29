@@ -18,61 +18,109 @@
     </footer>
 </template>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Klee+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Klee+One&display=swap');
-
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-main {
-  flex: 1;
-}
-
+<style scoped>
 footer {
   width: 100%;
-  background-color: #f5ede7;
-  color: #000;
-  padding: 20px 0;
-  text-align: center;
-  margin-bottom: -10vw;
-}
-div {
-    display: flex;
-    color: rgb(5, 5, 5);
-    margin-bottom: 50px;
-    justify-content: space-around;
-    font-family: 'Klee One', cursive;
+  background: #f5e9e0;
+  margin-top: 4vw;
 }
 
-div h1 {
-    font-family: 'Julius Sans One', sans-serif;
-    font-size: 2.5rem;
+footer > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  padding: 50px 80px;
 }
 
-div p {
-    text-align: center;
-    font-size: 1.2rem;
+footer section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-span {
-    padding: 0 6px 0 0;
+footer h1 {
+  font-size: 2.3rem;
+  letter-spacing: 2px;
+
+  color: #311111;
+  margin-bottom: 10px;
+
+  font-family: "Julius Sans One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
-a {
-    color: rgb(5, 5, 5);
-    text-decoration: none;
+footer p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 1rem;
+  color: #311111;
+
+  font-family: "Julius Sans One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+footer a {
+  color: #311111;
+  text-decoration: none;
+
+  transition: 0.3s;
+}
+
+footer a:hover {
+  opacity: 0.7;
+}
+
+footer span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
 }
 
 .endereço {
-    background: #311111;
-    color: white;
-    text-align: center;
-    padding: 2vw;;
+  width: 100%;
+  background: #311111;
+
+  color: #f5e9e0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  padding: 16px 20px;
+
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  footer > div {
+    flex-direction: column;
+    gap: 40px;
+
+    padding: 40px 30px;
+  }
+
+  footer h1 {
+    font-size: 1.7rem;
+  }
+
+  footer p {
+    font-size: 0.95rem;
+  }
+
+  .endereço {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    padding: 15px;
+  }
 }
 </style>

@@ -16,9 +16,9 @@
 </template>
 
 <style scoped>
-
 main{
-  margin-top: -8vw;
+  margin-top: -9vw;
+  margin-bottom: 2vw;
 }
 
 .bnt-grandes {
@@ -62,11 +62,13 @@ img {
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0) 55%,
-    rgba(217, 217, 217, 0.801) 80%,
+    rgba(217, 217, 217, 0.5) 75%,
     rgb(201, 180, 171) 100%
   );
+  display: flex;
   align-items: flex-end;
-  height: 100%;
+  justify-content: center;
+
 }
 
 .titulo-madri h1{
@@ -86,7 +88,7 @@ img {
 }
 
 .praia img{
-  width: 98%;
+  width: 100%;
   background-color: #F9EBE7;
   padding: 1vw;
   border-radius: 1.4vw;

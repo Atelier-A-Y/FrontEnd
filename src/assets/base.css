@@ -1,0 +1,95 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* VARIÁVEIS GLOBAIS */
+:root {
+  --cor-principal: #000;
+  --cor-secundaria: #fff;
+  --cor-destaque: #c9a46c;
+
+  --fonte-principal: 'Poppins', sans-serif;
+  --fonte-titulo: 'Playfair Display', serif;
+
+  --transition: 0.3s ease;
+}
+
+/* CONFIGURAÇÃO GLOBAL */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--fonte-principal);
+  background: #fff;
+  color: #000;
+  overflow-x: hidden;
+}
+
+/* IMAGENS */
+img {
+  width: 100%;
+  display: block;
+}
+
+/* LINKS */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* LISTAS */
+ul,
+ol {
+  list-style: none;
+}
+
+/* BOTÕES */
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* INPUTS */
+input,
+textarea,
+select {
+  outline: none;
+  border: none;
+  font-family: inherit;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #777;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* CLASSES ÚTEIS */
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section {
+  padding: 80px 0;
+}
