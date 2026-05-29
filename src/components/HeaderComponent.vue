@@ -305,8 +305,6 @@ header.scrolled {
 .menu {
   display: flex;
   gap: 2vw;
-
-  list-style: none;
 }
 
 .menu li a {
@@ -332,33 +330,40 @@ header.scrolled {
 
 .submenu {
   position: absolute;
-
   top: 5vw;
-  left: 50%;
-
-  transform: translateX(-50%);
-
+  left: 50vw;
   background: white;
-
-  border-radius: 1vw;
-
-  padding: 1vw 2vw;
-
-  box-shadow:
-    0 1vw 2vw rgba(0, 0, 0, 0.15);
+  margin: 0;
+  padding: 8px 25px 8px 10px;
+  border-radius: 6px;
+  min-width: 180px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.submenu ul {
-  list-style: none;
+.cima {
+  display: flex;
+}
+
+.baixo {
+  display: flex;
 }
 
 .submenu li {
-  margin: 0.5vw 0;
+  padding: 8px 25px;
+  margin-left: 1vw;
 }
 
 .submenu li a {
-  text-decoration: none;
   color: #311111;
+  font-weight: 500;
+  display: block;
+  text-decoration: none;
+}
+
+.submenu li a:hover {
+  background: #f1f1f1;
+  color: #311111;
+  font-weight: bold;
 }
 
 /* BUSCA */
