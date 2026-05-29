@@ -46,8 +46,8 @@ window.location.href = '/'
 
       <div class="formulario">
 
-        <div class="logo">
-        <img src="/css/logo.png" alt="logo.png" width="76" height="77">
+        <div class="logo-login">
+        <img src="/css/logo-login.png" alt="logo.png">
         <p class="nome1">ATELIER</p>
         <p class="nome2">A.Y</p>
       </div>
@@ -81,9 +81,16 @@ window.location.href = '/'
 </template>
 
 <style scoped>
-.logo{
+.logo-login{
   text-align: center;
-  padding-bottom: 10px;
+  padding-bottom: 1vw;
+}
+
+.logo-login img {
+  width: 6vw;
+  height: 6vw;
+  margin-left: 8.5vw;
+  margin-bottom: 1vw;
 }
 
 .nome1{
