@@ -22,7 +22,7 @@ async function cadastrar(){
     const token = response.data.access
     localStorage.setItem('token', token)
 
-    window.location.href = '/home'
+    window.location.href = '/'
 
   } catch (error) {
     console.error(error)

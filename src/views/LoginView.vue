@@ -16,7 +16,7 @@ const token = response.data.access
 
 localStorage.setItem('token', token)
 
-window.location.href = '/home'
+window.location.href = '/'
   } catch (error: unknown) {
   if (axios.isAxiosError(error)) {
     console.error(error.response?.data)
