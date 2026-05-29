@@ -275,14 +275,12 @@ header.scrolled {
   display: flex;
   align-items: center;
   gap: 1vw;
-  position: fixed;
-  top: 0;
+
 }
 
 .logo img {
   width: 4.5vw;
   height: 6vw;
-  margin-top: -2.5vw;
 }
 
 .texto {
@@ -293,13 +291,11 @@ header.scrolled {
 }
 
 .titulo {
-  margin-top: 1.5vw;
   font-size: 1rem;
   color: white;
 }
 
 .sigla {
-  margin-top: -1vw;
   font-size: 0.8rem;
   color: white;
 }
@@ -332,7 +328,6 @@ header.scrolled {
 .globo img {
   width: 1.8vw;
   margin-left: 35vw;
-  margin-top: 3.5vw;
 }
 
 .submenu {
@@ -370,7 +365,7 @@ header.scrolled {
 
 .search-container {
   position: relative;
-  margin-top: 3vw;
+
   width: 20vw;
 
   display: flex;
@@ -429,7 +424,7 @@ header.scrolled {
 
 .results-list ul {
   list-style: none;
-  margin-left: -8vw;
+
 }
 
 .result-item {
@@ -454,7 +449,6 @@ header.scrolled {
 
 .icones {
   display: flex;
-  margin-right: 5vw;
   align-items: center;
   gap: 2vw;
   list-style: none;

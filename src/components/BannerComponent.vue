@@ -63,7 +63,7 @@
 .marca{
   position: absolute;
   left: 92vw;
-  bottom: 16vw;
+  bottom: 18vw;
   transform: translateY(-50%);
   color: white;
   font-family: "Noto Rashi Hebrew", serif;

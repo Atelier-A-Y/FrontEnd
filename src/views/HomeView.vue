@@ -5,6 +5,7 @@ import CarrosselPrinciComponent from '../components/CarrosselPrinciComponent.vue
 import CarrosselSecunComponent from '../components/CarrosselSecunComponent.vue';
 import HomeComponent from '../components/HomeComponent.vue';
 
+
 </script>
 
 <template>
