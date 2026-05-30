@@ -296,7 +296,7 @@ header.scrolled {
 }
 
 .sigla {
-  margin-left: 1vw;
+  margin-left: 1.4vw;
   font-size: 0.8rem;
   color: white;
 }
