@@ -2,35 +2,38 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
+const nome = ref('');
 const email = ref('');
 const senha = ref('')
 
-async function entrar(){
+async function cadastrar(){
   try {
+    await axios.post('http://127.0.0.1:8000/api/registro/', {
+      name: nome.value,
+      email: email.value,
+      password: senha.value,
+    })
+
     const response = await axios.post('http://127.0.0.1:8000/api/token/', {
-  email: email.value,
-  password: senha.value
-})
+      email: email.value,
+      password: senha.value
+    })
 
-const token = response.data.access
+    const token = response.data.access
+    localStorage.setItem('token', token)
 
-localStorage.setItem('token', token)
+    window.location.href = '/'
 
-window.location.href = '/home'
-  } catch (error: unknown) {
-  if (axios.isAxiosError(error)) {
-    console.error(error.response?.data)
-    alert(error.response?.data?.error || 'Erro no login')
-  } else {
+  } catch (error) {
     console.error(error)
-    alert('Erro inesperado')
+    alert('Erro no cadastro')
   }
-}}
+}
 </script>
 
 <template>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <form @submit.prevent="entrar">
+  <form @submit.prevent="cadastrar">
     <div class="fundo">
 
     <img src="/css/modelo2.png" class="bg modelo2">
@@ -46,11 +49,20 @@ window.location.href = '/home'
 
       <div class="formulario">
 
-        <div class="logo">
-        <img src="/css/logo.png" alt="logo.png" width="76" height="77">
+        <div class="logo-login">
+        <img src="/css/logo-login.png" alt="logo.png">
         <p class="nome1">ATELIER</p>
         <p class="nome2">A.Y</p>
       </div>
+
+        <div class="campo">
+        <input
+            id="nome"
+            type="text"
+            v-model="nome"
+            placeholder="Digite seu nome..."
+          />
+        </div>
 
         <div class="campo">
           <input
@@ -70,20 +82,26 @@ window.location.href = '/home'
           />
         </div>
 
-        <button type="submit">Entrar</button>
-
-        <div class="cadastro-link">
-        <p>Não possui uma conta? Clique <router-link to="/cadastrar">Aqui!</router-link></p>
+        <div class="btn-cadastro">
+          <button type="submit">Entrar</button>
+          <button type="reset">Limpar</button>
         </div>
       </div>
-      </div>
+    </div>
   </form>
 </template>
 
 <style scoped>
-.logo{
+.logo-login{
   text-align: center;
-  padding-bottom: 10px;
+  padding-bottom: 1vw;
+}
+
+.logo-login img {
+  width: 6vw;
+  height: 6vw;
+  margin-left: 8.5vw;
+  margin-bottom: 1vw;
 }
 
 .nome1{
@@ -229,6 +247,12 @@ input:focus {
   box-shadow: 0 0 0 2px rgba(110, 29, 19, 0.15);
 }
 
+.btn-cadastro{
+  margin-top: 2vw;
+  display: flex;
+  justify-content: space-between;
+}
+
 button {
   background-color: #F5E6DE;
   color: #311111;
@@ -251,20 +275,5 @@ p {
   font-size: 13px;
   margin-top: -10px;
   margin-bottom: 10px;
-}
-
-.cadastro-link{
-  text-align: center;
-}
-
-.cadastro-link p{
-  color: #595858;
-  font-size: 13px;
-  padding: 10px 0 0 0;
-}
-
-.cadastro-link a{
-  color: #311111;
-  text-decoration: none;
 }
 </style>
