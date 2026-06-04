@@ -112,14 +112,14 @@
             </div>
 
             <div class="field">
-              <label>Sexo</label>
+              <label>Gênero</label>
 
               <select>
-                <option>Sexo</option>
-                <option>Feminino</option>
-                <option>Masculino</option>
-                <option>Outro</option>
-                <option>Prefiro Não Informar</option>
+                <option>---</option>
+                <option value="1">Feminino</option>
+                <option value="2">Masculino</option>
+                <option value="3">Outro</option>
+                <option value="4">Prefiro Não Informar</option>
               </select>
             </div>
 
@@ -140,10 +140,10 @@
             </div>
 
             <div class="field">
-              <label>Telefone Secundário</label>
+              <label>Email</label>
               <input
-                type="text"
-                placeholder="(DD) + Número"
+                type="email"
+                placeholder="julia@gmail.com"
               >
             </div>
 
@@ -163,12 +163,8 @@
           <div class="email-box">
 
             <span>
-              gabriela.heloisa.ramos.ifc@
+              gabriela.heloisa.ramos.ifc@gmail.com
             </span>
-
-            <button>
-              Copiar
-            </button>
 
           </div>
 
@@ -207,8 +203,8 @@
 
 .welcome-card,
 .menu-card{
-  background:#fff;
-  border:1px solid #e5e5e5;
+  background:#F5E9E0;
+  border:1px solid #31111152;
   border-radius:8px;
 }
 
@@ -226,13 +222,14 @@
 .logout{
   border:none;
   background:none;
-  color:#ff4d5e;
+  color:#960c19;
   cursor:pointer;
   padding:0;
 }
 
 .menu-card{
   display:flex;
+  margin-top: 0.5vw;
   gap:16px;
   padding:20px;
   cursor:pointer;
@@ -254,7 +251,7 @@
 }
 
 .menu-card.active{
-  background:#222;
+  background:#311111;
   color:white;
 }
 
@@ -267,13 +264,13 @@
 
   border-top:12px solid transparent;
   border-bottom:12px solid transparent;
-  border-left:12px solid #222;
+  border-left:12px solid #311111;
 }
 
 .content{
-  background:white;
+  background:#F5E9E0;
   border-radius:8px;
-  padding:30px;
+  padding:20px;
 }
 
 .title{
@@ -291,7 +288,7 @@
 
 .form-card,
 .access-card{
-  border:1px solid #e2e2e2;
+  border:1px solid #31111152;
   border-radius:10px;
   padding:25px;
 }
@@ -321,7 +318,7 @@
 .field input,
 .field select{
   height:50px;
-  border:1px solid #d7d7d7;
+
   border-radius:8px;
   padding:0 15px;
   font-size:15px;
@@ -353,24 +350,23 @@
   margin:20px 0;
 }
 
-.email-box button{
-  border:none;
-  background:none;
-  color:#1677ff;
-  cursor:pointer;
-}
-
 .change-password{
   width:100%;
   height:48px;
 
-  border:1px solid #1677ff;
+  border:1px solid #311111;
   border-radius:8px;
 
-  background:white;
-  color:#1677ff;
+  background:#F5E9E0;
+  color:#311111;
 
   cursor:pointer;
+}
+
+.change-password:hover{
+  background-color: #311111;
+  color: #F5E9E0;
+  transition:.3s;
 }
 
 @media(max-width:1024px){
