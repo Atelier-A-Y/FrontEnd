@@ -1,3 +1,58 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { getProfile, updateProfile } from '../services/user'
+
+const loading = ref(false)
+
+const form = ref({
+  name: '',
+  cpf: '',
+  telefone: '',
+  email: ''
+})
+
+async function carregarUsuario() {
+  try {
+    const data = await getProfile()
+
+    form.value = {
+      name: data.name || '',
+      cpf: data.cpf || '',
+      telefone: data.telefone || '',
+      email: data.email || ''
+    }
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+async function salvar() {
+  loading.value = true
+
+  try {
+    await updateProfile({
+      name: form.value.name,
+      cpf: form.value.cpf,
+      telefone: form.value.telefone
+    })
+
+    alert('Dados atualizados com sucesso!')
+  }
+  catch (error) {
+    console.error(error)
+    alert('Erro ao atualizar dados.')
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  carregarUsuario()
+})
+</script>
+
 <template>
   <main class="perfil-container">
 
@@ -6,12 +61,12 @@
 
       <div class="welcome-card">
         <div class="icon">
-          <i class="fa-regular fa-user"></i>
+          <img src="/img/user-solido.png" alt="user.png">
         </div>
 
         <div>
           <p>Bem-vindo,</p>
-          <h3>Gabriela Heloisa Ramos</h3>
+          <h3>{{ form.name }}</h3>
 
           <button class="logout">
             Sair da conta
@@ -22,7 +77,7 @@
       <nav>
 
         <div class="menu-card">
-          <i class="fa-regular fa-cube"></i>
+          <img src="/img/caminhao.png" alt="caminhao.png">
 
           <div>
             <h4>Pedidos</h4>
@@ -30,17 +85,8 @@
           </div>
         </div>
 
-        <div class="menu-card">
-          <i class="fa-regular fa-tag"></i>
-
-          <div>
-            <h4>Créditos e descontos</h4>
-            <p>Confira os cupons disponíveis.</p>
-          </div>
-        </div>
-
         <div class="menu-card active">
-          <i class="fa-regular fa-user"></i>
+          <img src="/img/user-solido.png" alt="user.png">
 
           <div>
             <h4>Cadastro</h4>
@@ -49,16 +95,16 @@
         </div>
 
         <div class="menu-card">
-          <i class="fa-regular fa-house"></i>
+          <img src="/img/bolsa-solido.png" alt="bolsa.png">
 
           <div>
-            <h4>Endereços</h4>
-            <p>Altere e gerencie seus endereços salvos.</p>
+            <h4>Salvos</h4>
+            <p>Veja seus itens salvos.</p>
           </div>
         </div>
 
         <div class="menu-card">
-          <i class="fa-regular fa-heart"></i>
+          <img src="/img/coracao-solido.png" alt="coracao.png">
 
           <div>
             <h4>Favoritos</h4>
@@ -74,7 +120,7 @@
     <section class="content">
 
       <div class="title">
-        <i class="fa-regular fa-user"></i>
+        <img src="/img/user-solido.png" alt="user.png">
         <h1>Cadastro</h1>
       </div>
 
@@ -90,6 +136,7 @@
             <div class="field full">
               <label>Nome Completo*</label>
               <input
+              v-model="form.name"
                 type="text"
                 placeholder="Ex: Julia Gabriela da Silva"
               >
@@ -98,6 +145,7 @@
             <div class="field">
               <label>CPF*</label>
               <input
+              v-model="form.cpf"
                 type="text"
                 placeholder="Ex: 000.000.000-00"
               >
@@ -134,6 +182,7 @@
             <div class="field">
               <label>Telefone Celular*</label>
               <input
+              v-model="form.telefone"
                 type="text"
                 placeholder="(DD) + Número"
               >
@@ -142,13 +191,18 @@
             <div class="field">
               <label>Email</label>
               <input
+              v-model="form.email"
                 type="email"
                 placeholder="julia@gmail.com"
               >
             </div>
 
-            <button class="save-btn">
-              ✓ Salvar Alterações
+            <button
+                class="save-btn"
+                @click="salvar"
+                :disabled="loading"
+              >
+                {{ loading ? 'Salvando...' : '✓ Salvar Alterações' }}
             </button>
 
           </div>
@@ -163,7 +217,7 @@
           <div class="email-box">
 
             <span>
-              gabriela.heloisa.ramos.ifc@gmail.com
+              {{form.email}}
             </span>
 
           </div>
@@ -187,36 +241,41 @@
   box-sizing:border-box;
 }
 
+img{
+  width: 1.5vw;
+  height: 1.5vw;
+}
+
 .perfil-container{
-  max-width:1240px;
-  margin:40px auto;
+  max-width:90vw;
+  margin:3vw auto;
   display:grid;
-  grid-template-columns:280px 1fr;
-  gap:40px;
+  grid-template-columns:20vw 1fr;
+  gap:3vw;
 }
 
 .sidebar{
   display:flex;
   flex-direction:column;
-  gap:18px;
+  gap:2vw;
 }
 
 .welcome-card,
 .menu-card{
   background:#F5E9E0;
-  border:1px solid #31111152;
-  border-radius:8px;
+  border:0.1vw solid #31111152;
+  border-radius:0.5vw;
 }
 
 .welcome-card{
   display:flex;
-  gap:18px;
-  padding:18px;
+  gap:2vw;
+  padding:1.1vw;
 }
 
 .welcome-card h3{
-  margin:5px 0;
-  font-size:20px;
+  margin:0.5vw 0;
+  font-size:1.5vw;
 }
 
 .logout{
@@ -230,24 +289,24 @@
 .menu-card{
   display:flex;
   margin-top: 0.5vw;
-  gap:16px;
-  padding:20px;
+  gap:1vw;
+  padding:1.5vw;
   cursor:pointer;
   transition:.3s;
   position:relative;
 }
 
 .menu-card:hover{
-  transform:translateX(5px);
+  transform:translateX(0.5vw);
 }
 
 .menu-card h4{
-  margin:0 0 6px;
+  margin:0 0 0.5vw;
 }
 
 .menu-card p{
   margin:0;
-  font-size:13px;
+  font-size:0.9vw;
 }
 
 .menu-card.active{
@@ -258,57 +317,57 @@
 .menu-card.active::after{
   content:"";
   position:absolute;
-  right:-12px;
+  right:-1vw;
   top:50%;
   transform:translateY(-50%);
 
-  border-top:12px solid transparent;
-  border-bottom:12px solid transparent;
-  border-left:12px solid #311111;
+  border-top:1vw solid transparent;
+  border-bottom:1vw solid transparent;
+  border-left:1vw solid #311111;
 }
 
 .content{
   background:#F5E9E0;
-  border-radius:8px;
-  padding:20px;
+  border-radius:0.5vw;
+  padding:2vw;
 }
 
 .title{
   display:flex;
   align-items:center;
-  gap:15px;
-  margin-bottom:30px;
+  gap:1vw;
+  margin-bottom:2vw;
 }
 
 .cards-grid{
   display:grid;
-  grid-template-columns:1fr 320px;
-  gap:35px;
+  grid-template-columns:1fr 20vw;
+  gap:3vw;
 }
 
 .form-card,
 .access-card{
-  border:1px solid #31111152;
-  border-radius:10px;
-  padding:25px;
+  border:0.1vw solid #31111152;
+  border-radius:1vw;
+  padding:2vw;
 }
 
 .form-card h2,
 .access-card h2{
   margin-top:0;
-  margin-bottom:25px;
+  margin-bottom:2vw;
 }
 
 .form-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:20px;
+  gap:1vw;
 }
 
 .field{
   display:flex;
   flex-direction:column;
-  gap:8px;
+  gap:1vw;
 }
 
 .full{
@@ -317,24 +376,24 @@
 
 .field input,
 .field select{
-  height:50px;
+  height:3.5vw;
 
-  border-radius:8px;
-  padding:0 15px;
-  font-size:15px;
+  border-radius:0.5vw;
+  padding:0 1vw;
+  font-size:1vw;
 }
 
 .save-btn{
   grid-column:span 2;
 
-  height:55px;
+  height:4vw;
   border:none;
-  border-radius:8px;
+  border-radius:0.5vw;
 
   background:#29b857;
   color:white;
 
-  font-size:18px;
+  font-size:1.5vw;
   cursor:pointer;
 }
 
@@ -347,15 +406,15 @@
   justify-content:space-between;
   align-items:center;
 
-  margin:20px 0;
+  margin:1.5vw 0;
 }
 
 .change-password{
   width:100%;
-  height:48px;
+  height:3.5vw;
 
-  border:1px solid #311111;
-  border-radius:8px;
+  border:0.1vw solid #311111;
+  border-radius:0.5vw;
 
   background:#F5E9E0;
   color:#311111;
