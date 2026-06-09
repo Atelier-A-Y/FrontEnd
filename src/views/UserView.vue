@@ -3,6 +3,11 @@ import { ref, onMounted } from 'vue'
 import { getProfile, updateProfile } from '../services/user'
 
 const loading = ref(false)
+const menuAtivo = ref('cadastros')
+const modalSenha = ref(false)
+const senhaAtual = ref('')
+const novaSenha = ref('')
+const confirmarSenha = ref('')
 
 const form = ref({
   name: '',
@@ -56,7 +61,6 @@ onMounted(() => {
 <template>
   <main class="perfil-container">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
 
       <div class="welcome-card">
@@ -68,15 +72,60 @@ onMounted(() => {
           <p>Bem-vindo,</p>
           <h3>{{ form.name }}</h3>
 
+          <div class="email-box">
+
+            <span>
+              {{form.email}}
+            </span>
+
+          </div>
+
+          <button
+            class="change-password"
+            @click="modalSenha = true"
+          >
+            Alterar Senha
+          </button>
+
+          <div v-if="modalSenha" class="modal">
+            <div class="modal-content">
+              <h2>Alterar Senha</h2>
+
+              <input
+                v-model="senhaAtual"
+                type="password"
+                placeholder="Senha atual"
+              />
+              <input
+                v-model="novaSenha"
+                type="password"
+                placeholder="Nova senha"
+           >
+              <input
+                v-model="confirmarSenha"
+                type="password"
+                placeholder="Confirmar senha"
+              />
+
+              <button>Salvar</button>
+              <button @click="modalSenha = false">Cancelar</button>
+            </div>
+          </div>
+
           <button class="logout">
             Sair da conta
           </button>
         </div>
-      </div>
+
+        </div>
 
       <nav>
 
-        <div class="menu-card">
+            <div
+              class="menu-card"
+              :class="{ active: menuAtivo === 'pedidos' }"
+              @click="menuAtivo = 'pedidos'"
+            >
           <img src="/img/caminhao.png" alt="caminhao.png">
 
           <div>
@@ -85,40 +134,60 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="menu-card active">
-          <img src="/img/user-solido.png" alt="user.png">
+          <div
+              class="menu-card"
+              :class="{ active: menuAtivo === 'cadastros' }"
+              @click="menuAtivo = 'cadastros'"
+            >
+            <img src="/img/user-solido.png" alt="user.png">
 
-          <div>
-            <h4>Cadastro</h4>
-            <p>Altere seus dados cadastrais, e-mail e senha.</p>
+            <div>
+              <h4>Cadastro</h4>
+              <p>Altere seus dados cadastrais, e-mail e senha.</p>
+            </div>
           </div>
-        </div>
 
-        <div class="menu-card">
-          <img src="/img/bolsa-solido.png" alt="bolsa.png">
+          <div
+              class="menu-card"
+              :class="{ active: menuAtivo === 'salvos' }"
+              @click="menuAtivo = 'salvos'"
+            >
+            <img src="/img/bolsa-solido.png" alt="bolsa.png">
 
-          <div>
-            <h4>Salvos</h4>
-            <p>Veja seus itens salvos.</p>
+            <div>
+              <h4>Salvos</h4>
+              <p>Veja seus itens salvos.</p>
+            </div>
           </div>
-        </div>
 
-        <div class="menu-card">
-          <img src="/img/coracao-solido.png" alt="coracao.png">
+          <div
+              class="menu-card"
+              :class="{ active: menuAtivo === 'favoritos' }"
+              @click="menuAtivo = 'favoritos'"
+            >
+            <img src="/img/coracao-solido.png" alt="coracao.png">
 
-          <div>
-            <h4>Favoritos</h4>
-            <p>Veja seus itens favoritos.</p>
+            <div>
+              <h4>Favoritos</h4>
+              <p>Veja seus itens favoritos.</p>
+            </div>
           </div>
-        </div>
 
       </nav>
 
     </aside>
 
-    <!-- CONTEÚDO -->
-    <section class="content">
+    <section
+      class="content"
+      v-if="menuAtivo === 'pedidos'"
+    >
+      <h1>Pedidos</h1>
+    </section>
 
+   <section
+      class="content"
+      v-if="menuAtivo === 'cadastros'"
+    >
       <div class="title">
         <img src="/img/user-solido.png" alt="user.png">
         <h1>Cadastro</h1>
@@ -126,7 +195,6 @@ onMounted(() => {
 
       <div class="cards-grid">
 
-        <!-- FORM -->
         <div class="form-card">
 
           <h2>Dados Pessoais</h2>
@@ -204,32 +272,23 @@ onMounted(() => {
               >
                 {{ loading ? 'Salvando...' : '✓ Salvar Alterações' }}
             </button>
-
           </div>
-
         </div>
-
-        <!-- ACESSO -->
-        <div class="access-card">
-
-          <h2>Dados de Acesso</h2>
-
-          <div class="email-box">
-
-            <span>
-              {{form.email}}
-            </span>
-
-          </div>
-
-          <button class="change-password">
-            Alterar Senha
-          </button>
-
         </div>
+    </section>
 
-      </div>
+    <section
+      class="content"
+      v-if="menuAtivo === 'salvos'"
+    >
+      <h1>Salvos</h1>
+    </section>
 
+    <section
+      class="content"
+      v-if="menuAtivo === 'favoritos'"
+    >
+      <h1>Favoritos</h1>
     </section>
 
   </main>
@@ -252,6 +311,41 @@ img{
   display:grid;
   grid-template-columns:20vw 1fr;
   gap:3vw;
+}
+
+.modal{
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.modal-content{
+  background: white;
+
+  padding: 2rem;
+
+  border-radius: 12px;
+
+  width: 400px;
+  max-width: 90%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-content input{
+  height: 45px;
+  padding: 0 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
 .sidebar{
@@ -345,15 +439,13 @@ img{
   gap:3vw;
 }
 
-.form-card,
-.access-card{
+.form-card{
   border:0.1vw solid #31111152;
   border-radius:1vw;
   padding:2vw;
 }
 
-.form-card h2,
-.access-card h2{
+.form-card h2{
   margin-top:0;
   margin-bottom:2vw;
 }
@@ -397,10 +489,6 @@ img{
   cursor:pointer;
 }
 
-.access-card{
-  height:fit-content;
-}
-
 .email-box{
   display:flex;
   justify-content:space-between;
@@ -411,7 +499,7 @@ img{
 
 .change-password{
   width:100%;
-  height:3.5vw;
+  height:2.5vw;
 
   border:0.1vw solid #311111;
   border-radius:0.5vw;
