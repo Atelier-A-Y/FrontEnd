@@ -59,6 +59,7 @@ color: #311111;
 font-weight: bold;
 padding: 0;
 margin-bottom: 0.7rem;
+padding-top: 1vw;
 
 }
 
@@ -67,6 +68,8 @@ p{
 color: black;
 justify-content: center;
 font-size: 1.2rem;
+padding-bottom: 1.2vw;
+padding-top: 1vw;
 
 }
 
@@ -77,8 +80,8 @@ font-size: 1.2rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 30px;
-  margin: 0vw 13vw 1.2vw 13vw;
+  padding: 140px 30px;
+  margin: 4vw 13vw 0vw 13vw;
 
 }
 
