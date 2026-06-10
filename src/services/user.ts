@@ -1,5 +1,3 @@
-// src/services/user.ts
-
 import api from '../api/api'
 
 export async function getProfile() {

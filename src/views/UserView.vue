@@ -20,6 +20,8 @@ async function carregarUsuario() {
   try {
     const data = await getProfile()
 
+    alert(JSON.stringify(data))
+
     form.value = {
       name: data.name || '',
       cpf: data.cpf || '',
@@ -70,7 +72,7 @@ onMounted(() => {
 
         <div>
           <p>Bem-vindo,</p>
-          <h3>{{ form.name }}</h3>
+          <pre>{{ form }}</pre>
 
           <div class="email-box">
 
