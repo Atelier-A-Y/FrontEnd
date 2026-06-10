@@ -1,21 +1,27 @@
 <script setup>
-
 import { ref, onMounted } from 'vue'
 
 const produtos = ref([])
 
-onMounted(() => {
+async function carregarProdutos() {
+  try {
+    const resposta = await fetch(
+      'http://localhost:8000/api/roupas/'
+    )
 
-  const produtosSalvos =
-    localStorage.getItem("produtos")
+    const dados = await resposta.json()
 
-  if(produtosSalvos) {
+    console.log(dados)
 
-    produtos.value =
-      JSON.parse(produtosSalvos)
+    produtos.value = dados.results || dados
 
+  } catch (erro) {
+    console.error('Erro ao carregar produtos:', erro)
   }
+}
 
+onMounted(() => {
+  carregarProdutos()
 })
 
 // excluir produto
@@ -45,13 +51,13 @@ onMounted(() => {
 
       <div
         class="card-produto"
-        v-for="(item, index) in produtos"
-        :key="index"
+        v-for="item in produtos"
+        :key="item.id"
       >
 
         <h2>{{ item.nome }}</h2>
 
-        <p>
+        <!--<p>
 
           <strong>Categoria:</strong>
 
@@ -65,7 +71,7 @@ onMounted(() => {
 
           {{ item.continente }}
 
-        </p>
+        </p>-->
 
         <p>
 

@@ -18,24 +18,41 @@ const produto = ref({
 
 })
 
-function salvarProduto() {
+async function salvarProduto() {
+  try {
+    const resposta = await fetch(
+      'http://localhost:8000/api/roupas/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nome: produto.value.nome,
+          tamanho: produto.value.tamanho,
+          cor: produto.value.cor,
+          preco: produto.value.preco,
+          descricao: produto.value.descricao
+        })
+      }
+    )
 
-  const produtosSalvos =
-    JSON.parse(localStorage.getItem("produtos")) || []
+    if (!resposta.ok) {
+      throw new Error('Erro ao salvar')
+    }
 
-  produtosSalvos.push({
+    const dados = await resposta.json()
 
-    ...produto.value
+    console.log(dados)
 
-  })
+    alert('Produto cadastrado com sucesso!')
 
-  localStorage.setItem(
-    "produtos",
-    JSON.stringify(produtosSalvos)
-  )
+    router.push('/produtos')
 
-  router.push('/produtos')
-
+  } catch (erro) {
+    console.error(erro)
+    alert('Erro ao cadastrar produto')
+  }
 }
 
 </script>
@@ -47,7 +64,7 @@ function salvarProduto() {
 
     <section class="fundo">
       <form class="form-container" @submit.prevent="salvarProduto">
-        <div class="input-group">
+       <!-- <div class="input-group">
           <label>Categoria:</label>
 
           <select v-model="produto.categoria">
@@ -70,26 +87,14 @@ function salvarProduto() {
             <option>Europa</option>
             <option>Oceania</option>
           </select>
-        </div>
+        </div>-->
 
         <div class="input-group">
           <input type="text" maxlength="100" placeholder="Nome" v-model="produto.nome" />
         </div>
 
         <div class="input-group">
-          <label>Tamanho:</label>
-
-          <select v-model="produto.tamanho">
-            <option>PP</option>
-            <option>P</option>
-            <option>M</option>
-            <option>G</option>
-            <option>GG</option>
-            <option>XG</option>
-            <option>XGG</option>
-            <option>EG</option>
-            <option>EGG</option>
-          </select>
+          <input type="text" maxlength="100" placeholder="Tamanho" v-model="produto.tamanho" />
         </div>
 
         <div class="input-group">
