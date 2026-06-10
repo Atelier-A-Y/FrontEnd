@@ -5,11 +5,20 @@ import {
   onMounted,
   onUnmounted
 } from "vue";
-
+import { useAuthStore } from '../stores/auth'
 import { useRouter } from "vue-router";
 
-/* HEADER TRANSPARENTE */
+const authStore = useAuthStore();
+const router = useRouter();
 const headerAtivo = ref(false);
+
+function abrirUsuario() {
+  if (authStore.token) {
+    router.push('/user')
+  } else {
+    router.push('/login')
+  }
+}
 
 function handleScroll() {
   headerAtivo.value = window.scrollY > 50;
@@ -23,14 +32,10 @@ onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
 });
 
-/* DROPDOWN */
 const showDropdown = ref(false);
 
-/* BUSCA */
 const pesquisa = ref("");
 const indexAtivo = ref(-1);
-
-const router = useRouter();
 
 const navegacao = ref([
   { id: "1", nome: "Casamento", rota: "/casamento" },
@@ -187,7 +192,7 @@ function navegar(e: KeyboardEvent) {
       <ul class="icones">
 
         <li>
-          <a href="#">
+          <a @click.prevent="abrirUsuario">
             <img
               :src="headerAtivo
                 ? '/img/user-solido.png'

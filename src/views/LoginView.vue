@@ -1,31 +1,44 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
 
-const email = ref('');
+import { getProfile } from '../services/user'
+import { useAuthStore } from '../stores/auth'
+
+const router = useRouter()
+const authStore = useAuthStore()
+
+const email = ref('')
 const senha = ref('')
 
-async function entrar(){
+async function entrar() {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/token/', {
-  email: email.value,
-  password: senha.value
-})
+    const response = await axios.post(
+      'http://127.0.0.1:8000/api/token/',
+      {
+        email: email.value,
+        password: senha.value
+      }
+    )
 
-const token = response.data.access
+    const token = response.data.access
 
-localStorage.setItem('token', token)
+    authStore.setToken(token)
 
-window.location.href = '/'
+    //const usuario = await getProfile()
+
+    //authStore.setUser(usuario)
+
+    router.push('/')
   } catch (error: unknown) {
-  if (axios.isAxiosError(error)) {
-    console.error(error.response?.data)
-    alert(error.response?.data?.error || 'Erro no login')
-  } else {
-    console.error(error)
-    alert('Erro inesperado')
+    if (axios.isAxiosError(error)) {
+      alert(error.response?.data?.error || 'Erro no login')
+    } else {
+      alert('Erro inesperado')
+    }
   }
-}}
+}
 </script>
 
 <template>

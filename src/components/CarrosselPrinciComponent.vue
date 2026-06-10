@@ -49,21 +49,23 @@ setInterval(nextSlide, 4000)
     :src="slide.img"
     :class="{ active: i === index }"
   />
+<h2>
+  <div class="marca1" :class="slides[index]?.classeMarca1">
+    {{ slides[index]?.marca1 }}
+  </div>
 
-  <h2>
-    <div class="marca1" :class="slides[index].classeMarca1">
-      {{ slides[index].marca1 }}
-    </div>
-    <div class="marca2" :class="slides[index].classeMarca2">
-      {{ slides[index].marca2 }}
-    </div>
-    <div class="texto" :class="slides[index].classeTexto">
-      {{ slides[index].texto }}
-    </div>
-    <div class="subtexto" :class="slides[index].classeSubtexto">
-      {{ slides[index].subtexto }}
-    </div>
-  </h2>
+  <div class="marca2" :class="slides[index]?.classeMarca2">
+    {{ slides[index]?.marca2 }}
+  </div>
+
+  <div class="texto" :class="slides[index]?.classeTexto">
+    {{ slides[index]?.texto }}
+  </div>
+
+  <div class="subtexto" :class="slides[index]?.classeSubtexto">
+    {{ slides[index]?.subtexto }}
+  </div>
+</h2>
   <button @click="prevSlide">❮</button>
   <button @click="nextSlide">❯</button>
 </div>
