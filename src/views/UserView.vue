@@ -126,7 +126,12 @@ onMounted(() => {
               :class="{ active: menuAtivo === 'pedidos' }"
               @click="menuAtivo = 'pedidos'"
             >
-          <img src="/img/caminhao.png" alt="caminhao.png">
+          <img
+            :src="menuAtivo === 'pedidos'
+              ? '/img/caminhao-branco.png'
+              : '/img/caminhao.png'"
+            alt="caminhao"
+          />
 
           <div>
             <h4>Pedidos</h4>
@@ -139,7 +144,12 @@ onMounted(() => {
               :class="{ active: menuAtivo === 'cadastros' }"
               @click="menuAtivo = 'cadastros'"
             >
-            <img src="/img/user-solido.png" alt="user.png">
+           <img
+            :src="menuAtivo === 'cadastros'
+              ? '/img/user.png'
+              : '/img/user-solido.png'"
+            alt="user"
+          />
 
             <div>
               <h4>Cadastro</h4>
@@ -152,7 +162,12 @@ onMounted(() => {
               :class="{ active: menuAtivo === 'salvos' }"
               @click="menuAtivo = 'salvos'"
             >
-            <img src="/img/bolsa-solido.png" alt="bolsa.png">
+            <img
+            :src="menuAtivo === 'salvos'
+              ? '/img/bolsa.png'
+              : '/img/bolsa-solido.png'"
+            alt="bolsa"
+          />
 
             <div>
               <h4>Salvos</h4>
@@ -165,7 +180,12 @@ onMounted(() => {
               :class="{ active: menuAtivo === 'favoritos' }"
               @click="menuAtivo = 'favoritos'"
             >
-            <img src="/img/coracao-solido.png" alt="coracao.png">
+            <img
+            :src="menuAtivo === 'favoritos'
+              ? '/img/coracao.png'
+              : '/img/coracao-solido.png'"
+            alt="coracao"
+          />
 
             <div>
               <h4>Favoritos</h4>
@@ -220,30 +240,10 @@ onMounted(() => {
             </div>
 
             <div class="field">
-              <label>RG</label>
-              <input
-                type="text"
-                placeholder="Mínimo de 6 caracteres"
-              >
-            </div>
-
-            <div class="field">
-              <label>Gênero</label>
-
-              <select>
-                <option>---</option>
-                <option value="1">Feminino</option>
-                <option value="2">Masculino</option>
-                <option value="3">Outro</option>
-                <option value="4">Prefiro Não Informar</option>
-              </select>
-            </div>
-
-            <div class="field">
               <label>Data de Nascimento</label>
               <input
                 type="text"
-                placeholder="09/07/1995"
+                placeholder="Ex: 09/07/1995"
               >
             </div>
 
@@ -252,7 +252,7 @@ onMounted(() => {
               <input
               v-model="form.telefone"
                 type="text"
-                placeholder="(DD) + Número"
+                placeholder="Ex: (DD) + Número"
               >
             </div>
 
@@ -261,7 +261,7 @@ onMounted(() => {
               <input
               v-model="form.email"
                 type="email"
-                placeholder="julia@gmail.com"
+                placeholder="Ex: julia@gmail.com"
               >
             </div>
 
@@ -342,10 +342,10 @@ img{
 }
 
 .modal-content input{
-  height: 45px;
-  padding: 0 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  height: 15vw;
+  padding: 0 5vw;
+  border: 0.1vw solid #ccc;
+  border-radius: 2vw;
 }
 
 .sidebar{
@@ -370,6 +370,8 @@ img{
 .welcome-card h3{
   margin:0.5vw 0;
   font-size:1.5vw;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .logout{
@@ -424,6 +426,7 @@ img{
   background:#F5E9E0;
   border-radius:0.5vw;
   padding:2vw;
+  padding-left: 5vw;
 }
 
 .title{
@@ -433,9 +436,14 @@ img{
   margin-bottom:2vw;
 }
 
+.title img{
+  width: 2.2vw;
+  height: 2.2vw;
+}
+
 .cards-grid{
   display:grid;
-  grid-template-columns:1fr 20vw;
+  grid-template-columns:1fr 1vw;
   gap:3vw;
 }
 
@@ -489,12 +497,16 @@ img{
   cursor:pointer;
 }
 
-.email-box{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.email-box {
+  width: 100%;
+}
 
-  margin:1.5vw 0;
+.email-box span {
+  margin-bottom: 0.5vw;
+  display: block;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .change-password{
