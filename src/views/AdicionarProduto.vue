@@ -1,25 +1,50 @@
 <script setup>
+import { ref } from "vue";
 
-import { ref } from 'vue'
+import { useRouter } from "vue-router";
 
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
+const router = useRouter();
 
 const produto = ref({
-
   categoria: "",
   continente: "",
   nome: "",
   tamanho: "",
   cor: "",
   preco: "",
-  descricao: ""
+  descricao: "",
+});
 
-})
+const imagem = ref(null);
+
+function selecionarImagem(event) {
+  imagem.value = event.target.files[0];
+}
 
 async function salvarProduto() {
   try {
+
+    let attachmentKey = null
+
+    if (imagem.value) {
+
+      const formData = new FormData()
+
+      formData.append('file', imagem.value)
+
+      const upload = await fetch(
+        'http://localhost:8000/api/media/images/',
+        {
+          method: 'POST',
+          body: formData
+        }
+      )
+
+      const dadosImagem = await upload.json()
+
+      attachmentKey = dadosImagem.attachment_key
+    }
+
     const resposta = await fetch(
       'http://localhost:8000/api/roupas/',
       {
@@ -32,7 +57,8 @@ async function salvarProduto() {
           tamanho: produto.value.tamanho,
           cor: produto.value.cor,
           preco: produto.value.preco,
-          descricao: produto.value.descricao
+          descricao: produto.value.descricao,
+          foto_attachment_key: attachmentKey
         })
       }
     )
@@ -41,12 +67,7 @@ async function salvarProduto() {
       throw new Error('Erro ao salvar')
     }
 
-    const dados = await resposta.json()
-
-    console.log(dados)
-
     alert('Produto cadastrado com sucesso!')
-
     router.push('/produtos')
 
   } catch (erro) {
@@ -54,17 +75,15 @@ async function salvarProduto() {
     alert('Erro ao cadastrar produto')
   }
 }
-
 </script>
 
 <template>
-
-   <main>
+  <main>
     <h1>Adicionar Produto</h1>
 
     <section class="fundo">
       <form class="form-container" @submit.prevent="salvarProduto">
-       <!-- <div class="input-group">
+        <!-- <div class="input-group">
           <label>Categoria:</label>
 
           <select v-model="produto.categoria">
@@ -94,7 +113,12 @@ async function salvarProduto() {
         </div>
 
         <div class="input-group">
-          <input type="text" maxlength="100" placeholder="Tamanho" v-model="produto.tamanho" />
+          <input
+            type="text"
+            maxlength="100"
+            placeholder="Tamanho"
+            v-model="produto.tamanho"
+          />
         </div>
 
         <div class="input-group">
@@ -109,20 +133,21 @@ async function salvarProduto() {
           <textarea placeholder="Descrição" v-model="produto.descricao"></textarea>
         </div>
 
+        <div class="input-group">
+          <input type="file" accept="image/*" @change="selecionarImagem" />
+        </div>
+
         <div class="buttons">
           <button type="reset">Limpar</button>
 
-          <button type="submit"> Salvar</button>
+          <button type="submit">Salvar</button>
         </div>
       </form>
     </section>
-
   </main>
-
 </template>
 
 <style scoped>
-
 h1 {
   color: #311111;
   font-weight: bold;
@@ -140,7 +165,6 @@ h1 {
   align-items: center;
   padding: 40px 30px;
   margin: 0vw 13vw 1.2vw 13vw;
-
 }
 
 .form-container {
@@ -192,5 +216,4 @@ button {
 button:hover {
   background-color: #e7e7e7;
 }
-
 </style>
