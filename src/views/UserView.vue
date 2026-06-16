@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getProfile, updateProfile } from '../services/user'
+import { getProfile, updateProfile, changePassword } from '../services/user'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
@@ -10,6 +10,9 @@ const modalSenha = ref(false)
 const senhaAtual = ref('')
 const novaSenha = ref('')
 const confirmarSenha = ref('')
+const mostrarSenhaAtual = ref(false)
+const mostrarNovaSenha = ref(false)
+const mostrarConfirmarSenha = ref(false)
 const router = useRouter()
 const authStore = useAuthStore()
 
@@ -29,6 +32,37 @@ function sair() {
 
   authStore.logout()
   router.push('/login')
+}
+
+async function alterarSenha() {
+  if (!senhaAtual.value || !novaSenha.value || !confirmarSenha.value) {
+    alert('Preencha todos os campos.')
+    return
+  }
+
+  if (novaSenha.value !== confirmarSenha.value) {
+    alert('As senhas não coincidem.')
+    return
+  }
+
+  try {
+    // chamada para sua API
+    await changePassword({
+      current_password: senhaAtual.value,
+      new_password: novaSenha.value
+    })
+
+    alert('Senha alterada com sucesso!')
+
+    senhaAtual.value = ''
+    novaSenha.value = ''
+    confirmarSenha.value = ''
+
+    modalSenha.value = false
+  } catch (error) {
+    console.error(error)
+    alert('Erro ao alterar senha.')
+  }
 }
 
 async function carregarUsuario() {
@@ -113,23 +147,52 @@ onMounted(() => {
             <div class="modal-content">
               <h2>Alterar Senha</h2>
 
-              <input
-                v-model="senhaAtual"
-                type="password"
-                placeholder="Senha atual"
-              />
-              <input
-                v-model="novaSenha"
-                type="password"
-                placeholder="Nova senha"
-           >
-              <input
-                v-model="confirmarSenha"
-                type="password"
-                placeholder="Confirmar senha"
-              />
+              <div class="senha-field">
+                <input
+                  v-model="senhaAtual"
+                  :type="mostrarSenhaAtual ? 'text' : 'password'"
+                  placeholder="Senha atual"
+                >
 
-              <button>Salvar</button>
+                <button
+                  type="button"
+                  @click="mostrarSenhaAtual = !mostrarSenhaAtual"
+                >
+                  {{ mostrarSenhaAtual ? 'Ocultar' : 'Mostrar' }}
+                </button>
+              </div>
+
+              <div class="senha-field">
+                <input
+                  v-model="novaSenha"
+                  :type="mostrarNovaSenha ? 'text' : 'password'"
+                  placeholder="Nova senha"
+                >
+
+                <button
+                  type="button"
+                  @click="mostrarNovaSenha = !mostrarNovaSenha"
+                >
+                  {{ mostrarNovaSenha ? 'Ocultar' : 'Mostrar' }}
+                </button>
+              </div>
+
+              <div class="senha-field">
+                <input
+                v-model="confirmarSenha"
+                :type="mostrarConfirmarSenha ? 'text' : 'password'"
+                placeholder="Confirmar senha"
+                >
+
+                <button
+                  type="button"
+                  @click="mostrarConfirmarSenha = !mostrarConfirmarSenha"
+                >
+                  {{ mostrarConfirmarSenha ? 'Ocultar' : 'Mostrar' }}
+                </button>
+              </div>
+
+              <button @click="alterarSenha">Salvar</button>
               <button @click="modalSenha = false">Cancelar</button>
             </div>
           </div>
