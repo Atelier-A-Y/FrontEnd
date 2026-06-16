@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { getProfile, updateProfile } from '../services/user'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 
 const loading = ref(false)
 const menuAtivo = ref('cadastros')
@@ -8,6 +10,8 @@ const modalSenha = ref(false)
 const senhaAtual = ref('')
 const novaSenha = ref('')
 const confirmarSenha = ref('')
+const router = useRouter()
+const authStore = useAuthStore()
 
 const form = ref({
   name: '',
@@ -15,6 +19,17 @@ const form = ref({
   telefone: '',
   email: ''
 })
+
+function sair() {
+  const confirmar = confirm(
+    'Deseja realmente sair da sua conta?'
+  )
+
+  if (!confirmar) return
+
+  authStore.logout()
+  router.push('/login')
+}
 
 async function carregarUsuario() {
   try {
@@ -43,10 +58,13 @@ async function salvar() {
     await updateProfile({
       name: form.value.name,
       cpf: form.value.cpf,
-      telefone: form.value.telefone
+      telefone: form.value.telefone,
+      email: form.value.email
     })
 
     alert('Dados atualizados com sucesso!')
+
+    await carregarUsuario()
   }
   catch (error) {
     console.error(error)
@@ -74,7 +92,7 @@ onMounted(() => {
 
         <div>
           <p>Bem-vindo,</p>
-          <pre>{{ form.name }}</pre>
+          <h1>{{ form.name }}</h1>
 
           <div class="email-box">
 
@@ -116,7 +134,10 @@ onMounted(() => {
             </div>
           </div>
 
-          <button class="logout">
+          <button
+            class="logout"
+            @click="sair"
+          >
             Sair da conta
           </button>
         </div>
@@ -332,24 +353,26 @@ img{
 
 .modal-content{
   background: white;
-
-  padding: 2rem;
-
-  border-radius: 12px;
-
-  width: 400px;
-  max-width: 90%;
-
+  padding: 2vw;
+  border-radius: 1vw;
+  width: 30vw;
+  max-width: 50%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1vw;
+}
+
+.modal-content h2{
+  color: #311111;
+  text-align: center;
 }
 
 .modal-content input{
-  height: 15vw;
+  height: 5vw;
   padding: 0 5vw;
-  border: 0.1vw solid #ccc;
-  border-radius: 2vw;
+  background:#F5E9E0;
+  border:0.1vw solid #31111152;
+  border-radius: 1vw;
 }
 
 .sidebar{
@@ -358,7 +381,7 @@ img{
   gap:2vw;
 }
 
-.welcome-card pre{
+.welcome-card h1{
   font-size: 1.5rem;
   font-weight: bold;
   margin: 0.3vw 0;
