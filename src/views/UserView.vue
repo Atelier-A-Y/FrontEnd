@@ -18,9 +18,11 @@ const form = ref({
 
 async function carregarUsuario() {
   try {
+    console.log('TOKEN USER:', localStorage.getItem('token'))
+
     const data = await getProfile()
 
-    alert(JSON.stringify(data))
+    console.log('USUARIO:', data)
 
     form.value = {
       name: data.name || '',
@@ -72,7 +74,7 @@ onMounted(() => {
 
         <div>
           <p>Bem-vindo,</p>
-          <pre>{{ form }}</pre>
+          <pre>{{ form.name }}</pre>
 
           <div class="email-box">
 
@@ -354,6 +356,14 @@ img{
   display:flex;
   flex-direction:column;
   gap:2vw;
+}
+
+.welcome-card pre{
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.3vw 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .welcome-card,

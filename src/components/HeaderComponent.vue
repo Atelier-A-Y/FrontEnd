@@ -91,13 +91,16 @@ function navegar(e: KeyboardEvent) {
     }
   }
 }
+
+function irParaHome(){
+  router.push('/')
+}
 </script>
 
 <template>
   <header :class="{ scrolled: headerAtivo }">
 
-      <div class="logo">
-
+      <div @click="irParaHome" class="logo">
         <img :src="headerAtivo
                 ? '/img/logo-solido.png'
                 : '/img/logo.png'"
@@ -280,12 +283,12 @@ header.scrolled {
   display: flex;
   align-items: center;
   gap: 1vw;
-
 }
 
 .logo img {
   width: 4.5vw;
   height: 6vw;
+  cursor: pointer;
 }
 
 .texto {
@@ -463,6 +466,7 @@ header.scrolled {
   align-items: center;
   gap: 2vw;
   list-style: none;
+  cursor: pointer;
 }
 
 .icones li img {

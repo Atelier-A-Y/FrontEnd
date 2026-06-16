@@ -3,8 +3,8 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
-import { getProfile } from '../services/user'
 import { useAuthStore } from '../stores/auth'
+console.log('TOKEN SALVO:', localStorage.getItem('token'))
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -24,13 +24,16 @@ async function entrar() {
 
     const token = response.data.access
 
-    authStore.setToken(token)
+console.log('TOKEN RECEBIDO:', token)
 
-    //const usuario = await getProfile()
+authStore.setToken(token)
 
-    //authStore.setUser(usuario)
+console.log(
+  'TOKEN APÓS SALVAR:',
+  localStorage.getItem('token')
+)
 
-    router.push('/')
+router.push('/')
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       alert(error.response?.data?.error || 'Erro no login')
