@@ -253,9 +253,9 @@ header {
 
   background: linear-gradient(
     to top,
-    rgba(63, 44, 25, 0) 30%,
-    rgba(63, 44, 25, 0.233) 50%,
-    rgba(63, 44, 25, 0.486) 90%
+    rgba(63, 44, 25, 0) 3%,
+    rgba(72, 50, 29, 0.341) 28%,
+    rgba(63, 44, 25, 0.654) 100%
   );
 
   transition:
@@ -286,8 +286,8 @@ header.scrolled {
 }
 
 .logo img {
-  width: 4.5vw;
-  height: 6vw;
+  width: 4vw;
+  height: 5.5vw;
   cursor: pointer;
 }
 
@@ -299,7 +299,7 @@ header.scrolled {
 }
 
 .titulo {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: white;
 }
 

@@ -445,7 +445,7 @@ img{
 
 .perfil-container{
   max-width:90vw;
-  margin:3vw auto;
+  margin:6vw auto;
   display:grid;
   grid-template-columns:20vw 1fr;
   gap:3vw;
@@ -491,7 +491,7 @@ img{
 .sidebar{
   display:flex;
   flex-direction:column;
-  gap:2vw;
+  gap:0.5vw;
 }
 
 .welcome-card h1{

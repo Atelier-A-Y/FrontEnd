@@ -106,7 +106,14 @@ async function cadastrar(){
 <style scoped>
 .logo{
   text-align: center;
-  padding-bottom: 10px;
+  padding-bottom: 1vw;
+}
+
+.logo img {
+  width: 6vw;
+  height: 6vw;
+  margin-left: 7.5vw;
+  margin-bottom: 1vw;
 }
 
 .nome1{

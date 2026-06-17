@@ -111,7 +111,14 @@ router.push('/')
 <style scoped>
 .logo{
   text-align: center;
-  padding-bottom: 10px;
+  padding-bottom: 1vw;
+}
+
+.logo img {
+  width: 6vw;
+  height: 6vw;
+  margin-left: 7.5vw;
+  margin-bottom: 1vw;
 }
 
 .nome1{
@@ -236,7 +243,7 @@ router.push('/')
   position: absolute;
   right: 3vw;
   top: 90%;
-  transform: translateY(-100vw);
+  transform: translateY(-8.4vw);
   border: none;
   cursor: pointer;
 }
