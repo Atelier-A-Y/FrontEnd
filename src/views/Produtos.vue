@@ -44,7 +44,7 @@ onMounted(() => {
 
         <img
           v-if="item.foto"
-          :src="item.foto.file"
+          :src="item.foto.url"
           :alt="item.nome"
           class="imagem-produto"
         />
