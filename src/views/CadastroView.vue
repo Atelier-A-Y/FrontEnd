@@ -4,7 +4,8 @@ import axios from 'axios'
 
 const nome = ref('');
 const email = ref('');
-const senha = ref('')
+const senha = ref('');
+const mostrarSenha = ref(false)
 
 async function cadastrar(){
   try {
@@ -75,11 +76,22 @@ async function cadastrar(){
 
         <div class="campo">
           <input
-            id="password"
-            type="password"
-            v-model="senha"
-            placeholder="Digite sua senha..."
-          />
+                  v-model="senha"
+                  :type="mostrarSenha ? 'text' : 'password'"
+                  placeholder="Digite sua senha..."
+                >
+          <button
+                  class="olho"
+                  type="button"
+                  @click="mostrarSenha = !mostrarSenha"
+                >
+                  <img
+                    :src="mostrarSenha
+                      ? '/img/olho-fechado.png'
+                      : '/img/olho-aberto.png'"
+                    alt="Mostrar senha"
+                  >
+                </button>
         </div>
 
         <div class="btn-cadastro">
@@ -213,6 +225,34 @@ async function cadastrar(){
   box-shadow: 0 4px 2px 0 #1e1e1e7c;
 }
 
+.olho {
+  width: 1.5vw;
+  height: 1.5vw;
+  position: absolute;
+  right: 3vw;
+  transform: translateY(50%);
+  border: none;
+  cursor: pointer;
+}
+
+.entrar {
+  background-color: #F5E6DE;
+  color: #311111;
+  border-radius: 8px;
+  width: auto;
+  align-self: center;
+  padding: 10px 25px;
+  font-weight: 500;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.entrar:hover {
+  background-color: #311111;
+  color: #F5E6DE;
+  border-color: #F5E6DE;
+}
+
 @keyframes entrada {
   to {
     opacity: 1;
@@ -240,13 +280,35 @@ input:focus {
   box-shadow: 0 0 0 2px rgba(110, 29, 19, 0.15);
 }
 
+p {
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.cadastro-link{
+  text-align: center;
+}
+
+.cadastro-link p{
+  color: #595858;
+  font-size: 13px;
+  padding: 10px 0 0 0;
+}
+
+.cadastro-link a{
+  color: #311111;
+  text-decoration: none;
+}
+
+
 .btn-cadastro{
   margin-top: 2vw;
   display: flex;
   justify-content: space-between;
 }
 
-button {
+.btn-cadastro button {
   background-color: #F5E6DE;
   color: #311111;
   border-radius: 8px;
@@ -258,7 +320,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.btn-cadastro button:hover {
   background-color: #311111;
   color: #F5E6DE;
   border-color: #F5E6DE;

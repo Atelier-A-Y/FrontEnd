@@ -158,7 +158,12 @@ onMounted(() => {
                   type="button"
                   @click="mostrarSenhaAtual = !mostrarSenhaAtual"
                 >
-                  {{ mostrarSenhaAtual ? 'Ocultar' : 'Mostrar' }}
+                  <img
+                    :src="mostrarSenhaAtual
+                      ? '/img/olho-fechado.png'
+                      : '/img/olho-aberto.png'"
+                    alt="Mostrar senha"
+                  >
                 </button>
               </div>
 
@@ -173,7 +178,12 @@ onMounted(() => {
                   type="button"
                   @click="mostrarNovaSenha = !mostrarNovaSenha"
                 >
-                  {{ mostrarNovaSenha ? 'Ocultar' : 'Mostrar' }}
+                  <img
+                    :src="mostrarNovaSenha
+                      ? '/img/olho-fechado.png'
+                      : '/img/olho-aberto.png'"
+                    alt="Mostrar senha"
+                  >
                 </button>
               </div>
 
@@ -188,12 +198,17 @@ onMounted(() => {
                   type="button"
                   @click="mostrarConfirmarSenha = !mostrarConfirmarSenha"
                 >
-                  {{ mostrarConfirmarSenha ? 'Ocultar' : 'Mostrar' }}
+                  <img
+                    :src="mostrarConfirmarSenha
+                      ? '/img/olho-fechado.png'
+                      : '/img/olho-aberto.png'"
+                    alt="Mostrar senha"
+                  >
                 </button>
               </div>
 
-              <button @click="alterarSenha">Salvar</button>
-              <button @click="modalSenha = false">Cancelar</button>
+              <button @click="alterarSenha" class="bnt-senha">Salvar</button>
+              <button @click="modalSenha = false" class="bnt-senha">Cancelar</button>
             </div>
           </div>
 
@@ -391,6 +406,41 @@ onMounted(() => {
 img{
   width: 1.5vw;
   height: 1.5vw;
+}
+
+.senha-field {
+  position: relative;
+}
+
+.senha-field input {
+  width: 100%;
+  padding-right: 50px;
+}
+
+.senha-field button {
+  position: absolute;
+  right: 1vw;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  cursor: pointer;
+}
+
+.bnt-senha{
+  width:50%;
+  height:2.5vw;
+  transform: translateX(50%);
+  border:0.1vw solid #31111192;
+  border-radius:0.5vw;
+  background:#F5E9E0;
+  color:#311111;
+  cursor:pointer;
+}
+
+.bnt-senha:hover{
+  background-color: #311111;
+  color: #F5E9E0;
+  transition:.3s;
 }
 
 .perfil-container{
@@ -611,7 +661,7 @@ img{
   width:100%;
   height:2.5vw;
 
-  border:0.1vw solid #311111;
+  border:0.1vw solid #31111192;
   border-radius:0.5vw;
 
   background:#F5E9E0;

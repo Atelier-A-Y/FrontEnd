@@ -11,6 +11,7 @@ const authStore = useAuthStore()
 
 const email = ref('')
 const senha = ref('')
+const mostrarSenha = ref(false)
 
 async function entrar() {
   try {
@@ -79,14 +80,25 @@ router.push('/')
 
         <div class="campo">
           <input
-            id="password"
-            type="password"
-            v-model="senha"
-            placeholder="Digite sua senha..."
-          />
+                  v-model="senha"
+                  :type="mostrarSenha ? 'text' : 'password'"
+                  placeholder="Digite sua senha..."
+                >
+          <button
+                  class="olho"
+                  type="button"
+                  @click="mostrarSenha = !mostrarSenha"
+                >
+                  <img
+                    :src="mostrarSenha
+                      ? '/img/olho-fechado.png'
+                      : '/img/olho-aberto.png'"
+                    alt="Mostrar senha"
+                  >
+                </button>
         </div>
 
-        <button type="submit">Entrar</button>
+        <button class="entrar" type="submit">Entrar</button>
 
         <div class="cadastro-link">
         <p>Não possui uma conta? Clique <router-link to="/cadastrar">Aqui!</router-link></p>
@@ -218,6 +230,35 @@ router.push('/')
   box-shadow: 0 4px 2px 0 #1e1e1e7c;
 }
 
+.olho {
+  width: 1.5vw;
+  height: 1.5vw;
+  position: absolute;
+  right: 3vw;
+  top: 90%;
+  transform: translateY(-100vw);
+  border: none;
+  cursor: pointer;
+}
+
+.entrar {
+  background-color: #F5E6DE;
+  color: #311111;
+  border-radius: 8px;
+  width: auto;
+  align-self: center;
+  padding: 10px 25px;
+  font-weight: 500;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.entrar:hover {
+  background-color: #311111;
+  color: #F5E6DE;
+  border-color: #F5E6DE;
+}
+
 @keyframes entrada {
   to {
     opacity: 1;
@@ -243,24 +284,6 @@ input {
 
 input:focus {
   box-shadow: 0 0 0 2px rgba(110, 29, 19, 0.15);
-}
-
-button {
-  background-color: #F5E6DE;
-  color: #311111;
-  border-radius: 8px;
-  width: auto;
-  align-self: center;
-  padding: 10px 25px;
-  font-weight: 500;
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #311111;
-  color: #F5E6DE;
-  border-color: #F5E6DE;
 }
 
 p {
