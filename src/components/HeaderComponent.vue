@@ -5,11 +5,20 @@ import {
   onMounted,
   onUnmounted
 } from "vue";
-
+import { useAuthStore } from '../stores/auth'
 import { useRouter } from "vue-router";
 
-/* HEADER TRANSPARENTE */
+const authStore = useAuthStore();
+const router = useRouter();
 const headerAtivo = ref(false);
+
+function abrirUsuario() {
+  if (authStore.token) {
+    router.push('/user')
+  } else {
+    router.push('/login')
+  }
+}
 
 function handleScroll() {
   headerAtivo.value = window.scrollY > 50;
@@ -23,14 +32,10 @@ onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
 });
 
-/* DROPDOWN */
 const showDropdown = ref(false);
 
-/* BUSCA */
 const pesquisa = ref("");
 const indexAtivo = ref(-1);
-
-const router = useRouter();
 
 const navegacao = ref([
   { id: "1", nome: "Casamento", rota: "/casamento" },
@@ -86,13 +91,16 @@ function navegar(e: KeyboardEvent) {
     }
   }
 }
+
+function irParaHome(){
+  router.push('/')
+}
 </script>
 
 <template>
   <header :class="{ scrolled: headerAtivo }">
 
-      <div class="logo">
-
+      <div @click="irParaHome" class="logo">
         <img :src="headerAtivo
                 ? '/img/logo-solido.png'
                 : '/img/logo.png'"
@@ -187,7 +195,7 @@ function navegar(e: KeyboardEvent) {
       <ul class="icones">
 
         <li>
-          <a href="#">
+          <a @click.prevent="abrirUsuario">
             <img
               :src="headerAtivo
                 ? '/img/user-solido.png'
@@ -245,9 +253,9 @@ header {
 
   background: linear-gradient(
     to top,
-    rgba(63, 44, 25, 0) 30%,
-    rgba(63, 44, 25, 0.233) 50%,
-    rgba(63, 44, 25, 0.486) 90%
+    rgba(63, 44, 25, 0) 3%,
+    rgba(72, 50, 29, 0.341) 28%,
+    rgba(63, 44, 25, 0.654) 100%
   );
 
   transition:
@@ -275,12 +283,12 @@ header.scrolled {
   display: flex;
   align-items: center;
   gap: 1vw;
-
 }
 
 .logo img {
-  width: 4.5vw;
-  height: 6vw;
+  width: 4vw;
+  height: 5.5vw;
+  cursor: pointer;
 }
 
 .texto {
@@ -291,7 +299,7 @@ header.scrolled {
 }
 
 .titulo {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: white;
 }
 
@@ -458,6 +466,7 @@ header.scrolled {
   align-items: center;
   gap: 2vw;
   list-style: none;
+  cursor: pointer;
 }
 
 .icones li img {

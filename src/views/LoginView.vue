@@ -1,31 +1,48 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
 
-const email = ref('');
+import { useAuthStore } from '../stores/auth'
+console.log('TOKEN SALVO:', localStorage.getItem('token'))
+
+const router = useRouter()
+const authStore = useAuthStore()
+
+const email = ref('')
 const senha = ref('')
+const mostrarSenha = ref(false)
 
-async function entrar(){
+async function entrar() {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/token/', {
-  email: email.value,
-  password: senha.value
-})
+    const response = await axios.post(
+      'http://127.0.0.1:8000/api/token/',
+      {
+        email: email.value,
+        password: senha.value
+      }
+    )
 
-const token = response.data.access
+    const token = response.data.access
 
-localStorage.setItem('token', token)
+console.log('TOKEN RECEBIDO:', token)
 
-window.location.href = '/'
+authStore.setToken(token)
+
+console.log(
+  'TOKEN APÓS SALVAR:',
+  localStorage.getItem('token')
+)
+
+router.push('/')
   } catch (error: unknown) {
-  if (axios.isAxiosError(error)) {
-    console.error(error.response?.data)
-    alert(error.response?.data?.error || 'Erro no login')
-  } else {
-    console.error(error)
-    alert('Erro inesperado')
+    if (axios.isAxiosError(error)) {
+      alert(error.response?.data?.error || 'Erro no login')
+    } else {
+      alert('Erro inesperado')
+    }
   }
-}}
+}
 </script>
 
 <template>
@@ -63,14 +80,25 @@ window.location.href = '/'
 
         <div class="campo">
           <input
-            id="password"
-            type="password"
-            v-model="senha"
-            placeholder="Digite sua senha..."
-          />
+                  v-model="senha"
+                  :type="mostrarSenha ? 'text' : 'password'"
+                  placeholder="Digite sua senha..."
+                >
+          <button
+                  class="olho"
+                  type="button"
+                  @click="mostrarSenha = !mostrarSenha"
+                >
+                  <img
+                    :src="mostrarSenha
+                      ? '/img/olho-fechado.png'
+                      : '/img/olho-aberto.png'"
+                    alt="Mostrar senha"
+                  >
+                </button>
         </div>
 
-        <button type="submit">Entrar</button>
+        <button class="entrar" type="submit">Entrar</button>
 
         <div class="cadastro-link">
         <p>Não possui uma conta? Clique <router-link to="/cadastrar">Aqui!</router-link></p>
@@ -89,7 +117,7 @@ window.location.href = '/'
 .logo-login img {
   width: 6vw;
   height: 6vw;
-  margin-left: 8.5vw;
+  margin-left: 7.5vw;
   margin-bottom: 1vw;
 }
 
@@ -209,6 +237,35 @@ window.location.href = '/'
   box-shadow: 0 4px 2px 0 #1e1e1e7c;
 }
 
+.olho {
+  width: 1.5vw;
+  height: 1.5vw;
+  position: absolute;
+  right: 3vw;
+  top: 90%;
+  transform: translateY(-8.4vw);
+  border: none;
+  cursor: pointer;
+}
+
+.entrar {
+  background-color: #F5E6DE;
+  color: #311111;
+  border-radius: 8px;
+  width: auto;
+  align-self: center;
+  padding: 10px 25px;
+  font-weight: 500;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.entrar:hover {
+  background-color: #311111;
+  color: #F5E6DE;
+  border-color: #F5E6DE;
+}
+
 @keyframes entrada {
   to {
     opacity: 1;
@@ -234,24 +291,6 @@ input {
 
 input:focus {
   box-shadow: 0 0 0 2px rgba(110, 29, 19, 0.15);
-}
-
-button {
-  background-color: #F5E6DE;
-  color: #311111;
-  border-radius: 8px;
-  width: auto;
-  align-self: center;
-  padding: 10px 25px;
-  font-weight: 500;
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #311111;
-  color: #F5E6DE;
-  border-color: #F5E6DE;
 }
 
 p {
