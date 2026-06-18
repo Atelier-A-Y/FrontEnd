@@ -63,8 +63,8 @@ router.push('/')
 
       <div class="formulario">
 
-        <div class="logo">
-        <img src="/css/logo.png" alt="logo.png" width="76" height="77">
+        <div class="logo-login">
+        <img src="/css/logo-login.png" alt="logo.png">
         <p class="nome1">ATELIER</p>
         <p class="nome2">A.Y</p>
       </div>
@@ -109,12 +109,12 @@ router.push('/')
 </template>
 
 <style scoped>
-.logo{
+.logo-login{
   text-align: center;
   padding-bottom: 1vw;
 }
 
-.logo img {
+.logo-login img {
   width: 6vw;
   height: 6vw;
   margin-left: 7.5vw;
