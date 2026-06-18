@@ -117,7 +117,7 @@ router.push('/')
 .logo-login img {
   width: 6vw;
   height: 6vw;
-  margin-left: 7.5vw;
+  margin-left: 8.5vw;
   margin-bottom: 1vw;
 }
 
@@ -243,7 +243,7 @@ router.push('/')
   position: absolute;
   right: 3vw;
   top: 90%;
-  transform: translateY(-8.4vw);
+  transform: translateY(-8.6vw);
   border: none;
   cursor: pointer;
 }

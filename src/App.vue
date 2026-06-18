@@ -25,7 +25,6 @@ onMounted(async () => {
 
     <router-view />
 
-
 <footer-component />
 
 </template>

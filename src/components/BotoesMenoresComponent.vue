@@ -24,6 +24,10 @@
 
 <style scoped>
 
+main{
+  margin-bottom: 4vw;
+}
+
 .bnt-pequenos{
   width: 100%;
   display: flex;
