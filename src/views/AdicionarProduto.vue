@@ -16,9 +16,14 @@ const produto = ref({
 });
 
 const imagem = ref(null);
+const previewImagem = ref(null);
 
 function selecionarImagem(event) {
   imagem.value = event.target.files[0];
+
+  if (imagem.value) {
+    previewImagem.value = URL.createObjectURL(imagem.value);
+  }
 }
 
 async function salvarProduto() {
@@ -45,23 +50,27 @@ async function salvarProduto() {
       attachmentKey = dadosImagem.attachment_key
     }
 
-    const resposta = await fetch(
-      'http://localhost:8000/api/roupas/',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          nome: produto.value.nome,
-          tamanho: produto.value.tamanho,
-          cor: produto.value.cor,
-          preco: produto.value.preco,
-          descricao: produto.value.descricao,
-          foto_attachment_key: attachmentKey
-        })
-      }
-    )
+   const resposta = await fetch(
+  'http://localhost:8000/api/roupas/',
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      nome: produto.value.nome,
+      tamanho: produto.value.tamanho,
+      cor: produto.value.cor,
+      preco: produto.value.preco,
+      descricao: produto.value.descricao,
+      foto_attachment_key: attachmentKey
+    })
+  }
+)
+
+const dados = await resposta.json()
+
+console.log(dados)
 
     if (!resposta.ok) {
       throw new Error('Erro ao salvar')
@@ -80,9 +89,6 @@ async function salvarProduto() {
 <template>
   <main>
     <h1>Adicionar Produto</h1>
-
-    <section class="fundo">
-      <form class="form-container" @submit.prevent="salvarProduto">
         <!-- <div class="input-group">
           <label>Categoria:</label>
 
@@ -107,9 +113,40 @@ async function salvarProduto() {
             <option>Oceania</option>
           </select>
         </div>-->
+<section class="fundo-prod">
+  <form class="form-container" @submit.prevent="salvarProduto">
+
+    <div class="conteudo-formulario">
+
+      <div class="lado-imagem">
 
         <div class="input-group">
-          <input type="text" maxlength="100" placeholder="Nome" v-model="produto.nome" />
+          <input
+            type="file"
+            accept="image/*"
+            @change="selecionarImagem"
+          />
+        </div>
+
+        <div v-if="previewImagem" class="preview-container">
+          <img
+            :src="previewImagem"
+            alt="Pré-visualização"
+            class="preview-imagem"
+          />
+        </div>
+
+      </div>
+
+      <div class="lado-campos">
+
+        <div class="input-group">
+          <input
+            type="text"
+            maxlength="100"
+            placeholder="Nome"
+            v-model="produto.nome"
+          />
         </div>
 
         <div class="input-group">
@@ -122,57 +159,91 @@ async function salvarProduto() {
         </div>
 
         <div class="input-group">
-          <input type="text" maxlength="30" placeholder="Cor" v-model="produto.cor" />
+          <input
+            type="text"
+            maxlength="30"
+            placeholder="Cor"
+            v-model="produto.cor"
+          />
         </div>
 
         <div class="input-group">
-          <input type="number" step="0.01" placeholder="Preço" v-model="produto.preco" />
+          <input
+            type="number"
+            step="0.01"
+            placeholder="Preço"
+            v-model="produto.preco"
+          />
         </div>
 
         <div class="input-group">
-          <textarea placeholder="Descrição" v-model="produto.descricao"></textarea>
+          <textarea
+            placeholder="Descrição"
+            v-model="produto.descricao"
+          ></textarea>
         </div>
 
-        <div class="input-group">
-          <input type="file" accept="image/*" @change="selecionarImagem" />
-        </div>
+      </div>
 
-        <div class="buttons">
-          <button type="reset">Limpar</button>
+    </div>
 
-          <button type="submit">Salvar</button>
-        </div>
-      </form>
-    </section>
+    <div class="buttons">
+      <button type="reset">
+        Limpar
+      </button>
+
+      <button type="submit">
+        Salvar
+      </button>
+    </div>
+
+  </form>
+</section>
   </main>
 </template>
 
 <style scoped>
+main {
+  margin-top: 7vw;
+}
+
 h1 {
   color: #311111;
   font-weight: bold;
-  margin-top: 3vw;
-  margin-bottom: 3vw;
+  margin: 3vw 0;
   text-align: center;
 }
 
-.fundo {
+.fundo-prod {
   background-color: #f5e9e0;
-  border: #311111 solid 0.8px;
+  border: 0.8px solid #311111;
   border-radius: 1.7rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 30px;
-  margin: 0vw 13vw 1.2vw 13vw;
+
+  padding: 2vw;
+
+  margin: 0 10vw 2vw;
 }
 
 .form-container {
-  width: 350px;
+  width: 100%;
+}
+
+.conteudo-formulario {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.lado-imagem {
+  width: 35%;
+}
+
+.lado-campos {
+  flex: 1;
 }
 
 .input-group {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 
 input,
@@ -186,34 +257,97 @@ input,
 textarea,
 select {
   width: 100%;
-  padding: 12px 15px;
+  padding: 1rem;
+
   border: none;
-  border-radius: 12px;
-  background-color: #fefefe;
-  font-size: 14px;
+  border-radius: 1rem;
+
+  background-color: #fff;
+
+  font-size: 0.9rem;
+
   outline: none;
 }
 
 textarea {
   resize: none;
-  height: 80px;
+  height: 10rem;
+}
+
+.preview-container {
+  width: 100%;
+  height: 450px;
+
+  margin-top: 1rem;
+
+  border-radius: 1rem;
+
+  overflow: hidden;
+
+  background: white;
+
+  border: 1px solid rgba(49, 17, 17, 0.2);
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.preview-imagem {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
 }
 
 .buttons {
   display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  margin-top: 2rem;
+
+  padding-top: 1.5rem;
+
+  border-top: 1px solid rgba(49, 17, 17, 0.15);
 }
 
-button {
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: 1px solid #5a3d36;
-  background-color: transparent;
+.buttons button {
+  padding: 0.8rem 2rem;
+
+  border-radius: 0.7rem;
+
+  border: 1px solid #311111;
+
+  background: transparent;
+
+  color: #311111;
+
   cursor: pointer;
+
+  transition: 0.3s;
 }
 
-button:hover {
-  background-color: #e7e7e7;
+.buttons button:hover {
+  background: #311111;
+  color: #f5e9e0;
+}
+
+@media (max-width: 768px) {
+
+  .conteudo-formulario {
+    flex-direction: column;
+  }
+
+  .lado-imagem,
+  .lado-campos {
+    width: 100%;
+  }
+
+  .preview-container {
+    height: 300px;
+  }
+
+  .buttons {
+    justify-content: center;
+  }
 }
 </style>

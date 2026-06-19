@@ -70,7 +70,7 @@ function moveHover(e: MouseEvent) {
 </script>
 
 <template>
-  <main>
+  <main class="mini-carro">
     <div class="carrossel-container">
 
       <button class="voltar" @click="prevSlide">
@@ -134,7 +134,7 @@ function moveHover(e: MouseEvent) {
 
 <style scoped>
 
-main {
+.mini-carro {
   background: #E6D6C5;
   margin: 4vw 0;
 }

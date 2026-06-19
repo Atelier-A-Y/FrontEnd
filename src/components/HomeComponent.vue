@@ -40,7 +40,7 @@ main{
   transition: 0.3s;
 }
 
-img {
+.bnt-grandes img {
   width: 100%;
   height: auto;
   display: block;
