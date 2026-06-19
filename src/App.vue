@@ -26,7 +26,6 @@ onMounted(async () => {
     <router-view />
 
 <footer-component />
-
 </template>
 
 <style scoped>
@@ -34,3 +33,4 @@ main {
   background-color: white;
 }
 </style>
+

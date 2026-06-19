@@ -98,7 +98,7 @@ function irParaHome(){
 </script>
 
 <template>
-  <header :class="{ scrolled: headerAtivo }">
+  <header :class="{ scrolled: headerAtivo }" class="topo">
 
       <div @click="irParaHome" class="logo">
         <img :src="headerAtivo
@@ -153,14 +153,14 @@ function irParaHome(){
           @keydown="navegar"
           class="search-input"
         />
-
-        <img
+        <RouterLink to="/produtos"><img
           :src="headerAtivo
             ? '/img/lupa-solido.png'
             : '/img/lupa.png'"
           alt="Pesquisar"
           class="icon-lupa"
         />
+        </RouterLink>
 
         <div
           class="results-list"
@@ -236,7 +236,7 @@ function irParaHome(){
 
 /* HEADER */
 
-header {
+.topo {
   position: fixed;
 
   top: 0;
@@ -268,7 +268,7 @@ header {
 
 /* HEADER QUANDO DESCE */
 
-header.scrolled {
+.topo.scrolled {
   background: rgba(245, 230, 222, 0.95);
 
   backdrop-filter: blur(10px);
@@ -475,20 +475,20 @@ header.scrolled {
 
 /* QUANDO O HEADER FICA SÓLIDO */
 
-header.scrolled .titulo,
-header.scrolled .sigla,
-header.scrolled .menu li a {
+.topo.scrolled .titulo,
+.topo.scrolled .sigla,
+.topo.scrolled .menu li a {
   color: #311111;
 }
 
-header.scrolled .search-input {
+.topo.scrolled .search-input {
   color: #311111;
 
   border-bottom:
     0.1vw solid #84453d;
 }
 
-header.scrolled .search-input::placeholder {
+.topo.scrolled .search-input::placeholder {
   color: rgba(49, 17, 17, 0.5);
 }
 
@@ -496,7 +496,7 @@ header.scrolled .search-input::placeholder {
 
 @media (max-width: 768px) {
 
-  header {
+  .topo {
     height: 14vw;
     padding: 0 5vw;
   }

@@ -1,9 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import AdicionarProduto from '../views/AdicionarProduto.vue'
+import Produtos from '../views/Produtos.vue'
 
 const routes = [
   {
     path: '/',
     component: () => import('../views/HomeView.vue')
+  },
+  {
+    path: '/adicionar',
+    component: () => import('../views/AdicionarProduto.vue')
+  },
+
+  {
+    path: '/produtos',
+    component: () => import('../views/Produtos.vue')
   },
   {
     path: '/login',
@@ -25,3 +36,4 @@ const router = createRouter({
 })
 
 export default router
+
