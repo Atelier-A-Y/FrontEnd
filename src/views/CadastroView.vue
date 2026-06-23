@@ -112,7 +112,7 @@ async function cadastrar(){
 .logo-login img {
   width: 6vw;
   height: 6vw;
-  margin-left: 8.5vw;
+  margin-left: 7.5vw;
   margin-bottom: 1vw;
 }
 

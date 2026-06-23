@@ -43,6 +43,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  z-index: 999;
 }
 
 .texto {
