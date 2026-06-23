@@ -23,13 +23,9 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  display: block;
+  display: flex;
 }
 
-.banner img {
-  width: 57%;
-  display: block;
-}
 
 .overlay {
   position: absolute;
@@ -44,7 +40,6 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  z-index: 999;
 }
 
 .texto {
