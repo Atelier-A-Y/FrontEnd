@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AdicionarProduto from '../views/AdicionarProduto.vue'
 import Produtos from '../views/Produtos.vue'
+import Favoritos from '../views/Favoritos.vue'
 
 const routes = [
   {
@@ -27,6 +28,10 @@ const routes = [
   {
     path: '/user',
     component: () => import('../views/UserView.vue')
+  },
+   {
+    path: '/favoritos',
+    component: Favoritos
   },
 ]
 

@@ -32,7 +32,7 @@
 
 <li>
 
-<button class="botao"><a href="" class="link">Voltar às Compras</a></button>
+<button class="botao"><router-link to="/" class="link">Voltar às Compras</router-link></button>
 
 </li>
 
