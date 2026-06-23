@@ -217,14 +217,14 @@ function irParaHome(){
         </li>
 
         <li>
-          <a href="#">
+          <RouterLink to="/favoritos">
             <img
               :src="headerAtivo
                 ? '/img/coracao-solido.png'
                 : '/img/coracao.png'"
               alt="Favoritos"
             />
-          </a>
+          </RouterLink>
         </li>
 
       </ul>
