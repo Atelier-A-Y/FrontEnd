@@ -23,9 +23,13 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  display: flex;
+  display: block;
 }
 
+.banner img {
+  width: 57%;
+  display: block;
+}
 
 .overlay {
   position: absolute;
