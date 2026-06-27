@@ -9,13 +9,13 @@ const mostrarSenha = ref(false)
 
 async function cadastrar(){
   try {
-    await axios.post('http://127.0.0.1:8000/api/registro/', {
+    await axios.post('https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/registro/', {
       name: nome.value,
       email: email.value,
       password: senha.value,
     })
 
-    const response = await axios.post('http://127.0.0.1:8000/api/token/', {
+    const response = await axios.post('https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/token/', {
       email: email.value,
       password: senha.value
     })
