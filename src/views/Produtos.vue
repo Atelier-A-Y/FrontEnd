@@ -5,7 +5,7 @@ const produtos = ref([]);
 
 async function carregarProdutos() {
   try {
-    const resposta = await fetch("http://localhost:8000/api/roupas/");
+    const resposta = await fetch("https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/");
 
     const dados = await resposta.json();
 

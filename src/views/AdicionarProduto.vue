@@ -38,7 +38,7 @@ async function salvarProduto() {
       formData.append('file', imagem.value)
 
       const upload = await fetch(
-        'http://localhost:8000/api/media/images/',
+        'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/media/images/',
         {
           method: 'POST',
           body: formData
@@ -51,7 +51,7 @@ async function salvarProduto() {
     }
 
    const resposta = await fetch(
-  'http://localhost:8000/api/roupas/',
+  'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/',
   {
     method: 'POST',
     headers: {
