@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const produtos = ref([]);
 
@@ -21,7 +24,7 @@ onMounted(() => {
   carregarProdutos();
 });
 
-function abrirProdutos() {
+function abrirProdutos(id) {
   router.push(`/info_prod/${id}`)
 }
 
@@ -43,7 +46,7 @@ function abrirProdutos() {
     <h1>Produtos</h1>
 
     <section class="container-produtos" v-if="produtos.length > 0">
-      <div class="card-produto" v-for="item in produtos" :key="item.id">
+      <div class="card-produto" v-for="item in produtos" :key="item.id" @click="abrirProdutos(item.id)">
 
         <img
           v-if="item.foto"
