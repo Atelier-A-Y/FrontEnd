@@ -21,6 +21,10 @@ onMounted(() => {
   carregarProdutos();
 });
 
+function abrirProdutos() {
+  router.push(`/info_prod/${id}`)
+}
+
 // excluir produto
 /*function excluirProduto(index) {
 
