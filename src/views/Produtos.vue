@@ -111,7 +111,7 @@ function abrirProdutos(id) {
 
 <style scoped>
 .produtos {
-  padding: 2rem;
+  padding: 1rem;
   margin-top: 5vw;
   min-height: 100vh;
 }
@@ -144,7 +144,7 @@ function abrirProdutos(id) {
 
   grid-template-columns: repeat(
     auto-fit,
-    minmax(19vw, 1fr)
+    minmax(18vw, 1fr)
   );
 
   gap: 2rem;
