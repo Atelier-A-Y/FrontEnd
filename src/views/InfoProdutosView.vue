@@ -21,7 +21,9 @@ onMounted(carregarProduto)
 
 <template>
 
-<div v-if="produto" class="informacoes">
+<div v-if="produto">
+
+<div class="informacoes">
   <div class="img-prod">
     <img v-if="produto.foto"
           :src="produto.foto.url"
@@ -51,6 +53,9 @@ onMounted(carregarProduto)
 </div>
   </div>
 </div>
+  <p class="descricao">Descrição:</p>
+  <span class="prod_descr">{{ produto.descricao }}</span>
+</div>
 </template>
 
 <style scoped>
@@ -58,32 +63,34 @@ onMounted(carregarProduto)
   display: flex;
 }
 .img-prod {
-  width: 30%;
+  width: 38%;
 
   height: 40vw;
 
   object-fit: cover;
 
-  margin: 6vw 10vw 5vw;
+  margin: 6vw 8vw 20vw;
 
   transition: transform 0.4s ease;
 }
 
 .infos{
-  margin: 10vw 8vw 0 0;
+  margin-top: 10vw;
+  margin-left: 4vw;
   font-family: "Lexend Deca", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
 }
 
 .infos h1{
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   font-weight: 600;
   margin-bottom: 3vw;
+  color: #311111;
 }
 
 .infos h2{
-  font-size: 2rem;
+  font-size: 1.7rem;
   font-weight: 400;
   margin-bottom: 1.5vw;
 }
@@ -105,7 +112,7 @@ onMounted(carregarProduto)
   color: #F5E9E0;
   padding: 1vw 10vw;
   font-size: 1.2rem;
-  border-radius: .5vw;
+  border-radius: 0.5vw;
   border: none;
   cursor: pointer;
   transition: transform 0.4s ease;
@@ -128,5 +135,17 @@ onMounted(carregarProduto)
 .coracao{
   width: 2vw;
   height: 2vw;
+}
+
+.descricao{
+  margin: 0 0 2vw 5vw;
+  font-size: 2rem;
+  color: #311111;
+  font-weight: 700;
+}
+
+span{
+  margin: 2vw 0 10vw 8vw;
+  font-size: 1.5rem;
 }
 </style>
