@@ -36,12 +36,21 @@ onMounted(carregarProduto)
 
     <p>Cor: {{ produto.cor }}</p>
 
-    <button>Comprar</button>
+    <div class="acoes">
+  <button class="btn-comprar">
+    Comprar
+  </button>
+
+  <button class="btn-favorito">
+    <img
+      src="/img/coracao-solido.png"
+      alt="Favoritar"
+      class="coracao"
+    >
+  </button>
+</div>
   </div>
 </div>
-<div class="icones">
-    <img src="/public/img/coracao-solido.png" alt="coracao" class="coracao">
-  </div>
 </template>
 
 <style scoped>
@@ -61,7 +70,7 @@ onMounted(carregarProduto)
 }
 
 .infos{
-  margin: 12vw 8vw 0 0;
+  margin: 10vw 8vw 0 0;
   font-family: "Lexend Deca", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
@@ -84,18 +93,40 @@ onMounted(carregarProduto)
   padding: 1.5vw 0;
 }
 
-button{
+.acoes{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 8vw;
+}
+
+.btn-comprar{
   background-color: #311111;
   color: #F5E9E0;
   padding: 1vw 10vw;
   font-size: 1.2rem;
-  border-radius: 0.5vw;
-  margin-top: 11vw;
+  border-radius: .5vw;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+.btn-comprar:hover{
+  transform: scale(1.05);
+}
+
+.btn-favorito{
+  width: 3.8vw;
+  height: 3.8vw;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 .coracao{
-  width: 3.5vw;
-  height: 3.5vw;
-  cursor: pointer;
+  width: 2vw;
+  height: 2vw;
 }
 </style>
