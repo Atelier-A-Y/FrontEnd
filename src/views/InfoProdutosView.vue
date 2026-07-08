@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import api from '../api/api'
 
-const route = useRoute()
+const route = useRoute();
+const router = useRouter();
 
 const produto = ref<any>(null)
 
@@ -16,10 +17,16 @@ async function carregarProduto() {
     produto.value = response.data
 }
 
+function voltarProd(){
+  router.push('/produtos')
+}
+
 onMounted(carregarProduto)
 </script>
 
 <template>
+
+<button class="voltar" @click="voltarProd"> < </button>
 
 <div v-if="produto">
 
@@ -51,14 +58,28 @@ onMounted(carregarProduto)
     >
   </button>
 </div>
+<p class="descricao">Descrição: {{ produto.descricao }}</p>
   </div>
 </div>
-  <p class="descricao">Descrição:</p>
-  <span class="prod_descr">{{ produto.descricao }}</span>
 </div>
 </template>
 
 <style scoped>
+.voltar{
+  background-color: #311111;
+  color: #F5E9E0;
+  margin: 6vw 0 2vw 5vw;
+  padding: 0.5vw 2vw;
+  cursor: pointer;
+  font-size: 1vw;
+  border-radius: 0.5vw;
+  transition: transform 0.4s ease;
+}
+
+.voltar:hover{
+  transform: scale(1.05);
+}
+
 .informacoes{
   display: flex;
 }
@@ -69,7 +90,7 @@ onMounted(carregarProduto)
 
   object-fit: cover;
 
-  margin: 6vw 8vw 20vw;
+  margin: 0 8vw 20vw;
 
   transition: transform 0.4s ease;
 }
@@ -110,9 +131,9 @@ onMounted(carregarProduto)
 .btn-comprar{
   background-color: #311111;
   color: #F5E9E0;
-  padding: 1vw 10vw;
+  padding: 1vw 12vw;
   font-size: 1.2rem;
-  border-radius: 0.5vw;
+  border-radius: 0.2vw;
   border: none;
   cursor: pointer;
   transition: transform 0.4s ease;
@@ -138,14 +159,7 @@ onMounted(carregarProduto)
 }
 
 .descricao{
-  margin: 0 0 2vw 5vw;
+  margin-top: 2vw;
   font-size: 2rem;
-  color: #311111;
-  font-weight: 700;
-}
-
-span{
-  margin: 2vw 0 10vw 8vw;
-  font-size: 1.5rem;
 }
 </style>
