@@ -217,14 +217,14 @@ function irParaHome(){
         </li>
 
         <li>
-          <a href="#">
+          <RouterLink to="/favoritos">
             <img
               :src="headerAtivo
                 ? '/img/coracao-solido.png'
                 : '/img/coracao.png'"
               alt="Favoritos"
             />
-          </a>
+          </RouterLink>
         </li>
 
       </ul>
@@ -282,31 +282,32 @@ function irParaHome(){
 .logo {
   display: flex;
   align-items: center;
-  gap: 1vw;
+  gap: 15px;
+  cursor: pointer;
 }
 
 .logo img {
-  width: 4vw;
-  height: 5.5vw;
-  cursor: pointer;
+  width: 60px;
+  height: 80px;
 }
 
 .texto {
   display: flex;
   flex-direction: column;
-  font-family: "Playfair", serif;
-  font-optical-sizing: auto;
+  justify-content: center;
 }
 
 .titulo {
-  font-size: 0.9rem;
+  font-size: 12px;
   color: white;
+  margin: 0;
 }
 
 .sigla {
-  margin-left: 1.4vw;
-  font-size: 0.8rem;
+  font-size: 10px;
   color: white;
+  margin: 0;
+  align-self: center;
 }
 
 /* MENU */
@@ -379,32 +380,20 @@ function irParaHome(){
 
 .search-container {
   position: relative;
-
-  width: 20vw;
-
   display: flex;
   align-items: center;
-
-  gap: 1vw;
+  width: 320px;
+  max-width: 100%;
 }
 
 .search-input {
   width: 100%;
-
+  padding: 8px 35px 8px 0;
   border: none;
-  border-bottom: 0.1vw solid white;
-
+  border-bottom: 1px solid white;
   background: transparent;
-
-  padding: 0.5vw 0;
-
-  outline: none;
-
+  font-size: 16px;
   color: white;
-
-  font-size: 1rem;
-
-  transition: 0.3s;
 }
 
 .search-input::placeholder {

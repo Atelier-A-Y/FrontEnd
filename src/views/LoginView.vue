@@ -16,7 +16,7 @@ const mostrarSenha = ref(false)
 async function entrar() {
   try {
     const response = await axios.post(
-      'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/token/',
+      'http://127.0.0.1:8000/api/token/',
       {
         email: email.value,
         password: senha.value
@@ -109,16 +109,17 @@ router.push('/')
 </template>
 
 <style scoped>
-.logo-login{
-  text-align: center;
+.logo-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-bottom: 1vw;
 }
 
 .logo-login img {
-  width: 6vw;
-  height: 6vw;
-  margin-left: 7.4vw;
-  margin-bottom: 1vw;
+  width: 90px;
+  height: 90px;
+  margin: 0 0 15px;
 }
 
 .nome1{
@@ -237,15 +238,30 @@ router.push('/')
   box-shadow: 0 4px 2px 0 #1e1e1e7c;
 }
 
+.campo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+}
+
 .olho {
-  width: 1.5vw;
-  height: 1.5vw;
   position: absolute;
-  right: 3vw;
-  top: 92.5%;
-  transform: translateY(-8.6vw);
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
   border: none;
+  background: transparent;
   cursor: pointer;
+  padding: 0;
+}
+
+.olho img {
+  width: 100%;
+  height: 100%;
 }
 
 .entrar {
