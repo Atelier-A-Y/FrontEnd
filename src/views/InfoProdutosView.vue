@@ -202,7 +202,12 @@ onMounted(carregarProduto);
 }
 
 .btn-comprar:hover {
+  background-color: #5a1f1f;
   transform: scale(1.05);
+}
+
+.btn-comprar:active {
+  background-color: #7a2d2d;
 }
 
 .btn-favorito {
