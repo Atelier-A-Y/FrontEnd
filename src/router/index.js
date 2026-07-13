@@ -11,7 +11,6 @@ const routes = [
     path: '/adicionar',
     component: () => import('../views/AdicionarProduto.vue')
   },
-
   {
     path: '/produtos',
     component: () => import('../views/Produtos.vue')
@@ -27,6 +26,10 @@ const routes = [
   {
     path: '/user',
     component: () => import('../views/UserView.vue')
+  },
+  {
+    path: '/carrinho',
+    component: () => import('../views/CarrinhoView.vue')
   },
 ]
 

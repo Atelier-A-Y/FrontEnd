@@ -206,7 +206,7 @@ function irParaHome(){
         </li>
 
         <li>
-          <a href="#">
+          <a href="/carrinho">
             <img
               :src="headerAtivo
                 ? '/img/bolsa-solido.png'

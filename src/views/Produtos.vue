@@ -5,7 +5,7 @@ const produtos = ref([]);
 
 async function carregarProdutos() {
   try {
-    const resposta = await fetch("http://localhost:8000/api/roupas/");
+    const resposta = await fetch("https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/");
 
     const dados = await resposta.json();
 
@@ -20,18 +20,6 @@ async function carregarProdutos() {
 onMounted(() => {
   carregarProdutos();
 });
-
-// excluir produto
-/*function excluirProduto(index) {
-
-  produtos.value.splice(index, 1)
-
-  localStorage.setItem(
-    "produtos",
-    JSON.stringify(produtos.value)
-  )
-
-}*/
 </script>
 
 <template>
@@ -49,33 +37,6 @@ onMounted(() => {
         />
 
         <h2>{{ item.nome }}</h2>
-        <!--<p>
-
-          <strong>Categoria:</strong>
-
-          {{ item.categoria }}
-
-        </p>
-
-        <p>
-
-          <strong>Continente:</strong>
-
-          {{ item.continente }}
-
-        </p>
-
-        <p>
-          <strong>Tamanho:</strong>
-
-          {{ item.tamanho }}
-        </p>
-
-        <p>
-          <strong>Cor:</strong>
-
-          {{ item.cor }}
-        </p>-->
 
         <p>
           <strong>Preço:</strong>
@@ -83,16 +44,6 @@ onMounted(() => {
           R$
           {{ Number(item.preco).toFixed(2).replace(".", ",") }}
         </p>
-
-        <!--<p>
-          <strong>Descrição:</strong>
-
-          {{ item.descricao }}
-        </p>
-
-        <button @click="excluirProduto(index)">
-          Excluir
-        </button>-->
       </div>
     </section>
 
