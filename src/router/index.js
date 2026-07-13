@@ -12,10 +12,14 @@ const routes = [
     path: '/adicionar',
     component: () => import('../views/AdicionarProduto.vue')
   },
-
   {
     path: '/produtos',
     component: () => import('../views/Produtos.vue')
+  },
+  {
+    path: '/info_prod/:id',
+    component: () => import('../views/InfoProdutosView.vue'),
+    props: true
   },
   {
     path: '/login',
