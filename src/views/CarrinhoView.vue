@@ -95,8 +95,8 @@ onMounted(carregarProduto);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 140px 30px;
-  margin: 8vw 13vw 0vw 13vw;
+  padding: 120px 30px;
+  margin: 4vw 13vw 0vw 13vw;
 }
 
 ul{
@@ -155,8 +155,8 @@ li {
 }
 
 img{
-  width: 12vw;
-  height: 12vw;
+  width: 11vw;
+  height: 11vw;
 }
 
 /* ---------------- BOTÃO VOLTAR ----------------
