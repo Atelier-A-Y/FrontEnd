@@ -23,22 +23,6 @@ async function carregarProdutos() {
 onMounted(() => {
   carregarProdutos();
 });
-
-function abrirProdutos(id) {
-  router.push(`/info_prod/${id}`)
-}
-
-// excluir produto
-/*function excluirProduto(index) {
-
-  produtos.value.splice(index, 1)
-
-  localStorage.setItem(
-    "produtos",
-    JSON.stringify(produtos.value)
-  )
-
-}*/
 </script>
 
 <template>
@@ -56,33 +40,6 @@ function abrirProdutos(id) {
         />
 
         <h2>{{ item.nome }}</h2>
-        <!--<p>
-
-          <strong>Categoria:</strong>
-
-          {{ item.categoria }}
-
-        </p>
-
-        <p>
-
-          <strong>Continente:</strong>
-
-          {{ item.continente }}
-
-        </p>
-
-        <p>
-          <strong>Tamanho:</strong>
-
-          {{ item.tamanho }}
-        </p>
-
-        <p>
-          <strong>Cor:</strong>
-
-          {{ item.cor }}
-        </p>-->
 
         <p>
           <strong>Preço:</strong>
@@ -90,16 +47,6 @@ function abrirProdutos(id) {
           R$
           {{ Number(item.preco).toFixed(2).replace(".", ",") }}
         </p>
-
-        <!--<p>
-          <strong>Descrição:</strong>
-
-          {{ item.descricao }}
-        </p>
-
-        <button @click="excluirProduto(index)">
-          Excluir
-        </button>-->
       </div>
     </section>
 
