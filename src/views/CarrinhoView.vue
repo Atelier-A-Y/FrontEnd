@@ -67,8 +67,8 @@ onMounted(carregarProduto);
     <section v-else class="sem-produtos">
       <ul>
         <li class="icone">
-        <img src="/img/carrinho.png" alt="carrinho">
-      </li>
+            <img src="/img/carrinho.png" alt="carrinho">
+        </li>
 
       <li class="titulo">
         <h1>Carrinho Vazio</h1>
@@ -149,16 +149,14 @@ li {
   justify-content: center;
 }
 
-span{
-  color: #311111;
-  font-size: 8rem;
-  padding-bottom: 1rem;
+.icone{
+  display: flex;
+  justify-content: center;
 }
 
-.icone{
+img{
   width: 12vw;
   height: 12vw;
-  margin-left: 14.5vw;
 }
 
 /* ---------------- BOTÃO VOLTAR ----------------
