@@ -45,7 +45,7 @@ onMounted(carregarProduto);
 </script>
 
 <template>
-  <button class="voltar" @click="voltarProd">←</button>
+  <button class="voltar" @click="voltarProd"><img src="/public/img/flecha.png" alt="flecha"></button>
 
   <div v-if="produto" class="container">
     <div class="informacoes">
@@ -102,19 +102,15 @@ onMounted(carregarProduto);
 /* ---------------- BOTÃO VOLTAR ---------------- */
 
 .voltar {
-  margin: 5.5rem 0 2rem 5%;
-  padding: 0.8rem 1.8rem;
-  background: #311111;
-  color: #f5e9e0;
-  border: none;
-  border-radius: 8px;
+  width: 3vw;
+  height: 2vw;
+  margin: 6rem 0 2rem 5%;
   cursor: pointer;
-  font-size: 1rem;
   transition: 0.3s;
 }
 
 .voltar:hover {
-  transform: scale(1.05);
+  transform: translateX(-10px);
 }
 
 /* ---------------- CONTAINER ---------------- */
