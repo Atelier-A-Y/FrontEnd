@@ -22,7 +22,6 @@
 footer {
   width: 100%;
   background: #f5e9e0;
-  margin-top: 4vw;
 }
 
 footer > div {

@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const produtos = ref([]);
 
@@ -27,7 +30,7 @@ onMounted(() => {
     <h1>Produtos</h1>
 
     <section class="container-produtos" v-if="produtos.length > 0">
-      <div class="card-produto" v-for="item in produtos" :key="item.id">
+      <div class="card-produto" v-for="item in produtos" :key="item.id" @click="abrirProdutos(item.id)">
 
         <img
           v-if="item.foto"
@@ -55,7 +58,7 @@ onMounted(() => {
 
 <style scoped>
 .produtos {
-  padding: 2rem;
+  padding: 1rem;
   margin-top: 5vw;
   min-height: 100vh;
 }
@@ -88,7 +91,7 @@ onMounted(() => {
 
   grid-template-columns: repeat(
     auto-fit,
-    minmax(19vw, 1fr)
+    minmax(18vw, 1fr)
   );
 
   gap: 2rem;

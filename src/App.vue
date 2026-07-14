@@ -1,3 +1,4 @@
+
 <script setup lang="ts">
 import FooterComponent from './components/FooterComponent.vue';
 import HeaderComponent from './components/HeaderComponent.vue';
@@ -31,6 +32,8 @@ onMounted(async () => {
 <style scoped>
 main {
   background-color: white;
+  margin: 6vw;
+  padding: 0.3vw 0vw 0vw 0vw;
 }
 </style>
 

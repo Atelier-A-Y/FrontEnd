@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AdicionarProduto from '../views/AdicionarProduto.vue'
-import Produtos from '../views/Produtos.vue'
 
 const routes = [
   {
@@ -14,6 +12,11 @@ const routes = [
   {
     path: '/produtos',
     component: () => import('../views/Produtos.vue')
+  },
+  {
+    path: '/info_prod/:id',
+    component: () => import('../views/InfoProdutosView.vue'),
+    props: true
   },
   {
     path: '/login',
@@ -30,6 +33,10 @@ const routes = [
   {
     path: '/carrinho',
     component: () => import('../views/CarrinhoView.vue')
+  },
+   {
+    path: '/favoritos',
+    component: () => import('../views/Favoritos.vue')
   },
 ]
 
