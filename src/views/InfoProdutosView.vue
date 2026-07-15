@@ -27,6 +27,18 @@ function alterarFav() {
   localStorage.setItem("favoritos", JSON.stringify(favoritos));
 }
 
+async function adicionarCarrinho() {
+  await api.post(
+    "/carrinho/adicionar/",
+    {
+      roupa: produto.value.id,
+      quantidade: 1,
+    }
+  );
+
+  router.push("/carrinho");
+}
+
 async function carregarProduto() {
   const id = route.params.id;
 
@@ -71,8 +83,8 @@ onMounted(carregarProduto);
 
         <div class="acoes">
 
-          <button class="btn-comprar">
-            Comprar
+          <button class="btn-carrinho" @click="adicionarCarrinho">
+            Adicionar ao Carrinho
           </button>
 
           <button class="btn-favorito" @click="alterarFav">
@@ -185,9 +197,9 @@ onMounted(carregarProduto);
   margin: 3rem 0;
 }
 
-.btn-comprar {
+.btn-carrinho {
   min-width: 260px;
-  padding: 16px 180px;
+  padding: 16px 160px;
   background: #311111;
   color: #f5e9e0;
   border: none;
@@ -197,12 +209,12 @@ onMounted(carregarProduto);
   transition: .3s;
 }
 
-.btn-comprar:hover {
+.btn-carrinho:hover {
   background-color: #5a1f1f;
   transform: scale(1.05);
 }
 
-.btn-comprar:active {
+.btn-carrinho:active {
   background-color: #7a2d2d;
 }
 

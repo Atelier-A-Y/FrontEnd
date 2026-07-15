@@ -20,6 +20,10 @@ async function carregarProdutos() {
   }
 }
 
+function abrirProdutos(id) {
+  router.push(`/info_prod/${id}`)
+}
+
 onMounted(() => {
   carregarProdutos();
 });
