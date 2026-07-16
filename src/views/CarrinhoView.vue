@@ -6,7 +6,7 @@ const carrinho = ref<any[]>([]);
 
 async function carregarCarrinho() {
   try {
-    const resposta = await api.get("/carrinho/");
+    const resposta = await api.get("https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/");
 
     carrinho.value = resposta.data;
   } catch (erro) {

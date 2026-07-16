@@ -29,7 +29,7 @@ function alterarFav() {
 
 async function adicionarCarrinho() {
   await api.post(
-    "/carrinho/adicionar/",
+    "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/adicionar/",
     {
       roupa: produto.value.id,
       quantidade: 1,
