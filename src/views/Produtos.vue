@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const produtos = ref([]);
 
@@ -17,21 +20,13 @@ async function carregarProdutos() {
   }
 }
 
+function abrirProdutos(id) {
+  router.push(`/info_prod/${id}`)
+}
+
 onMounted(() => {
   carregarProdutos();
 });
-
-// excluir produto
-/*function excluirProduto(index) {
-
-  produtos.value.splice(index, 1)
-
-  localStorage.setItem(
-    "produtos",
-    JSON.stringify(produtos.value)
-  )
-
-}*/
 </script>
 
 <template>
@@ -39,7 +34,7 @@ onMounted(() => {
     <h1>Produtos</h1>
 
     <section class="container-produtos" v-if="produtos.length > 0">
-      <div class="card-produto" v-for="item in produtos" :key="item.id">
+      <div class="card-produto" v-for="item in produtos" :key="item.id" @click="abrirProdutos(item.id)">
 
         <img
           v-if="item.foto"
@@ -49,33 +44,6 @@ onMounted(() => {
         />
 
         <h2>{{ item.nome }}</h2>
-        <!--<p>
-
-          <strong>Categoria:</strong>
-
-          {{ item.categoria }}
-
-        </p>
-
-        <p>
-
-          <strong>Continente:</strong>
-
-          {{ item.continente }}
-
-        </p>
-
-        <p>
-          <strong>Tamanho:</strong>
-
-          {{ item.tamanho }}
-        </p>
-
-        <p>
-          <strong>Cor:</strong>
-
-          {{ item.cor }}
-        </p>-->
 
         <p>
           <strong>Preço:</strong>
@@ -83,16 +51,6 @@ onMounted(() => {
           R$
           {{ Number(item.preco).toFixed(2).replace(".", ",") }}
         </p>
-
-        <!--<p>
-          <strong>Descrição:</strong>
-
-          {{ item.descricao }}
-        </p>
-
-        <button @click="excluirProduto(index)">
-          Excluir
-        </button>-->
       </div>
     </section>
 
@@ -104,7 +62,7 @@ onMounted(() => {
 
 <style scoped>
 .produtos {
-  padding: 2rem;
+  padding: 1rem;
   margin-top: 5vw;
   min-height: 100vh;
 }
@@ -137,7 +95,7 @@ onMounted(() => {
 
   grid-template-columns: repeat(
     auto-fit,
-    minmax(19vw, 1fr)
+    minmax(18vw, 1fr)
   );
 
   gap: 2rem;
