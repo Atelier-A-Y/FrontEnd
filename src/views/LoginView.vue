@@ -16,7 +16,7 @@ const mostrarSenha = ref(false)
 async function entrar() {
   try {
     const response = await axios.post(
-      'http://127.0.0.1:8000/api/token/',
+      'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/token/',
       {
         email: email.value,
         password: senha.value

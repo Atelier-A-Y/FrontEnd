@@ -38,7 +38,7 @@ async function salvarProduto() {
       formData.append('file', imagem.value)
 
       const upload = await fetch(
-        'http://localhost:8000/api/media/images/',
+        'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/media/images/',
         {
           method: 'POST',
           body: formData
@@ -51,7 +51,7 @@ async function salvarProduto() {
     }
 
    const resposta = await fetch(
-  'http://localhost:8000/api/roupas/',
+  'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/',
   {
     method: 'POST',
     headers: {
@@ -310,20 +310,23 @@ textarea {
   border-top: 1px solid rgba(49, 17, 17, 0.15);
 }
 
+.buttons {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  align-items: center;
+  color: #311111;
+  gap: 2rem;
+  padding: 0.8rem 2rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+}
+
 .buttons button {
   padding: 0.8rem 2rem;
-
   border-radius: 0.7rem;
-
-  border: 1px solid #311111;
-
-  background: transparent;
-
-  color: #311111;
-
-  cursor: pointer;
-
   transition: 0.3s;
+  border: 0.1vw solid #311111;
 }
 
 .buttons button:hover {

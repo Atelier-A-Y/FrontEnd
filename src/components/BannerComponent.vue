@@ -23,6 +23,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
+  display: block;
 }
 
 .banner img {
