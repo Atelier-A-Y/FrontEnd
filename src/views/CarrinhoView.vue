@@ -6,9 +6,16 @@ const carrinho = ref<any[]>([]);
 
 async function carregarCarrinho() {
   try {
-    const resposta = await api.get("https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/");
+    const resposta = await api.get(
+      "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/"
+    );
 
-    carrinho.value = resposta.data;
+    console.log("CARRINHO RECEBIDO:", resposta.data);
+
+    carrinho.value = resposta.data.results || [];
+
+    console.log("ITENS DO CARRINHO:", carrinho.value);
+
   } catch (erro) {
     console.error("Erro ao carregar carrinho:", erro);
   }
@@ -34,13 +41,15 @@ onMounted(carregarCarrinho);
       >
 
         <img
-          v-if="item.roupa.foto"
-          :src="item.roupa.foto.url"
-          :alt="item.roupa.nome"
+          v-if="item.roupa_detalhes?.foto"
+          :src="item.roupa_detalhes.foto.url"
+          :alt="item.roupa_detalhes.nome"
           class="imagem-produto"
         >
 
-        <h2>{{ item.roupa.nome }}</h2>
+        <h2>
+          {{ item.roupa_detalhes?.nome }}
+        </h2>
 
         <p>
           Quantidade:
@@ -49,7 +58,9 @@ onMounted(carregarCarrinho);
 
         <p>
           R$
-          {{ Number(item.roupa.preco).toFixed(2).replace(".", ",") }}
+          {{ Number(item.roupa_detalhes?.preco || 0)
+            .toFixed(2)
+            .replace(".", ",") }}
         </p>
 
       </div>

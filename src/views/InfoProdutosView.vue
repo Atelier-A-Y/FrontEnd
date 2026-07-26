@@ -28,15 +28,27 @@ function alterarFav() {
 }
 
 async function adicionarCarrinho() {
-  await api.post(
-    "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/adicionar/",
-    {
-      roupa: produto.value.id,
-      quantidade: 1,
-    }
-  );
+  try {
+    await api.post(
+      "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/",
+      {
+        roupa: produto.value.id,
+        quantidade: 1,
+      }
+    );
 
-  router.push("/carrinho");
+    router.push("/carrinho");
+
+  } catch (error: any) {
+    console.error("Erro ao adicionar ao carrinho:", error);
+
+    if (error.response) {
+      console.log("Status:", error.response.status);
+      console.log("Resposta completa:", error.response.data);
+      console.log("Erro usuario:", error.response.data.usuario);
+      console.log("Mensagem:", error.response.data.usuario?.[0]);
+    }
+  }
 }
 
 async function carregarProduto() {
