@@ -51,6 +51,7 @@ onMounted(carregarCarrinho);
           {{ item.roupa_detalhes?.nome }}
         </h2>
 
+      <div class="infos">
         <p>
           Quantidade:
           {{ item.quantidade }}
@@ -62,6 +63,7 @@ onMounted(carregarCarrinho);
             .toFixed(2)
             .replace(".", ",") }}
         </p>
+      </div>
 
       </div>
 
@@ -105,6 +107,93 @@ onMounted(carregarCarrinho);
 </template>
 
 <style scoped>
+/* ================================
+   CONTAINER PRINCIPAL
+================================ */
+
+.container-produtos {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.container-produtos > h1 {
+  color: #311111;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid #d8c6bd;
+  padding-bottom: 1rem;
+}
+
+/* ================================
+   CARD DO PRODUTO
+================================ */
+
+.card-produto {
+  display: grid;
+  grid-template-columns: 150px 1fr auto;
+  align-items: center;
+  gap: 2rem;
+
+  background-color: #f5e9e0;
+  border: 1px solid #dfcec4;
+  border-radius: 12px;
+
+  padding: 1.5rem;
+  margin-bottom: 1.2rem;
+
+  transition: 0.3s ease;
+}
+
+.card-produto:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(49, 17, 17, 0.08);
+}
+
+/* ================================
+   IMAGEM
+================================ */
+
+.imagem-produto {
+  width: 150px;
+  height: 190px;
+
+  object-fit: cover;
+  border-radius: 8px;
+
+  display: block;
+}
+
+/* ================================
+   NOME
+================================ */
+
+.card-produto h2 {
+  color: #311111;
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+/* ================================
+   INFORMAÇÕES
+================================ */
+
+.infos{
+  text-align: right;
+}
+
+.card-produto p {
+  color: #555;
+  font-size: 1.15rem;
+}
+
+.card-produto p:last-child {
+  color: #311111;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
 .sem-produtos {
   background-color: #f5e9e0;
   border: #311111 solid 0.8px;

@@ -12,7 +12,7 @@ async function carregarProdutos() {
 
     const dados = await resposta.json();
 
-    console.log(dados);
+    console.log(produtos.value);
 
     produtos.value = dados.results || dados;
   } catch (erro) {

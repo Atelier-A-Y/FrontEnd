@@ -5,23 +5,23 @@ import api from "../api/api";
 
 const route = useRoute();
 const router = useRouter();
-const favorito = ref(false)
 
 const produto = ref<any>(null);
 
-function alterarFav() {
-  favorito.value = !favorito.value;
+function estaFavoritado(id: number) {
+  const favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
+  return favoritos.includes(id);
+}
 
+function alterarFav(id: number) {
   const favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
 
-  if (favorito.value) {
-    favoritos.push(produto.value.id);
-  } else {
-    const index = favoritos.indexOf(produto.value.id);
+  const index = favoritos.indexOf(id);
 
-    if (index > -1) {
-      favoritos.splice(index, 1);
-    }
+  if (index > -1) {
+    favoritos.splice(index, 1);
+  } else {
+    favoritos.push(id);
   }
 
   localStorage.setItem("favoritos", JSON.stringify(favoritos));
@@ -99,14 +99,16 @@ onMounted(carregarProduto);
             Adicionar ao Carrinho
           </button>
 
-          <button class="btn-favorito" @click="alterarFav">
-            <img
-              :src="favorito
-                ? '/img/coracao-solido.png'
-                : '/img/coracao-cheio.png'"
-              alt="Favoritos"
-            />
-          </button>
+         <button class="btn-favorito" @click="alterarFav(produto.id)">
+          <img
+          :src="
+          estaFavoritado(produto.id)
+            ? '/img/coracao-solido.png'
+            : '/img/coracao-cheio.png'
+            "
+            alt="Favorito"
+          />
+        </button>
 
         </div>
 
