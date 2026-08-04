@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { getProfile, updateProfile, changePassword } from '../services/user'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import CarrinhoComponent from '../components/CarrinhoComponent.vue'
 
 const loading = ref(false)
 const menuAtivo = ref('cadastros')
@@ -230,16 +231,16 @@ onMounted(() => {
               @click="menuAtivo = 'pedidos'"
             >
               <img
-                :src="menuAtivo === 'pedidos'
-                  ? '/img/bolsa.png'
-                  : '/img/bolsa-solido.png'"
-                alt="Carrinho"
-              />
+            :src="menuAtivo === 'pedidos'
+              ? '/img/caminhao-branco.png'
+              : '/img/caminhao.png'"
+            alt="caminhao"
+          />
 
-              <div>
-                <h4>Carrinho</h4>
-                <p>Veja os produtos adicionados ao carrinho.</p>
-              </div>
+          <div>
+            <h4>Pedidos</h4>
+            <p>Confira o andamento dos seus pedidos.</p>
+          </div>
             </div>
 
           <div
@@ -266,16 +267,16 @@ onMounted(() => {
               @click="menuAtivo = 'salvos'"
             >
             <img
-            :src="menuAtivo === 'salvos'
-              ? '/img/bolsa.png'
-              : '/img/bolsa-solido.png'"
-            alt="bolsa"
-          />
+                :src="menuAtivo === 'salvos'
+                  ? '/img/bolsa.png'
+                  : '/img/bolsa-solido.png'"
+                alt="Carrinho"
+              />
 
-            <div>
-              <h4>Salvos</h4>
-              <p>Veja seus itens salvos.</p>
-            </div>
+              <div>
+                <h4>Carrinho</h4>
+                <p>Veja os produtos adicionados ao carrinho.</p>
+              </div>
           </div>
 
           <div
@@ -306,7 +307,7 @@ onMounted(() => {
     >
     <div class="title">
     <img src="/img/carrinho.png" alt="carrinho.png">
-      <h1>Carrinho</h1>
+      <h1>Pedidos</h1>
     </div>
     </section>
 
@@ -387,7 +388,12 @@ onMounted(() => {
       class="content"
       v-if="menuAtivo === 'salvos'"
     >
-      <h1>Salvos</h1>
+      <div class="title">
+    <img src="/img/bolsa-solido.png" alt="bolsa.png">
+      <h1>Carrinho</h1>
+    </div>
+
+    <CarrinhoComponent />
     </section>
 
     <section
