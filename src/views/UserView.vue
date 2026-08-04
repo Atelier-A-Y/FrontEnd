@@ -229,18 +229,18 @@ onMounted(() => {
               :class="{ active: menuAtivo === 'pedidos' }"
               @click="menuAtivo = 'pedidos'"
             >
-          <img
-            :src="menuAtivo === 'pedidos'
-              ? '/img/caminhao-branco.png'
-              : '/img/caminhao.png'"
-            alt="caminhao"
-          />
+              <img
+                :src="menuAtivo === 'pedidos'
+                  ? '/img/bolsa.png'
+                  : '/img/bolsa-solido.png'"
+                alt="Carrinho"
+              />
 
-          <div>
-            <h4>Pedidos</h4>
-            <p>Confira o andamento dos seus pedidos.</p>
-          </div>
-        </div>
+              <div>
+                <h4>Carrinho</h4>
+                <p>Veja os produtos adicionados ao carrinho.</p>
+              </div>
+            </div>
 
           <div
               class="menu-card"
@@ -304,7 +304,10 @@ onMounted(() => {
       class="content"
       v-if="menuAtivo === 'pedidos'"
     >
-      <h1>Pedidos</h1>
+    <div class="title">
+    <img src="/img/carrinho.png" alt="carrinho.png">
+      <h1>Carrinho</h1>
+    </div>
     </section>
 
    <section

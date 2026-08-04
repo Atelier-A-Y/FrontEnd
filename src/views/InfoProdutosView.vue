@@ -89,7 +89,7 @@ onMounted(carregarProduto);
         <h2>R$ {{ produto.preco }}</h2>
 
         <div class="detalhes">
-          <p><strong>Tamanho:</strong> {{ produto.tamanho }}</p>
+          <p><strong>Tamanho:</strong> {{ produto.tamanho.nome }}</p>
           <p><strong>Cor:</strong> {{ produto.cor }}</p>
         </div>
 
