@@ -2,39 +2,39 @@
 import { ref, onMounted } from "vue";
 import api from "../api/api";
 
-const carrinho = ref<any[]>([]);
+const favorito = ref<any[]>([]);
 
-async function carregarCarrinho() {
+async function carregarFavorito() {
   try {
     const resposta = await api.get(
-      "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/"
+      "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/favoritos/"
     );
 
-    console.log("CARRINHO RECEBIDO:", resposta.data);
+    console.log("FAVORITO RECEBIDO:", resposta.data);
 
-    carrinho.value = resposta.data.results || [];
+    favorito.value = resposta.data.results || [];
 
-    console.log("ITENS DO CARRINHO:", carrinho.value);
+    console.log("ITENS DO FAVORITO:", favorito.value);
 
   } catch (erro) {
-    console.error("Erro ao carregar carrinho:", erro);
+    console.error("Erro ao carregar favorito:", erro);
   }
 }
 
-onMounted(carregarCarrinho);
+onMounted(carregarFavorito);
 </script>
 
 <template>
   <main class="produtos">
 
     <section
-      v-if="carrinho.length > 0"
+      v-if="favorito.length > 0"
       class="container-produtos"
     >
 
       <div
         class="card-produto"
-        v-for="item in carrinho"
+        v-for="item in favorito"
         :key="item.id"
       >
 
@@ -75,11 +75,11 @@ onMounted(carregarCarrinho);
       <ul>
 
         <li class="icone">
-          <img src="/img/carrinho.png">
+          <img src="/img/coracao-solido.png">
         </li>
 
         <li class="titulo">
-          <h1>Carrinho vazio</h1>
+          <h1>Favoritos vazio</h1>
         </li>
 
         <li class="texto">
@@ -112,6 +112,15 @@ onMounted(carregarCarrinho);
 .container-produtos {
   max-width: 1250px;
   margin: 0 auto;
+}
+
+.container-produtos > h1 {
+  color: #311111;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid #d8c6bd;
+  padding-bottom: 1rem;
 }
 
 /* ================================

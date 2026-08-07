@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import CarrinhoComponent from '../components/CarrinhoComponent.vue';
-
 </script>
 
 <template>

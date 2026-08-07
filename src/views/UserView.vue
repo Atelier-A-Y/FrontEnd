@@ -4,6 +4,7 @@ import { getProfile, updateProfile, changePassword } from '../services/user'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import CarrinhoComponent from '../components/CarrinhoComponent.vue'
+import FavoritosComponent from '../components/FavoritosComponent.vue'
 
 const loading = ref(false)
 const menuAtivo = ref('cadastros')
@@ -400,7 +401,12 @@ onMounted(() => {
       class="content"
       v-if="menuAtivo === 'favoritos'"
     >
+      <div class="title">
+    <img src="/img/coracao-solido.png" alt="coracao-solido.png">
       <h1>Favoritos</h1>
+    </div>
+
+    <FavoritosComponent />
     </section>
 
   </main>
