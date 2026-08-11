@@ -2,70 +2,89 @@
 import { ref, onMounted } from "vue";
 import api from "../api/api";
 
-const favorito = ref<any[]>([]);
+const favorito = ref<any[]>([])
 
-async function carregarFavorito() {
+async function carregarFavoritos() {
   try {
-    const resposta = await api.get(
-      "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/favoritos/"
-    );
+    const resposta = await api.get("https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/favoritos/")
 
-    console.log("FAVORITO RECEBIDO:", resposta.data);
+    console.log(
+      "FAVORITOS JSON:",
+      JSON.stringify(resposta.data, null, 2)
+    )
 
-    favorito.value = resposta.data.results || [];
+    const resultados = resposta.data.results || resposta.data
 
-    console.log("ITENS DO FAVORITO:", favorito.value);
+    console.log(
+      "RESULTADOS JSON:",
+      JSON.stringify(resultados, null, 2)
+    )
+
+    favorito.value = resultados
 
   } catch (erro) {
-    console.error("Erro ao carregar favorito:", erro);
+    console.error("ERRO FAVORITOS:", erro)
   }
 }
 
-onMounted(carregarFavorito);
+function alterarFav(id: number) {
+  favorito.value = favorito.value.filter(
+    item => item.id !== id
+  )
+
+  localStorage.setItem(
+    "favoritos",
+    JSON.stringify(favorito.value)
+  )
+}
+
+onMounted(carregarFavoritos)
 </script>
 
 <template>
   <main class="produtos">
 
     <section
-      v-if="favorito.length > 0"
-      class="container-produtos"
+  v-if="favorito.length > 0"
+  class="container-produtos"
+>
+  <div
+    class="card-produto"
+    v-for="item in favorito"
+    :key="item.id"
+  >
+
+    <img
+      v-if="item.foto"
+      :src="item.foto.url"
+      :alt="item.nome"
+      class="imagem-produto"
     >
 
-      <div
-        class="card-produto"
-        v-for="item in favorito"
-        :key="item.id"
-      >
+    <h2>
+      {{ item.nome }}
+    </h2>
 
-        <img
-          v-if="item.roupa_detalhes?.foto"
-          :src="item.roupa_detalhes.foto.url"
-          :alt="item.roupa_detalhes.nome"
-          class="imagem-produto"
-        >
-
-        <h2>
-          {{ item.roupa_detalhes?.nome }}
-        </h2>
-
-      <div class="infos">
-        <p>
-          Quantidade:
-          {{ item.quantidade }}
-        </p>
-
-        <p>
-          R$
-          {{ Number(item.roupa_detalhes?.preco || 0)
+    <div class="infos">
+      <p>
+        R$
+        {{
+          Number(item.preco || 0)
             .toFixed(2)
-            .replace(".", ",") }}
-        </p>
-      </div>
+            .replace(".", ",")
+        }}
+      </p>
+    </div>
 
-      </div>
+    <button
+      class="remover-favorito"
+      @click="alterarFav(item.id)"
+    >
+      Remover
+    </button>
 
-    </section>
+  </div>
+</section>
 
     <section
       v-else

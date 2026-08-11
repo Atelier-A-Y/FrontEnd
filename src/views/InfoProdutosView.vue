@@ -5,26 +5,49 @@ import api from "../api/api";
 
 const route = useRoute();
 const router = useRouter();
-
+const favorito = ref(false)
 const produto = ref<any>(null);
 
-function estaFavoritado(id: number) {
-  const favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
-  return favoritos.includes(id);
+async function alterarFav(id: number) {
+  try {
+    const resposta = await api.get("/favoritos/")
+
+    const favoritos = resposta.data.results || resposta.data
+
+    const favoritoExistente = favoritos.find(
+      (item: any) => item.roupa === id
+    )
+
+    if (favoritoExistente) {
+      await api.delete(
+        `/favoritos/${favoritoExistente.id}/`
+      )
+    } else {
+      await api.post("/favoritos/", {
+        roupa: id
+      })
+    }
+
+    await verificarFavorito(id)
+
+  } catch (erro) {
+    console.error("Erro ao alterar favorito:", erro)
+  }
 }
 
-function alterarFav(id: number) {
-  const favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
+async function verificarFavorito(id: number) {
+  try {
+    const resposta = await api.get("/favoritos/")
 
-  const index = favoritos.indexOf(id);
+    const favoritos = resposta.data.results || resposta.data
 
-  if (index > -1) {
-    favoritos.splice(index, 1);
-  } else {
-    favoritos.push(id);
+    favorito.value = favoritos.some(
+      (item: any) => item.roupa === id
+    )
+
+  } catch (erro) {
+    console.error("Erro ao verificar favorito:", erro)
   }
-
-  localStorage.setItem("favoritos", JSON.stringify(favoritos));
 }
 
 async function adicionarCarrinho() {
@@ -99,16 +122,19 @@ onMounted(carregarProduto);
             Adicionar ao Carrinho
           </button>
 
-         <button class="btn-favorito" @click="alterarFav(produto.id)">
-          <img
-          :src="
-          estaFavoritado(produto.id)
-            ? '/img/coracao-solido.png'
-            : '/img/coracao-cheio.png'
-            "
-            alt="Favorito"
-          />
-        </button>
+         <button
+            class="btn-favorito"
+            @click="alterarFav(produto.id)"
+          >
+            <img
+              :src="
+                favorito
+                  ? '/img/coracao-cheio.png'
+                  : '/img/coracao-solido.png'
+              "
+              alt="Favorito"
+            />
+          </button>
 
         </div>
 
