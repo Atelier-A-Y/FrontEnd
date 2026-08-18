@@ -27,15 +27,17 @@ async function carregarFavoritos() {
   }
 }
 
-function alterarFav(id: number) {
-  favorito.value = favorito.value.filter(
+async function alterarFav(id: number) {
+  try{
+    await api.delete("https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/favoritos/${id}/")
+
+    favorito.value = favorito.value.filter(
     item => item.id !== id
   )
-
-  localStorage.setItem(
-    "favoritos",
-    JSON.stringify(favorito.value)
-  )
+  }
+  catch (erro){
+    console.error("Erro ao remover favorito:", erro)
+  }
 }
 
 onMounted(carregarFavoritos)
@@ -55,21 +57,21 @@ onMounted(carregarFavoritos)
   >
 
     <img
-      v-if="item.foto"
-      :src="item.foto.url"
-      :alt="item.nome"
+      v-if="item.roupa?.foto"
+      :src="item.roupa.foto.url"
+      :alt="item.roupa.nome"
       class="imagem-produto"
     >
 
     <h2>
-      {{ item.nome }}
+      {{ item.roupa.nome }}
     </h2>
 
     <div class="infos">
       <p>
         R$
         {{
-          Number(item.preco || 0)
+          Number(item.roupa.preco || 0)
             .toFixed(2)
             .replace(".", ",")
         }}
