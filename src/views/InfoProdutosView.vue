@@ -88,7 +88,13 @@ function voltarProd() {
   router.push("/produtos");
 }
 
-onMounted(carregarProduto);
+onMounted(async () => {
+  await carregarProduto();
+
+  if (produto.value) {
+    await verificarFavorito(produto.value.id);
+  }
+});
 </script>
 
 <template>

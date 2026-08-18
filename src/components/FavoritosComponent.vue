@@ -29,7 +29,7 @@ async function carregarFavoritos() {
 
 async function alterarFav(id: number) {
   try{
-    await api.delete("https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/favoritos/${id}/")
+    await api.delete(`https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/favoritos/${id}/`)
 
     favorito.value = favorito.value.filter(
     item => item.id !== id
