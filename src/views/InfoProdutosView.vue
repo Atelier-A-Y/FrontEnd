@@ -1,52 +1,70 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "../stores/auth";
 import api from "../api/api";
 
 const route = useRoute();
 const router = useRouter();
 const favorito = ref(false)
 const produto = ref<any>(null);
+const authStore = useAuthStore();
 
 async function alterarFav(id: number) {
   try {
-    const resposta = await api.get("/favoritos/")
+    const resposta = await api.get("/favoritos/");
 
-    const favoritos = resposta.data.results || resposta.data
+    const favoritos = resposta.data.results || resposta.data;
+
+    console.log("FAVORITOS:", favoritos);
 
     const favoritoExistente = favoritos.find(
-      (item: any) => item.roupa === id
-    )
+      (item: any) => item.roupa?.id === id
+    );
+
+    console.log("FAVORITO EXISTENTE:", favoritoExistente);
 
     if (favoritoExistente) {
-      await api.delete(
-        `/favoritos/${favoritoExistente.id}/`
-      )
+      await api.delete(`/favoritos/${favoritoExistente.id}/`);
+
+      favorito.value = false;
+
+      console.log("FAVORITO REMOVIDO!");
+
     } else {
       await api.post("/favoritos/", {
         roupa: id
-      })
+      });
+
+      favorito.value = true;
+
+      console.log("FAVORITO ADICIONADO!");
     }
 
-    await verificarFavorito(id)
+  } catch (erro: any) {
+    console.error("ERRO AO ALTERAR FAVORITO:", erro);
 
-  } catch (erro) {
-    console.error("Erro ao alterar favorito:", erro)
+    if (erro.response) {
+      console.log("STATUS:", erro.response.status);
+      console.log("DADOS:", erro.response.data);
+    }
   }
 }
 
 async function verificarFavorito(id: number) {
   try {
-    const resposta = await api.get("/favoritos/")
+    const resposta = await api.get("/favoritos/");
 
-    const favoritos = resposta.data.results || resposta.data
+    const favoritos = resposta.data.results || resposta.data;
 
     favorito.value = favoritos.some(
-      (item: any) => item.roupa === id
-    )
+      (item: any) => item.roupa?.id === id
+    );
+
+    console.log("FAVORITO ESTÁ ATIVO?", favorito.value);
 
   } catch (erro) {
-    console.error("Erro ao verificar favorito:", erro)
+    console.error("Erro ao verificar favorito:", erro);
   }
 }
 
