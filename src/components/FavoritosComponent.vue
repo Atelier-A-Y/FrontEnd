@@ -63,11 +63,11 @@ onMounted(carregarFavoritos)
       class="imagem-produto"
     >
 
-    <h2>
+    <div class="infos">
+      <h2>
       {{ item.roupa.nome }}
     </h2>
 
-    <div class="infos">
       <p>
         R$
         {{
@@ -82,7 +82,7 @@ onMounted(carregarFavoritos)
       class="remover-favorito"
       @click="alterarFav(item.id)"
     >
-      Remover
+      <img src="/img/delete.png" alt="delete.png">
     </button>
 
   </div>
@@ -184,32 +184,23 @@ onMounted(carregarFavoritos)
 }
 
 /* ================================
-   NOME
-================================ */
-
-.card-produto h2 {
-  color: #311111;
-  font-size: 1.45rem;
-  font-weight: 600;
-  margin: 0 0 1rem;
-}
-
-/* ================================
    INFORMAÇÕES
 ================================ */
 
 .infos{
-  text-align: right;
+  text-align: left;
 }
 
-.card-produto p {
-  color: #555;
-  font-size: 1.15rem;
-}
-
-.card-produto p:last-child {
+.infos h2{
   color: #311111;
-  font-size: 1.25rem;
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin-bottom: 1vw;
+}
+
+.infos p{
+  font-size: 1.1vw;
+  color: #277c00;
   font-weight: 600;
 }
 
@@ -234,13 +225,12 @@ ul{
   margin-bottom: 0.7rem;
   padding-top: 1vw;
 }
-p{
-  color: black;
-  justify-content: center;
-  font-size: 1.2rem;
-  padding-bottom: 1.2vw;
-  padding-top: 1vw;
+
+.remover-favorito img{
+  width: 1.5vw;
+  height: 1.5vw;
 }
+
 .botao{
   background-color: #311111;
   border: none;
