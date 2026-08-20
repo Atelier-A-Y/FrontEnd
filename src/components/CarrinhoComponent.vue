@@ -21,6 +21,47 @@ async function carregarCarrinho() {
   }
 }
 
+async function tirarCarrinho(id: number) {
+  try{
+    await api.delete(`https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/${id}/`)
+
+    carrinho.value = carrinho.value.filter(
+    item => item.id !== id
+  )
+  }
+  catch (erro){
+    console.error("Erro ao remover do carrinho:", erro)
+  }
+}
+
+async function incrementar(item: any) {
+  item.quantidade++;
+
+  try {
+    await api.patch(`/carrinho/${item.id}/`, {
+      quantidade: item.quantidade
+    });
+  } catch (erro) {
+    console.error("Erro ao aumentar quantidade:", erro);
+    item.quantidade--;
+  }
+}
+
+async function decrementar(item: any) {
+  if (item.quantidade > 1) {
+    item.quantidade--;
+
+    try {
+      await api.patch(`/carrinho/${item.id}/`, {
+        quantidade: item.quantidade
+      });
+    } catch (erro) {
+      console.error("Erro ao diminuir quantidade:", erro);
+      item.quantidade++;
+    }
+  }
+}
+
 onMounted(carregarCarrinho);
 </script>
 
@@ -45,15 +86,10 @@ onMounted(carregarCarrinho);
           class="imagem-produto"
         >
 
-        <h2>
+      <div class="infos">
+      <h2>
           {{ item.roupa_detalhes?.nome }}
         </h2>
-
-      <div class="infos">
-        <p>
-          Quantidade:
-          {{ item.quantidade }}
-        </p>
 
         <p>
           R$
@@ -63,6 +99,23 @@ onMounted(carregarCarrinho);
         </p>
       </div>
 
+      <div>
+      <div class="quantidade">
+        <button @click="decrementar(item)"><img src="/img/menos.png" alt="menos.png"></button>
+        <p>
+          Quantidade:
+          {{ item.quantidade }}
+        </p>
+        <button @click="incrementar(item)"><img src="/img/mais.png" alt="mais.png"></button>
+       </div>
+
+        <button
+      class="remover-carrinho"
+      @click="tirarCarrinho(item.id)"
+    >
+      <img src="/img/delete.png" alt="delete.png">
+    </button>
+    </div>
       </div>
 
     </section>
@@ -154,32 +207,23 @@ onMounted(carregarCarrinho);
 }
 
 /* ================================
-   NOME
-================================ */
-
-.card-produto h2 {
-  color: #311111;
-  font-size: 1.45rem;
-  font-weight: 600;
-  margin: 0 0 1rem;
-}
-
-/* ================================
    INFORMAÇÕES
 ================================ */
 
 .infos{
-  text-align: right;
+  text-align: left;
 }
 
-.card-produto p {
-  color: #555;
-  font-size: 1.15rem;
-}
-
-.card-produto p:last-child {
+.infos h2{
   color: #311111;
-  font-size: 1.25rem;
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin-bottom: 1vw;
+}
+
+.infos p{
+  font-size: 1.1vw;
+  color: #277c00;
   font-weight: 600;
 }
 
@@ -193,9 +237,11 @@ onMounted(carregarCarrinho);
   padding: 120px 30px;
   margin: 4vw 13vw 5vw 13vw;
 }
+
 ul{
   list-style-type: none;
 }
+
 .titulo{
   justify-content: center;
   color: #311111;
@@ -204,13 +250,13 @@ ul{
   margin-bottom: 0.7rem;
   padding-top: 1vw;
 }
-p{
-  color: black;
-  justify-content: center;
-  font-size: 1.2rem;
-  padding-bottom: 1.2vw;
-  padding-top: 1vw;
+
+.remover-carrinho img{
+  width: 1.5vw;
+  height: 1.5vw;
+  margin-left: 5vw;
 }
+
 .botao{
   background-color: #311111;
   border: none;
@@ -225,23 +271,44 @@ p{
   color: #f5e9e0;
   transition: 0.3s ease;
 }
+
 .botao:hover {
   background-color: #5a1f1f;
   transform: scale(1.05);
 }
+
 .botao:active {
   background-color: #7a2d2d;
 }
+
 li {
   display: flex;
   justify-content: center;
 }
+
 .icone{
   display: flex;
   justify-content: center;
 }
+
 img{
   width: 11vw;
   height: 11vw;
+}
+
+.quantidade{
+  display: flex;
+  margin-bottom: 1vw;
+}
+
+.quantidade p{
+  margin: 0 1vw 0 1vw;
+  margin-top: 0.4vw;
+  color: rgb(95, 87, 87);
+}
+
+.quantidade img{
+  width: 1.5vw;
+  height: 1.5vw;
 }
 </style>

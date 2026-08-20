@@ -229,6 +229,7 @@ ul{
 .remover-favorito img{
   width: 1.5vw;
   height: 1.5vw;
+  margin-right: 3vw;
 }
 
 .botao{
