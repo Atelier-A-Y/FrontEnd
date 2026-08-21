@@ -62,6 +62,15 @@ async function decrementar(item: any) {
   }
 }
 
+function totalCompra(){
+  return carrinho.value.reduce((total, item) => {
+    const preco = Number(item.roupa_detalhes?.preco || 0)
+    const quantidade = Number(item.quantidade || 0)
+
+    return total + preco * quantidade
+  }, 0)
+}
+
 onMounted(carregarCarrinho);
 </script>
 
@@ -118,6 +127,18 @@ onMounted(carregarCarrinho);
     </div>
       </div>
 
+      <div class="total">
+      <span>Total da compra</span>
+
+      <strong>
+        R$
+        {{ totalCompra().toFixed(2).replace(".", ",") }}
+      </strong>
+
+      <button class="botao-finalizar">
+      Finalizar compra
+    </button>
+    </div>
     </section>
 
     <section
@@ -310,5 +331,53 @@ img{
 .quantidade img{
   width: 1.5vw;
   height: 1.5vw;
+}
+
+.total {
+max-width: 1250px;
+  margin: 2rem auto 4rem;
+  padding: 1.5rem 2rem;
+
+  background-color: #f5e9e0;
+  border: 1px solid #dfcec4;
+  border-radius: 12px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.total span {
+  color: #5f5757;
+  font-size: 1rem;
+}
+
+.total strong {
+  color: #277c00;
+  font-size: 1.7rem;
+}
+
+.botao-finalizar {
+  background-color: #311111;
+  color: #f5e9e0;
+
+  border: none;
+  border-radius: 5px;
+
+  padding: 12px 25px;
+
+  font-size: 1rem;
+  font-weight: bold;
+
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.botao-finalizar:hover {
+  background-color: #5a1f1f;
+  transform: scale(1.03);
 }
 </style>
