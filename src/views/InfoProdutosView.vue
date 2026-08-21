@@ -133,7 +133,7 @@ onMounted(async () => {
 
         <h1>{{ produto.nome }}</h1>
 
-        <h2>R$ {{ produto.preco }}</h2>
+        <h2>R$ {{ Number(produto.preco).toFixed(2).replace(".", ",") }}</h2>
 
         <div class="detalhes">
           <p><strong>Tamanho:</strong> {{ produto.tamanho.nome }}</p>
