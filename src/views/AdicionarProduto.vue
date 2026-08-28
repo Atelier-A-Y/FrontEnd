@@ -2,6 +2,7 @@
 import { ref } from "vue";
 
 import { useRouter } from "vue-router";
+import ColorPicker from "../components/ColorPicker.vue";
 
 const router = useRouter();
 
@@ -165,6 +166,7 @@ console.log(dados)
             placeholder="Cor"
             v-model="produto.cor"
           />
+          <color-picker v-model:pureColor="produto.cor" />
         </div>
 
         <div class="input-group">
