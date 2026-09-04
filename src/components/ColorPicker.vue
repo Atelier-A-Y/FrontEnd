@@ -34,7 +34,7 @@ const gradient = ref(
 .selected-color {
   margin-top: 15px;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 30px;
   color: white;
   text-align: center;
 }
