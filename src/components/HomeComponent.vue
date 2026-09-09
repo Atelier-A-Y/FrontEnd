@@ -121,6 +121,10 @@ main{
 
 
 @media (max-width: 600px){
+  main{
+    margin-top: -30vw;
+  }
+
   .bnt-g-desktop{
     display: none;
   }
@@ -128,21 +132,46 @@ main{
   .bnt-g-mobile{
     display: block;
     background-color: #F9EBE7;
+    padding-bottom: 8vw;
   }
 
-  .bnt-pequenos{
-    width: 40vw;
-    height: 40vw;
+  .bnt-g-mobile h1{
+    font-size: 5vw;
+    margin-left: 5vw;
+    padding-top: 5vw;
+    color: #311111;
   }
 
-  .bnt-superiores{
-    display: flex;
-    margin: 2vw 20vw 2vw 15vw;
-  }
+  .bnt-pequenos {
+        display: flex;
+        flex-direction: column;
+        gap: 8vw;
+    }
 
-  .bnt-inferiores{
-    display: flex;
-    margin: 5vw;
-  }
+    .bnt-superiores,
+    .bnt-inferiores {
+        display: flex;
+        justify-content: center;
+        margin: 5vw 0 0 0;
+        padding: 0;
+        gap: 8vw;
+    }
+
+    .bnt-g-mobile a {
+        width: 18vw;
+        height: 18vw;
+        border-radius: 50%;
+        background-color: #F3DDCB;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .bnt-g-mobile img {
+        width: 10vw;
+        height: 10vw;
+        object-fit: contain;
+    }
 }
 </style>
