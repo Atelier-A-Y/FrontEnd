@@ -15,23 +15,24 @@
   </div>
 </section>
 <section class="bnt-g-mobile">
-  <button><img src="../img/bride.png" alt="bride.png"></button>
+  <h1>Categorias</h1>
+  <div class="bnt-pequenos">
+    <div class="bnt-superiores">
+      <a href="/casamento"><img src="/img/bride.png" alt="bride"></a>
+      <a href="/"><img src="/img/education.png" alt="education"></a>
+      <a href="/praia"><img src="/img/sunbed.png" alt="sunbed"></a>
+    </div>
+    <div class="bnt-inferiores">
+      <a href="/"><img src="/img/confetti.png" alt="confetti"></a>
+      <a href="/"><img src="/img/suit.png" alt="suit"></a>
+      <a href="/"><img src="/img/wear.png" alt="wear"></a>
+    </div>
+  </div>
 </section>
 </main>
 </template>
 
 <style scoped>
-@media (max-width: 600px){
-  .bnt-g-desktop{
-    display: none;
-  }
-
-  .bnt-g-mobile{
-    display: flex;
-  }
-}
-
-
 .bnt-g-desktop{
   display: flex;
 }
@@ -116,5 +117,32 @@ main{
   background-color: #F9EBE7;
   padding: 1vw;
   border-radius: 1.4vw;
+}
+
+
+@media (max-width: 600px){
+  .bnt-g-desktop{
+    display: none;
+  }
+
+  .bnt-g-mobile{
+    display: block;
+    background-color: #F9EBE7;
+  }
+
+  .bnt-pequenos{
+    width: 40vw;
+    height: 40vw;
+  }
+
+  .bnt-superiores{
+    display: flex;
+    margin: 2vw 20vw 2vw 15vw;
+  }
+
+  .bnt-inferiores{
+    display: flex;
+    margin: 5vw;
+  }
 }
 </style>
