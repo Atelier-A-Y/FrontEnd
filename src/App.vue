@@ -22,6 +22,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
 <header-component />
 
     <router-view />
@@ -30,6 +31,7 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Antic+Didone&display=swap');
 main {
   background-color: white;
   margin: 6vw;

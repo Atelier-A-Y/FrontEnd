@@ -15,17 +15,17 @@
   </div>
 </section>
 <section class="bnt-g-mobile">
-  <h1>Categorias</h1>
+  <h1>CATEGORIAS</h1>
   <div class="bnt-pequenos">
     <div class="bnt-superiores">
       <a href="/casamento"><img src="/img/bride.png" alt="bride"></a>
-      <a href="/"><img src="/img/education.png" alt="education"></a>
+      <a href="/formatura"><img src="/img/education.png" alt="education"></a>
       <a href="/praia"><img src="/img/sunbed.png" alt="sunbed"></a>
     </div>
     <div class="bnt-inferiores">
-      <a href="/"><img src="/img/confetti.png" alt="confetti"></a>
-      <a href="/"><img src="/img/suit.png" alt="suit"></a>
-      <a href="/"><img src="/img/wear.png" alt="wear"></a>
+      <a href="/festa"><img src="/img/confetti.png" alt="confetti"></a>
+      <a href="/terno"><img src="/img/suit.png" alt="suit"></a>
+      <a href="/casual"><img src="/img/wear.png" alt="wear"></a>
     </div>
   </div>
 </section>
@@ -122,7 +122,7 @@ main{
 
 @media (max-width: 600px){
   main{
-    margin-top: -30vw;
+    margin-top: -103vw;
   }
 
   .bnt-g-desktop{
@@ -136,10 +136,15 @@ main{
   }
 
   .bnt-g-mobile h1{
-    font-size: 5vw;
-    margin-left: 5vw;
-    padding-top: 5vw;
+    font-size: 4vw;
+    margin-left: 7vw;
+    margin-bottom: 3vw;
+    padding-top: 8vw;
     color: #311111;
+    font-family: "Hahmlet", serif;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
   }
 
   .bnt-pequenos {
@@ -154,7 +159,7 @@ main{
         justify-content: center;
         margin: 5vw 0 0 0;
         padding: 0;
-        gap: 8vw;
+        gap: 12vw;
     }
 
     .bnt-g-mobile a {

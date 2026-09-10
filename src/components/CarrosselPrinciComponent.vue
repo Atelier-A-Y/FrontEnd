@@ -36,11 +36,10 @@ function prevSlide() {
   index.value = (index.value - 1 + slides.length) % slides.length
 }
 
-setInterval(nextSlide, 4000)
+setInterval(nextSlide, 40000)
 </script>
 
 <template>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <main>
     <div class="carrossel-principal">
   <img
@@ -73,8 +72,6 @@ setInterval(nextSlide, 4000)
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Antic+Didone&display=swap');
-
 /*==============================
           CASAMENTO
 ==============================*/
@@ -261,5 +258,195 @@ button:last-of-type { right: 10px; }
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+@media (max-width: 600px){
+  /*==============================
+          CASAMENTO
+==============================*/
+
+.marca1-noiva{
+  position: absolute;
+  bottom: 86%;
+  right: 66%;
+  color: rgb(255, 255, 255);
+  font-size: clamp(2.5vw, 2.5vw, 2.5vw);
+  z-index: 2;
+  font-family: "Noto Rashi Hebrew", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  text-shadow: 0.2vw 0vw 0.2vw #f9bc8a;
+}
+
+.marca2-noiva{
+  position: absolute;
+  bottom: 84%;
+  right: 69%;
+  color: white;
+  font-size: clamp(2.3vw, 2.3vw, 2.3vw);
+  z-index: 2;
+  font-family: "Noto Rashi Hebrew", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  text-shadow: 0.2vw 0vw 0.2vw #f9bc8a;
+}
+
+.texto-noiva {
+  position: absolute;
+  bottom: 77%;
+  right: 43%;
+  color: rgb(255, 244, 232);
+  font-size: clamp(8vw, 8vw, 8vw);
+  z-index: 2;
+  font-family: "Lexend Deca", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  letter-spacing: 0.2vw;
+  text-shadow: 0vw 0.2vw 1.5vw #f8ceac;
+}
+
+.subtexto-noiva{
+  position: absolute;
+  bottom: 75%;
+  right: 49%;
+  color: #e7d3c3;
+  font-size: clamp(3.3vw, 3.3vw, 3.3vw);
+  z-index: 2;
+  font-family: "Nanum Myeongjo", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/*==============================
+          FORMATURA
+==============================*/
+
+.marca1-formanda{
+  position: absolute;
+  bottom: 86%;
+  right: 66%;
+  color: rgb(255, 255, 255);
+  font-size: clamp(2.5vw, 2.5vw, 2.5vw);
+  z-index: 2;
+  font-family: "Noto Rashi Hebrew", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  text-shadow: 0.2vw 0vw 0.2vw #8a8af9;
+}
+
+.marca2-formanda{
+  position: absolute;
+  bottom: 84%;
+  right: 69%;
+  color: white;
+  font-size: clamp(2.3vw, 2.3vw, 2.3vw);
+  z-index: 2;
+  font-family: "Noto Rashi Hebrew", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  text-shadow: 0.2vw 0vw 0.2vw #8a8af9;
+}
+
+.texto-formanda {
+  position: absolute;
+  bottom: 77%;
+  right: 43%;
+  color: #ffffff;
+  font-size: clamp(8vw, 8vw, 8vw);
+  z-index: 2;
+  font-family: 'Antic Didone', serif;
+  letter-spacing: 0.4vw;
+  text-shadow: 0vw 0.2vw 1.5vw #2736a5;
+}
+
+.subtexto-formanda{
+  position: absolute;
+  bottom: 75%;
+  right: 54%;
+  color: #2f3776;
+  font-size: clamp(3.3vw, 3.3vw, 3.3vw);
+  z-index: 2;
+  font-family: "Nanum Myeongjo", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/*=========================
+          GERAL
+=========================*/
+
+.carrossel-principal {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carrossel-principal::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 40vh;
+  transform: translate(-50%, -125%);
+  background: rgba(117, 67, 36, 0.317);
+  z-index: 1;
+}
+
+img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 40vh;
+  object-fit: cover;
+  transform: translate(-50%, -125%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+}
+
+img.active {
+  opacity: 1;
+}
+
+button {
+  position: absolute;
+  top: 20%;
+  transform: translateY(-50%);
+  background: none;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+button:first-of-type { left: 10px; }
+button:last-of-type { right: 10px; }
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 }
 </style>

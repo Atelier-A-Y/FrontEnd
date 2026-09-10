@@ -11,6 +11,7 @@ import { useRouter } from "vue-router";
 const authStore = useAuthStore();
 const router = useRouter();
 const headerAtivo = ref(false);
+const menuAtivo = ref(false);
 
 function abrirUsuario() {
   if (authStore.token) {
@@ -98,7 +99,7 @@ function irParaHome(){
 </script>
 
 <template>
-  <header :class="{ scrolled: headerAtivo }" class="topo">
+  <div :class="{ scrolled: headerAtivo }" class="topo">
 
       <div @click="irParaHome" class="logo">
         <img :src="headerAtivo
@@ -226,58 +227,51 @@ function irParaHome(){
             />
           </RouterLink>
         </li>
-
       </ul>
+  </div>
+  <div class="topo-mobile">
 
-  </header>
+  </div>
 </template>
 
 <style scoped>
+.topo{
+  display: block;
+}
 
-/* HEADER */
+.topo-mobile{
+  display: none;
+}
 
 .topo {
   position: fixed;
-
   top: 0;
   left: 0;
-
   width: 100%;
   height: 6vw;
-
   padding: 0 2vw;
   display: flex;
   align-items: center;
-
   z-index: 99;
-
   background: linear-gradient(
     to top,
     rgba(63, 44, 25, 0) 3%,
     rgba(72, 50, 29, 0.341) 28%,
     rgba(63, 44, 25, 0.654) 100%
   );
-
   transition:
     background 0.4s ease,
     backdrop-filter 0.4s ease,
     box-shadow 0.4s ease;
-
   justify-content: space-between;
 }
 
-/* HEADER QUANDO DESCE */
-
 .topo.scrolled {
   background: rgba(245, 230, 222, 0.95);
-
   backdrop-filter: blur(10px);
-
   box-shadow:
     0 0.2vw 1vw rgba(0, 0, 0, 0.08);
 }
-
-/* LOGO */
 
 .logo {
   display: flex;
@@ -310,8 +304,6 @@ function irParaHome(){
   align-self: center;
 }
 
-/* MENU */
-
 .menu {
   display: flex;
   gap: 2vw;
@@ -319,19 +311,14 @@ function irParaHome(){
 
 .menu li a {
   text-decoration: none;
-
   color: white;
-
   font-size: 0.9rem;
-
   transition: 0.3s;
 }
 
 .menu li a:hover {
   opacity: 0.7;
 }
-
-/* DROPDOWN */
 
 .globo img {
   width: 1.8vw;
@@ -376,8 +363,6 @@ function irParaHome(){
   font-weight: bold;
 }
 
-/* BUSCA */
-
 .search-container {
   position: relative;
   display: flex;
@@ -405,29 +390,20 @@ function irParaHome(){
   height: 1.5vw;
 }
 
-/* RESULTADOS */
-
 .results-list {
   position: absolute;
-
   top: 120%;
   left: 0;
-
   width: 100%;
-
   background: white;
-
   border-radius: 1vw;
-
   overflow: hidden;
-
   box-shadow:
     0 1vw 2vw rgba(0, 0, 0, 0.1);
 }
 
 .results-list ul {
   list-style: none;
-
 }
 
 .result-item {
@@ -462,8 +438,6 @@ function irParaHome(){
   width: 2vw;
 }
 
-/* QUANDO O HEADER FICA SÓLIDO */
-
 .topo.scrolled .titulo,
 .topo.scrolled .sigla,
 .topo.scrolled .menu li a {
@@ -481,30 +455,13 @@ function irParaHome(){
   color: rgba(49, 17, 17, 0.5);
 }
 
-/* RESPONSIVO */
-
-@media (max-width: 768px) {
-
-  .topo {
-    height: 14vw;
-    padding: 0 5vw;
+@media (max-width: 600px) {
+  .topo-mobile{
+    display: block;
   }
 
-  .menu {
+  .topo{
     display: none;
-  }
-
-  .logo img {
-    width: 10vw;
-    height: 10vw;
-  }
-
-  .search-container {
-    width: 30vw;
-  }
-
-  .icones li img {
-    width: 4vw;
   }
 }
 
