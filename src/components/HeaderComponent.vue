@@ -229,8 +229,68 @@ function irParaHome(){
         </li>
       </ul>
   </div>
-  <div class="topo-mobile">
+  <div :class="{ scrolled: headerAtivo }" class="topo-mobile">
 
+    <div class="texto-mobile">
+      <p class="titulo-mobile">ATELIER</p>
+      <p class="sigla-mobile">A.Y.</p>
+    </div>
+
+    <div class="search-container-mobile">
+      <div @click="showDropdown = !showDropdown">
+        <img
+          :src="headerAtivo
+            ? '/img/lupa-solido.png'
+            : '/img/lupa.png'"
+          alt="Pesquisar"
+          class="icon-lupa-mobile"
+        />
+      </div>
+
+      <div v-if="showDropdown">
+        <input
+          type="text"
+          v-model="pesquisa"
+          @keydown="navegar"
+          class="search-input-mobile"
+        />
+
+        <img
+          :src="headerAtivo
+            ? '/img/lupa-solido.png'
+            : '/img/lupa.png'"
+          alt="Pesquisar"
+          class="icon-lupa-mobile"
+        />
+
+        <div
+          class="results-list-mobile"
+          v-if="resultados.length"
+        >
+          <ul>
+
+            <li
+              v-for="(item, index) in resultados"
+              :key="item.id"
+              :class="{ ativo: index === indexAtivo }"
+              @click="abrirNavegacao(item)"
+              class="result-item-mobile"
+            >
+
+              <span class="item-icon-mobile">
+                <img src="/img/lupa-solido.png" alt="Lupa" />
+              </span>
+
+              <span class="item-text-mobile">
+                {{ item.nome }}
+              </span>
+
+            </li>
+
+          </ul>
+        </div>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -456,12 +516,189 @@ function irParaHome(){
 }
 
 @media (max-width: 600px) {
-  .topo-mobile{
-    display: block;
-  }
-
   .topo{
     display: none;
+  }
+
+  .topo-mobile{
+    display: block;
+    background-color: #8d1e1e;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6vw;
+    padding: 0 2vw;
+    display: flex;
+    align-items: center;
+    z-index: 99;
+    background: linear-gradient(
+      to top,
+      rgba(63, 44, 25, 0) 3%,
+      rgba(72, 50, 29, 0.341) 28%,
+      rgba(63, 44, 25, 0.654) 100%
+    );
+    transition:
+      background 0.4s ease,
+      backdrop-filter 0.4s ease,
+      box-shadow 0.4s ease;
+    justify-content: space-between;
+  }
+
+  .topo-mobile.scrolled {
+    background: rgba(245, 230, 222, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow:
+      0 0.2vw 1vw rgba(0, 0, 0, 0.08);
+  }
+
+  .texto-mobile {
+    align-items: center;
+  }
+
+  .titulo-mobile {
+    font-size: 8px;
+    color: white;
+    margin: 0;
+  }
+
+  .sigla-mobile {
+    font-size: 5px;
+    color: white;
+    margin: 0;
+  }
+
+  .menu {
+    display: flex;
+    gap: 2vw;
+  }
+
+  .menu li a {
+    text-decoration: none;
+    color: white;
+    font-size: 0.9rem;
+    transition: 0.3s;
+  }
+
+  .menu li a:hover {
+    opacity: 0.7;
+  }
+
+  .globo img {
+    width: 1.8vw;
+    margin-left: 35vw;
+  }
+
+  .submenu {
+    position: absolute;
+    top: 5vw;
+    left: 50vw;
+    background: white;
+    margin: 0;
+    padding: 8px 25px 8px 10px;
+    border-radius: 6px;
+    min-width: 180px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .cima {
+    display: flex;
+  }
+
+  .baixo {
+    display: flex;
+  }
+
+  .submenu li {
+    padding: 8px 25px;
+    margin-left: 1vw;
+  }
+
+  .submenu li a {
+    color: #311111;
+    font-weight: 500;
+    display: block;
+    text-decoration: none;
+  }
+
+  .submenu li a:hover {
+    background: #f1f1f1;
+    color: #311111;
+    font-weight: bold;
+  }
+
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 320px;
+    max-width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 8px 35px 8px 0;
+    border: none;
+    border-bottom: 1px solid white;
+    background: transparent;
+    font-size: 16px;
+    color: white;
+  }
+
+  .search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .icon-lupa {
+    width: 1.5vw;
+    height: 1.5vw;
+  }
+
+  .results-list {
+    position: absolute;
+    top: 120%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 1vw;
+    overflow: hidden;
+    box-shadow:
+      0 1vw 2vw rgba(0, 0, 0, 0.1);
+  }
+
+  .results-list ul {
+    list-style: none;
+  }
+
+  .result-item {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    padding: 1vw;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .result-item:hover,
+  .result-item.ativo {
+    background: #f5e9e0;
+  }
+
+  .topo.scrolled .titulo,
+  .topo.scrolled .sigla,
+  .topo.scrolled .menu li a {
+    color: #311111;
+  }
+
+  .topo.scrolled .search-input {
+    color: #311111;
+
+    border-bottom:
+      0.1vw solid #84453d;
+  }
+
+  .topo.scrolled .search-input::placeholder {
+    color: rgba(49, 17, 17, 0.5);
   }
 }
 

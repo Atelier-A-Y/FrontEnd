@@ -36,7 +36,7 @@ function prevSlide() {
   index.value = (index.value - 1 + slides.length) % slides.length
 }
 
-setInterval(nextSlide, 40000)
+setInterval(nextSlide, 4000)
 </script>
 
 <template>
