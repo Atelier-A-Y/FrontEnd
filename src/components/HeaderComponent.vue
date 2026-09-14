@@ -12,6 +12,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 const headerAtivo = ref(false);
 const menuAtivo = ref(false);
+const continentesAtivo = ref(false);
 
 function abrirUsuario() {
   if (authStore.token) {
@@ -230,8 +231,68 @@ function irParaHome(){
       </ul>
   </div>
 
-  <div :class="{ scrolled: headerAtivo }" class="topo-mobile">
 
+  <div :class="{ scrolled: headerAtivo }" class="topo-mobile">
+  <div>
+    <div @click="menuAtivo = !menuAtivo">
+          <img
+            :src="menuAtivo
+              ? (headerAtivo
+                  ? '/img/x-solido.png'
+                  : '/img/x.png')
+              : (headerAtivo
+                  ? '/img/menu-aberto-solido.png'
+                  : '/img/menu-aberto.png')"
+            class="menu-mobile"
+          />
+      </div>
+
+      <div v-if="menuAtivo" class="aba-menu">
+        <ul class="icones-mobile">
+          <li>
+            <a @click.prevent="abrirUsuario">
+              <img src="/img/user-solido.png" alt="user-solido.png"> Usuário
+            </a>
+          </li>
+
+          <li>
+            <a href="/carrinho">
+              <img src="/img/bolsa-solido.png" alt="bolsa-solido.png"> Carrinho
+            </a>
+          </li>
+
+          <li>
+            <a href="/favoritos">
+              <img src="/img/coracao-solido.png" alt="coracao-solido.png"> Favoritos
+            </a>
+          </li>
+
+          <div
+            class="dropdown-mobile"
+            @click="continentesAtivo = !continentesAtivo"
+          >
+            <a href="#" class="globo-mobile">
+              <img src="/img/globo-solido.png" alt="globo-solido.png"> Continentes
+            </a>
+
+            <div v-if="continentesAtivo" class="submenu-mobile">
+
+              <ul class="cima-mobile">
+                <li><RouterLink to="/">África</RouterLink></li>
+                <li><RouterLink to="/">América</RouterLink></li>
+                <li><RouterLink to="/">Ásia</RouterLink></li>
+              </ul>
+
+              <ul class="baixo-mobile">
+                <li><RouterLink to="/">Europa</RouterLink></li>
+                <li><RouterLink to="/">Oceania</RouterLink></li>
+              </ul>
+
+            </div>
+          </div>
+        </ul>
+      </div>
+    </div>
     <div class="texto-mobile">
       <p class="titulo-mobile">ATELIER <span class="sigla-mobile">A.Y.</span></p>
     </div>
@@ -515,6 +576,10 @@ function irParaHome(){
   color: rgba(49, 17, 17, 0.5);
 }
 
+/*========================================
+                MOBILE
+=========================================*/
+
 @media (max-width: 600px) {
   .topo{
     display: none;
@@ -525,7 +590,7 @@ function irParaHome(){
     top: 0;
     left: 0;
     width: 100%;
-    height: 8vw;
+    height: 10vw;
     padding: 0 4vw;
     display: flex;
     align-items: center;
@@ -549,20 +614,109 @@ function irParaHome(){
       0 0.2vw 1vw rgba(0, 0, 0, 0.08);
   }
 
+  .menu-mobile{
+    width: 5vw;
+    align-items: center;
+  }
+
+  .aba-menu{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    padding: 6vw 8vw 0 8vw;
+    box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    animation: entrarMenu 0.3s ease;
+  }
+
+  @keyframes entrarMenu {
+    from{
+      transform: translateX(-100%);
+    }
+
+    to{
+      transform: translateX(0);
+    }
+  }
+
+  .icones-mobile img{
+    width: 7vw;
+  }
+
+  .icones-mobile li a {
+    display: flex;
+    align-items: center;
+    gap: 4vw;
+    color: #311111;
+    font-size: 4vw;
+    font-family: "Inria Serif", serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  .icones-mobile li {
+    margin-bottom: 7vw;
+  }
+
+  .dropdown-mobile {
+    position: relative;
+    margin-bottom: 7vw;
+  }
+
+  .globo-mobile {
+    display: flex;
+    align-items: center;
+    gap: 4vw;
+    color: #311111;
+    font-size: 4vw;
+    font-family: "Inria Serif", serif;
+    font-weight: 300;
+    text-decoration: none;
+  }
+
+  .globo-mobile img {
+    width: 7vw;
+  }
+
+  .submenu-mobile {
+    margin-top: 4vw;
+    margin-left: 11vw;
+  }
+
+  .submenu-mobile li {
+    margin-bottom: 3vw;
+    padding-right: 3vw;
+  }
+
+  .cima-mobile {
+    display: flex;
+  }
+
+  .baixo-mobile {
+    display: flex;
+  }
+
   .texto-mobile {
     text-align: center;
+    margin-left: 25vw;
+    font-family: "Inria Serif", serif;
+    font-weight: 300;
+    font-style: normal;
   }
 
   .titulo-mobile {
-    font-size: 2.5vw;
+    font-size: 4.5vw;
     color: white;
     margin: 0;
+    white-space: nowrap;
+    letter-spacing: 2px;
   }
 
   .sigla-mobile {
-    font-size: 2vw;
+    font-size: 3vw;
     color: white;
-    margin: 0;
+    margin-left: 1.5vw;
   }
 
   .search-container-mobile {
@@ -623,9 +777,8 @@ function irParaHome(){
     background: #f5e9e0;
   }
 
-  .topo-mobile.scrolled .titulo,
-  .topo-mobile.scrolled .sigla,
-  .topo-mobile.scrolled .menu li a {
+  .topo-mobile.scrolled .titulo-mobile,
+  .topo-mobile.scrolled .sigla-mobile{
     color: #311111;
   }
 
