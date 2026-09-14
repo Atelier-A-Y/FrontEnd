@@ -229,11 +229,11 @@ function irParaHome(){
         </li>
       </ul>
   </div>
+
   <div :class="{ scrolled: headerAtivo }" class="topo-mobile">
 
     <div class="texto-mobile">
-      <p class="titulo-mobile">ATELIER</p>
-      <p class="sigla-mobile">A.Y.</p>
+      <p class="titulo-mobile">ATELIER <span class="sigla-mobile">A.Y.</span></p>
     </div>
 
     <div class="search-container-mobile">
@@ -521,14 +521,12 @@ function irParaHome(){
   }
 
   .topo-mobile{
-    display: block;
-    background-color: #8d1e1e;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 6vw;
-    padding: 0 2vw;
+    height: 8vw;
+    padding: 0 4vw;
     display: flex;
     align-items: center;
     z-index: 99;
@@ -542,7 +540,6 @@ function irParaHome(){
       background 0.4s ease,
       backdrop-filter 0.4s ease,
       box-shadow 0.4s ease;
-    justify-content: space-between;
   }
 
   .topo-mobile.scrolled {
@@ -553,108 +550,50 @@ function irParaHome(){
   }
 
   .texto-mobile {
-    align-items: center;
+    text-align: center;
   }
 
   .titulo-mobile {
-    font-size: 8px;
+    font-size: 2.5vw;
     color: white;
     margin: 0;
   }
 
   .sigla-mobile {
-    font-size: 5px;
+    font-size: 2vw;
     color: white;
     margin: 0;
   }
 
-  .menu {
-    display: flex;
-    gap: 2vw;
-  }
-
-  .menu li a {
-    text-decoration: none;
-    color: white;
-    font-size: 0.9rem;
-    transition: 0.3s;
-  }
-
-  .menu li a:hover {
-    opacity: 0.7;
-  }
-
-  .globo img {
-    width: 1.8vw;
-    margin-left: 35vw;
-  }
-
-  .submenu {
-    position: absolute;
-    top: 5vw;
-    left: 50vw;
-    background: white;
-    margin: 0;
-    padding: 8px 25px 8px 10px;
-    border-radius: 6px;
-    min-width: 180px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .cima {
-    display: flex;
-  }
-
-  .baixo {
-    display: flex;
-  }
-
-  .submenu li {
-    padding: 8px 25px;
-    margin-left: 1vw;
-  }
-
-  .submenu li a {
-    color: #311111;
-    font-weight: 500;
-    display: block;
-    text-decoration: none;
-  }
-
-  .submenu li a:hover {
-    background: #f1f1f1;
-    color: #311111;
-    font-weight: bold;
-  }
-
-  .search-container {
+  .search-container-mobile {
     position: relative;
     display: flex;
     align-items: center;
     width: 320px;
     max-width: 100%;
+    justify-content: flex-end;
   }
 
-  .search-input {
+  .search-input-mobile {
     width: 100%;
     padding: 8px 35px 8px 0;
     border: none;
     border-bottom: 1px solid white;
     background: transparent;
-    font-size: 16px;
+    font-size: 8px;
     color: white;
   }
 
-  .search-input::placeholder {
+  .search-input-mobile::placeholder {
     color: rgba(255, 255, 255, 0.7);
   }
 
-  .icon-lupa {
-    width: 1.5vw;
-    height: 1.5vw;
+  .icon-lupa-mobile {
+    width: 4vw;
+    height: 4vw;
   }
 
-  .results-list {
+  .results-list-mobile {
     position: absolute;
     top: 120%;
     left: 0;
@@ -666,11 +605,11 @@ function irParaHome(){
       0 1vw 2vw rgba(0, 0, 0, 0.1);
   }
 
-  .results-list ul {
+  .results-list-mobile ul {
     list-style: none;
   }
 
-  .result-item {
+  .result-item-mobile {
     display: flex;
     align-items: center;
     gap: 1vw;
@@ -679,26 +618,30 @@ function irParaHome(){
     transition: 0.3s;
   }
 
-  .result-item:hover,
-  .result-item.ativo {
+  .result-item-mobile:hover,
+  .result-item-mobile.ativo {
     background: #f5e9e0;
   }
 
-  .topo.scrolled .titulo,
-  .topo.scrolled .sigla,
-  .topo.scrolled .menu li a {
+  .topo-mobile.scrolled .titulo,
+  .topo-mobile.scrolled .sigla,
+  .topo-mobile.scrolled .menu li a {
     color: #311111;
   }
 
-  .topo.scrolled .search-input {
+  .topo-mobile.scrolled .search-input-mobile {
     color: #311111;
 
     border-bottom:
       0.1vw solid #84453d;
   }
 
-  .topo.scrolled .search-input::placeholder {
+  .topo-mobile.scrolled .search-input-mobile .search-input-mobile::placeholder {
     color: rgba(49, 17, 17, 0.5);
+  }
+
+  .item-icon-mobile img {
+  width: 4vw;
   }
 }
 
