@@ -12,6 +12,7 @@ const produto = ref({
   nome: "",
   tamanho: "",
   cor: "",
+  corNome: "",
   preco: "",
   descricao: "",
 });
@@ -59,13 +60,16 @@ async function salvarProduto() {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      nome: produto.value.nome,
-      tamanho: produto.value.tamanho,
-      cor: produto.value.cor,
-      preco: produto.value.preco,
-      descricao: produto.value.descricao,
-      foto_attachment_key: attachmentKey
-    })
+  nome: produto.value.nome,
+  categoria: produto.value.categoria,
+  continente: produto.value.continente,
+  tamanho: produto.value.tamanho,
+  cor: produto.value.corNome,
+  cor_hex: produto.value.cor,
+  preco: produto.value.preco,
+  descricao: produto.value.descricao,
+  foto_attachment_key: attachmentKey
+})
   }
 )
 
@@ -90,31 +94,9 @@ console.log(dados)
 <template>
   <main>
     <h1>Adicionar Produto</h1>
-        <!-- <div class="input-group">
-          <label>Categoria:</label>
-
-          <select v-model="produto.categoria">
-            <option>Vestidos de Festas</option>
-            <option>Vestidos de Madrinhas</option>
-            <option>Vestidos de Casamento</option>
-            <option>Vestidos de Formatura</option>
-            <option>Ternos Femininos</option>
-          </select>
-        </div>
-
-
-        <div class="input-group">
-          <label>Continente:</label>
-
-          <select v-model="produto.continente">
-            <option>América</option>
-            <option>África</option>
-            <option>Ásia</option>
-            <option>Europa</option>
-            <option>Oceania</option>
-          </select>
-        </div>-->
+    
 <section class="fundo-prod">
+
   <form class="form-container" @submit.prevent="salvarProduto">
 
     <div class="conteudo-formulario">
@@ -150,23 +132,46 @@ console.log(dados)
           />
         </div>
 
-        <div class="input-group">
-          <input
-            type="text"
-            maxlength="100"
-            placeholder="Tamanho"
-            v-model="produto.tamanho"
-          />
+         <div class="input-group">
+          <label>Categoria:</label>
+
+          <select v-model="produto.categoria">
+            <option value="6">Vestidos de Festas</option>
+            <option value="7">Vestidos de Madrinhas</option>
+            <option value="5">Vestidos de Casamento</option>
+            <option value="4">Vestidos de Formatura</option>
+            <option value="8">Ternos Femininos</option>
+          </select>
         </div>
 
+
         <div class="input-group">
-          <input
-            type="text"
-            maxlength="30"
-            placeholder="Cor"
-            v-model="produto.cor"
-          />
-          <color-picker v-model:pureColor="produto.cor" />
+          <label>Continente:</label>
+
+          <select v-model="produto.continente">
+            <option value="1">África</option>
+            <option value="2">América</option>
+            <option value="3">Europa</option>
+            <option value="4">Ásia</option>
+            <option value="5">Oceania</option>
+          </select>
+        </div>
+
+        <div>
+          <select v-model="produto.tamanho">
+            <option disabled value="">Tamanho</option>
+            <option value="1">GG</option>
+            <option value="2">M</option>
+            <option value="3">PP</option>
+            <option value="4">P</option>
+            <option value="5">G</option>
+          </select>
+
+        </div>
+
+
+        <div class="input-group">
+         <color-picker v-model:pureColor="produto.cor" @update:colorName="produto.corNome = $event"/>
         </div>
 
         <div class="input-group">
