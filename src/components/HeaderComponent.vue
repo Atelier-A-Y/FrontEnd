@@ -306,7 +306,6 @@ function irParaHome(){
           alt="Pesquisar"
           class="icon-lupa-mobile"
         />
-      </div>
 
       <div v-if="showDropdown">
         <input
@@ -349,6 +348,7 @@ function irParaHome(){
             </li>
 
           </ul>
+        </div>
         </div>
         </div>
       </div>
@@ -591,7 +591,7 @@ function irParaHome(){
     left: 0;
     width: 100%;
     height: 10vw;
-    padding: 0 4vw;
+    padding: 0 8vw;
     display: flex;
     align-items: center;
     z-index: 99;
@@ -605,6 +605,7 @@ function irParaHome(){
       background 0.4s ease,
       backdrop-filter 0.4s ease,
       box-shadow 0.4s ease;
+      box-sizing: border-box;
   }
 
   .topo-mobile.scrolled {
@@ -672,7 +673,6 @@ function irParaHome(){
     font-size: 4vw;
     font-family: "Inria Serif", serif;
     font-weight: 300;
-    text-decoration: none;
   }
 
   .globo-mobile img {
@@ -699,7 +699,7 @@ function irParaHome(){
 
   .texto-mobile {
     text-align: center;
-    margin-left: 25vw;
+    margin-left: 20vw;
     font-family: "Inria Serif", serif;
     font-weight: 300;
     font-style: normal;
@@ -721,25 +721,21 @@ function irParaHome(){
 
   .search-container-mobile {
     position: relative;
-    display: flex;
     align-items: center;
     width: 320px;
     max-width: 100%;
+    display: flex;
     justify-content: flex-end;
   }
 
   .search-input-mobile {
+    position: absolute;
     width: 100%;
-    padding: 8px 35px 8px 0;
     border: none;
     border-bottom: 1px solid white;
     background: transparent;
     font-size: 8px;
     color: white;
-  }
-
-  .search-input-mobile::placeholder {
-    color: rgba(255, 255, 255, 0.7);
   }
 
   .icon-lupa-mobile {
@@ -789,12 +785,12 @@ function irParaHome(){
       0.1vw solid #84453d;
   }
 
-  .topo-mobile.scrolled .search-input-mobile .search-input-mobile::placeholder {
+  .topo-mobile.scrolled .search-input-mobile::placeholder {
     color: rgba(49, 17, 17, 0.5);
   }
 
   .item-icon-mobile img {
-  width: 4vw;
+    width: 4vw;
   }
 }
 
