@@ -273,6 +273,13 @@ function irParaHome(){
           >
             <a href="#" class="globo-mobile">
               <img src="/img/globo-solido.png" alt="globo-solido.png"> Continentes
+
+              <span
+                class="seta-continentes"
+                :class="{ aberta: continentesAtivo }"
+              >
+                ▼
+              </span>
             </a>
 
             <div v-if="continentesAtivo" class="submenu-mobile">
@@ -293,65 +300,94 @@ function irParaHome(){
         </ul>
       </div>
     </div>
-    <div class="texto-mobile">
+    <div @click="irParaHome" class="texto-mobile">
       <p class="titulo-mobile">ATELIER <span class="sigla-mobile">A.Y.</span></p>
     </div>
 
     <div class="search-container-mobile">
-      <div @click="showDropdown = !showDropdown">
-        <img
-          :src="headerAtivo
-            ? '/img/lupa-solido.png'
-            : '/img/lupa.png'"
-          alt="Pesquisar"
-          class="icon-lupa-mobile"
-        />
 
-      <div v-if="showDropdown">
-        <input
-          type="text"
-          v-model="pesquisa"
-          @keydown="navegar"
-          class="search-input-mobile"
-        />
+  <!-- LUPA DO HEADER -->
+  <button
+    class="botao-lupa-mobile"
+    @click="showDropdown = !showDropdown"
+  >
+    <img
+      :src="headerAtivo
+        ? '/img/lupa-solido.png'
+        : '/img/lupa.png'"
+      alt="Pesquisar"
+      class="icon-lupa-mobile"
+    />
+  </button>
 
-        <img
-          :src="headerAtivo
-            ? '/img/lupa-solido.png'
-            : '/img/lupa.png'"
-          alt="Pesquisar"
-          class="icon-lupa-mobile"
-        />
 
-        <div
-          class="results-list-mobile"
-          v-if="resultados.length"
+  <!-- PAINEL DE PESQUISA -->
+  <div
+    v-if="showDropdown"
+    class="painel-pesquisa-mobile"
+  >
+
+    <!-- BARRA DE PESQUISA -->
+    <div class="barra-pesquisa-mobile">
+
+      <img  class="lupa-barra-mobile" src="/img/lupa-solido.png" alt="lupa.png">
+
+      <input
+        type="text"
+        v-model="pesquisa"
+        placeholder="Buscar..."
+        @keydown="navegar"
+        class="search-input-mobile"
+        autofocus
+      />
+
+      <!-- FECHAR -->
+      <button
+        class="fechar-pesquisa-mobile"
+        @click="showDropdown = false"
+      >
+        <img src="/img/x-solido.png" alt="fechar">
+      </button>
+
+    </div>
+
+
+    <!-- RESULTADOS -->
+    <div
+      class="results-list-mobile"
+      v-if="resultados.length"
+    >
+
+      <ul>
+
+        <li
+          v-for="(item, index) in resultados"
+          :key="item.id"
+          :class="{ ativo: index === indexAtivo }"
+          @click="abrirNavegacao(item)"
+          class="result-item-mobile"
         >
-          <ul>
 
-            <li
-              v-for="(item, index) in resultados"
-              :key="item.id"
-              :class="{ ativo: index === indexAtivo }"
-              @click="abrirNavegacao(item)"
-              class="result-item-mobile"
-            >
+          <span class="item-icon-mobile">
+            <img
+              src="/img/lupa-solido.png"
+              alt="Lupa"
+            />
+          </span>
 
-              <span class="item-icon-mobile">
-                <img src="/img/lupa-solido.png" alt="Lupa" />
-              </span>
+          <span class="item-text-mobile">
+            {{ item.nome }}
+          </span>
 
-              <span class="item-text-mobile">
-                {{ item.nome }}
-              </span>
+        </li>
 
-            </li>
+      </ul>
 
-          </ul>
-        </div>
-        </div>
-        </div>
-      </div>
+    </div>
+
+  </div>
+
+</div>
   </div>
 </template>
 
@@ -679,14 +715,24 @@ function irParaHome(){
     width: 7vw;
   }
 
+  .seta-continentes {
+    font-size: 3vw;
+    margin-left: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .seta-continentes.aberta {
+      transform: rotate(180deg);
+  }
+
   .submenu-mobile {
-    margin-top: 4vw;
-    margin-left: 11vw;
+    margin-top: 6vw;
+    margin-left: 2vw;
   }
 
   .submenu-mobile li {
-    margin-bottom: 3vw;
-    padding-right: 3vw;
+    margin-bottom: 4vw;
+    padding-right: 5vw;
   }
 
   .cima-mobile {
@@ -719,78 +765,166 @@ function irParaHome(){
     margin-left: 1.5vw;
   }
 
+  /* ========================================
+        PESQUISA MOBILE
+======================================== */
+
   .search-container-mobile {
     position: relative;
-    align-items: center;
-    width: 320px;
-    max-width: 100%;
+
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
+
+    width: 5vw;
+    height: 100%;
   }
 
-  .search-input-mobile {
-    position: absolute;
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid white;
-    background: transparent;
-    font-size: 8px;
-    color: white;
+
+  /* ========================================
+          LUPA DO HEADER
+  ======================================== */
+
+  .botao-lupa-mobile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 5vw;
+      height: 5vw;
+      padding: 0 0 0 40vw;
+      border: none;
+      background: transparent;
+      cursor: pointer;
   }
 
   .icon-lupa-mobile {
-    width: 4vw;
-    height: 4vw;
+      display: block;
+      width: 4vw;
+      height: 4vw;
   }
 
+  /* ========================================
+          PAINEL DE PESQUISA
+  ======================================== */
+
+  .painel-pesquisa-mobile {
+      position: fixed;
+      top: 10vw;
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 10vw);
+      background: white;
+      z-index: 98;
+      overflow-y: auto;
+  }
+
+  /* ========================================
+          BARRA DE PESQUISA
+  ======================================== */
+
+  .barra-pesquisa-mobile {
+      width: 100%;
+      height: 14vw;
+      padding: 0 5vw;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      background: #F5E9E0;
+  }
+
+  /* LUPA DENTRO DA BARRA */
+
+  .lupa-barra-mobile {
+      width: 4.5vw;
+      height: 4.5vw;
+      flex-shrink: 0;
+      margin-right: 3vw;
+  }
+
+  /* INPUT */
+
+  .search-input-mobile {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      padding: 0;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 4vw;
+  }
+
+  .search-input-mobile::placeholder {
+      color: #777;
+  }
+
+
+  /* ========================================
+          BOTÃO X
+  ======================================== */
+
+  .fechar-pesquisa-mobile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 8vw;
+      height: 8vw;
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      flex-shrink: 0;
+  }
+
+  .fechar-pesquisa-mobile img {
+      width: 5vw;
+      height: 5vw;
+  }
+
+
+  /* ========================================
+          RESULTADOS
+  ======================================== */
+
   .results-list-mobile {
-    position: absolute;
-    top: 120%;
-    left: 0;
-    width: 100%;
-    background: white;
-    border-radius: 1vw;
-    overflow: hidden;
-    box-shadow:
-      0 1vw 2vw rgba(0, 0, 0, 0.1);
+      width: 100%;
+      background: white;
   }
 
   .results-list-mobile ul {
-    list-style: none;
+      list-style: none;
+      margin: 0;
+      padding: 0;
   }
 
   .result-item-mobile {
-    display: flex;
-    align-items: center;
-    gap: 1vw;
-    padding: 1vw;
-    cursor: pointer;
-    transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 3vw;
+      padding: 4vw 5vw;
+      cursor: pointer;
+      transition: background 0.2s ease;
   }
 
   .result-item-mobile:hover,
   .result-item-mobile.ativo {
-    background: #f5e9e0;
+      background: #f5e9e0;
+  }
+
+  .item-icon-mobile img {
+      width: 4vw;
+      height: 4vw;
+  }
+
+  .item-text-mobile {
+      color: #311111;
+      font-size: 4vw;
+      font-family: "Inria Serif", serif;
   }
 
   .topo-mobile.scrolled .titulo-mobile,
   .topo-mobile.scrolled .sigla-mobile{
     color: #311111;
-  }
-
-  .topo-mobile.scrolled .search-input-mobile {
-    color: #311111;
-
-    border-bottom:
-      0.1vw solid #84453d;
-  }
-
-  .topo-mobile.scrolled .search-input-mobile::placeholder {
-    color: rgba(49, 17, 17, 0.5);
-  }
-
-  .item-icon-mobile img {
-    width: 4vw;
   }
 }
 
