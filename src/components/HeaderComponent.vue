@@ -771,11 +771,9 @@ function irParaHome(){
 
   .search-container-mobile {
     position: relative;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 5vw;
     height: 100%;
   }
@@ -791,7 +789,7 @@ function irParaHome(){
       justify-content: center;
       width: 5vw;
       height: 5vw;
-      padding: 0 0 0 40vw;
+      margin: 0 0 0 40vw;
       border: none;
       background: transparent;
       cursor: pointer;

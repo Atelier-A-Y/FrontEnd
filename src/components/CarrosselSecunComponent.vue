@@ -129,6 +129,22 @@ function moveHover(e: MouseEvent) {
       </Transition>
 
     </div>
+
+    <div class="banner-mobile">
+      <router-link to="/formatura">
+      <img src="/img/modelo19.png" alt="banner">
+
+      <div class="overlay-mobile">
+        <div class="marca-mobile">
+          <span class="marca1-mobile">ATELIER</span>
+          <span class="marca2-mobile">A.Y.</span>
+        </div>
+        <div class="texto-mobile">
+          <h2>50% OFF PARA<br>FORMANDOS</h2>
+        </div>
+      </div>
+    </router-link>
+    </div>
   </main>
 </template>
 
@@ -137,6 +153,10 @@ function moveHover(e: MouseEvent) {
 .mini-carro {
   background: #E6D6C5;
   margin: 4vw 0;
+}
+
+.banner-mobile{
+  display: none;
 }
 
 .carrossel-container {
@@ -311,6 +331,79 @@ function moveHover(e: MouseEvent) {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@media(max-width:600px){
+  .carrossel-container{
+    display: none;
+  }
+
+  .banner-mobile {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: block;
+  }
+
+  .banner-mobile img {
+    width: 100%;
+    display: block;
+    background-color: black;
+  }
+
+  .overlay-mobile {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.39) 40%,
+      rgb(0, 0, 0) 98%,
+      rgb(0, 0, 0) 20%
+    );
+      height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .texto-mobile {
+    color: white;
+    text-align: center;
+    margin: 25vw 30vw 0 0 ;
+  }
+
+  .texto-mobile h2 {
+    font-family: "Playfair", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    width: 100;
+    font-size: 6vw;
+    line-height: 1.2;
+  }
+
+  .marca-mobile{
+    position: absolute;
+    left: 83vw;
+    bottom: 38vw;
+    transform: translateY(-50%);
+    color: white;
+    font-family: "Noto Rashi Hebrew", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+  .marca1-mobile{
+    font-size: 2.6vw;
+    letter-spacing: 0.3vw;
+    display: block;
+  }
+
+  .marca2-mobile{
+    font-size: 2.4vw;
+    letter-spacing: 0.1vw;
+    display: block;
+    margin-left: 3.5vw;
   }
 }
 </style>
