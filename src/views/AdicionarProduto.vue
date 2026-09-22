@@ -136,11 +136,11 @@ console.log(dados)
           <label>Categoria:</label>
 
           <select v-model="produto.categoria">
-            <option value="6">Vestidos de Festas</option>
-            <option value="7">Vestidos de Madrinhas</option>
-            <option value="5">Vestidos de Casamento</option>
-            <option value="4">Vestidos de Formatura</option>
-            <option value="8">Ternos Femininos</option>
+            <option :value="6">Vestidos de Festas</option>
+            <option :value="7">Vestidos de Madrinhas</option>
+            <option :value="5">Vestidos de Casamento</option>
+            <option :value="4">Vestidos de Formatura</option>
+            <option :value="8">Ternos Femininos</option>
           </select>
         </div>
 
@@ -149,22 +149,22 @@ console.log(dados)
           <label>Continente:</label>
 
           <select v-model="produto.continente">
-            <option value="1">África</option>
-            <option value="2">América</option>
-            <option value="3">Europa</option>
-            <option value="4">Ásia</option>
-            <option value="5">Oceania</option>
+            <option :value="1">África</option>
+            <option :value="2">América</option>
+            <option :value="3">Europa</option>
+            <option :value="4">Ásia</option>
+            <option :value="5">Oceania</option>
           </select>
         </div>
 
         <div>
           <select v-model="produto.tamanho">
             <option disabled value="">Tamanho</option>
-            <option value="1">GG</option>
-            <option value="2">M</option>
-            <option value="3">PP</option>
-            <option value="4">P</option>
-            <option value="5">G</option>
+            <option :value="1">GG</option>
+            <option :value="2">M</option>
+            <option :value="3">PP</option>
+            <option :value="4">P</option>
+            <option :value="5">G</option>
           </select>
 
         </div>
