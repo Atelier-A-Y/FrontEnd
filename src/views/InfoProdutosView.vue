@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth";
 import api from "../api/api";
 
 const route = useRoute();
 const router = useRouter();
-const favorito = ref(false)
+const favorito = ref(false);
 const produto = ref<any>(null);
-const authStore = useAuthStore();
 
 async function alterarFav(id: number) {
   try {

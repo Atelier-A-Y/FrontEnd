@@ -1,105 +1,409 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 
-const slides = [
-  { img: '/img/modelo2.png', nome: 'Vestido Marsala' },
-  { img: '/img/modelo3.png', nome: 'Elegance Red' },
-  { img: '/img/modelo4.png', nome: 'Midnight Blue' },
-  { img: '/img/modelo5.png', nome: 'African Gold' },
-  { img: '/img/modelo6.png', nome: 'Lavender Night' },
-  { img: '/img/modelo7.png', nome: 'Classic Black' },
-  { img: '/img/modelo17.png', nome: 'Golden Shine' },
-  { img: '/img/modelo18.png', nome: 'Royal Green' },
-  { img: '/img/modelo12.png', nome: 'White Pearl' }
-]
+import { ref, onMounted } from 'vue'
+import api from "../api/api"
 
-const index = ref(2)
+
+/* =========================================================
+   ROUPAS
+========================================================= */
+
+const slides = ref<any[]>([])
+
+const index = ref(0)
+
+const favoritos = ref<number[]>([])
+
+
+/* =========================================================
+   CARREGAR ROUPAS DO BACKEND
+========================================================= */
+
+async function carregarRoupas() {
+
+  try {
+
+    const resposta = await api.get("/roupas/")
+
+    slides.value = resposta.data.results || resposta.data
+
+    console.log("ROUPAS CARREGADAS:", slides.value)
+
+    /*
+      Se existirem roupas, começamos no terceiro card.
+      Caso tenha menos de 3, começamos no primeiro.
+    */
+    if (slides.value.length > 0) {
+      index.value = Math.min(2, slides.value.length - 1)
+    }
+
+  } catch (erro: any) {
+
+    console.error("ERRO AO CARREGAR ROUPAS:", erro)
+
+    if (erro.response) {
+      console.log("STATUS:", erro.response.status)
+      console.log("DADOS:", erro.response.data)
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   CARREGAR FAVORITOS
+========================================================= */
+
+async function carregarFavoritos() {
+
+  try {
+
+    const resposta = await api.get("/favoritos/")
+
+    const lista = resposta.data.results || resposta.data
+
+    favoritos.value = lista
+      .map((item: any) => item.roupa?.id)
+      .filter((id: any) => id !== undefined)
+
+    console.log("FAVORITOS:", favoritos.value)
+
+  } catch (erro: any) {
+
+    console.error("ERRO AO CARREGAR FAVORITOS:", erro)
+
+  }
+
+}
+
+
+/* =========================================================
+   ALTERAR FAVORITO
+========================================================= */
+
+async function alterarFav(id: number) {
+
+  try {
+
+    /*
+      Primeiro buscamos os favoritos atuais
+      para descobrir se essa roupa já está favoritada.
+    */
+    const resposta = await api.get("/favoritos/")
+
+    const lista = resposta.data.results || resposta.data
+
+    const favoritoExistente = lista.find(
+      (item: any) => item.roupa?.id === id
+    )
+
+
+    /* =========================================
+       SE JÁ É FAVORITO → REMOVE
+    ========================================= */
+
+    if (favoritoExistente) {
+
+      await api.delete(
+        `/favoritos/${favoritoExistente.id}/`
+      )
+
+      favoritos.value = favoritos.value.filter(
+        favoritoId => favoritoId !== id
+      )
+
+      console.log("FAVORITO REMOVIDO!")
+
+
+    }
+
+    /* =========================================
+       SE NÃO É FAVORITO → ADICIONA
+    ========================================= */
+
+    else {
+
+      await api.post("/favoritos/", {
+        roupa: id
+      })
+
+      favoritos.value.push(id)
+
+      console.log("FAVORITO ADICIONADO!")
+
+    }
+
+
+  } catch (erro: any) {
+
+    console.error("ERRO AO ALTERAR FAVORITO:", erro)
+
+    if (erro.response) {
+
+      console.log("STATUS:", erro.response.status)
+
+      console.log("DADOS:", erro.response.data)
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   VERIFICAR SE É FAVORITO
+========================================================= */
+
+function ehFavorito(id: number) {
+
+  return favoritos.value.includes(id)
+
+}
+
+
+/* =========================================================
+   PRÓXIMO SLIDE
+========================================================= */
 
 function nextSlide() {
-  index.value = (index.value + 1) % slides.length
+
+  if (slides.value.length === 0) return
+
+  index.value =
+    (index.value + 1) % slides.value.length
+
 }
+
+
+/* =========================================================
+   SLIDE ANTERIOR
+========================================================= */
 
 function prevSlide() {
+
+  if (slides.value.length === 0) return
+
   index.value =
-    (index.value - 1 + slides.length) % slides.length
+    (index.value - 1 + slides.value.length)
+    % slides.value.length
+
 }
 
+
+/* =========================================================
+   POSIÇÃO DOS CARDS
+========================================================= */
+
 function getOffset(i: number) {
-  const total = slides.length
+
+  const total = slides.value.length
+
+  if (total === 0) return 0
 
   let diff = i - index.value
+
 
   if (diff > total / 2) {
     diff -= total
   }
 
+
   if (diff < -total / 2) {
     diff += total
   }
 
-  return diff * 300
+
+  /*
+    Distância entre os cards no mobile.
+  */
+  return diff * 45
+
 }
 
+
+/* =========================================================
+   HOVER
+========================================================= */
+
 const hover = ref(false)
+
 const hoverItem = ref<any>(null)
 
 const mouseX = ref(0)
+
 const mouseY = ref(0)
 
+
 function showHover(item: any) {
+
   hover.value = true
+
   hoverItem.value = item
+
 }
 
+
 function hideHover() {
+
   hover.value = false
+
 }
+
 
 function moveHover(e: MouseEvent) {
 
   const cardWidth = 320
 
+
   if (window.innerWidth - e.clientX < cardWidth) {
+
     mouseX.value = e.clientX - 120
-  } else {
-    mouseX.value = e.clientX + 40
+
   }
 
+  else {
+
+    mouseX.value = e.clientX + 40
+
+  }
+
+
   mouseY.value = e.clientY
+
 }
+
+
+/* =========================================================
+   IMAGEM DA ROUPA
+========================================================= */
+
+function getImagem(slide: any) {
+
+  /*
+    O backend pode retornar a imagem com nomes diferentes.
+    O primeiro que existir será usado.
+  */
+
+  return (
+    slide.foto ||
+    slide.imagem ||
+    slide.foto_url ||
+    slide.image ||
+    ''
+  )
+
+}
+
+
+/* =========================================================
+   CARREGAMENTO INICIAL
+========================================================= */
+
+onMounted(async () => {
+
+  await carregarRoupas()
+
+  await carregarFavoritos()
+
+})
+
 </script>
 
+
 <template>
+
   <main>
-    <router-link to="/formatura" class="banner">
-      <img src="/img/formanda_banner.png" alt="banner">
+
+
+    <!-- =====================================================
+         BANNER DESKTOP
+    ====================================================== -->
+
+    <router-link
+      to="/formatura"
+      class="banner"
+    >
+
+      <img
+        src="/img/formanda_banner.png"
+        alt="banner"
+      >
+
 
       <div class="overlay">
+
         <div class="marca">
-          <span class="marca1">ATELIER</span>
-          <span class="marca2">A.Y.</span>
+
+          <span class="marca1">
+            ATELIER
+          </span>
+
+          <span class="marca2">
+            A.Y.
+          </span>
+
         </div>
+
+
         <div class="texto">
-          <h2>50% OFF<br>PARA<br>FORMANDOS</h2>
+
+          <h2>
+            50% OFF
+            <br>
+            PARA
+            <br>
+            FORMANDOS
+          </h2>
+
         </div>
+
       </div>
+
     </router-link>
 
 
+
+    <!-- =====================================================
+         CARROSSEL MOBILE
+    ====================================================== -->
+
     <div class="carrossel-container-mobile">
 
-      <button class="voltar-mobile" @click="prevSlide">
+
+      <!-- BOTÃO ANTERIOR -->
+
+      <button
+        class="voltar-mobile"
+        @click="prevSlide"
+      >
+
         ❮
+
       </button>
 
+
+
+      <!-- ÁREA DO CARROSSEL -->
+
       <div class="carrossel-mobile">
+
+
         <div class="carrossel-track-mobile">
+
+
+          <!-- =================================================
+               CARDS
+          ================================================== -->
 
           <div
             v-for="(slide, i) in slides"
-            :key="i"
+            :key="slide.id"
             class="card"
-            :class="{ active: i === index }"
+            :class="{
+              active: i === index
+            }"
             :style="{
               transform: `
                 translate(-50%, -50%)
@@ -109,22 +413,105 @@ function moveHover(e: MouseEvent) {
               zIndex: i === index ? 5 : 1
             }"
           >
-            <img
-              :src="slide.img"
-              @mouseenter="showHover(slide)"
-              @mouseleave="hideHover"
-              @mousemove="moveHover"
-            />
+
+
+            <!-- =============================================
+                 IMAGEM
+            ============================================== -->
+
+            <div class="imagem-card">
+
+              <img
+                :src="getImagem(slide)"
+                :alt="slide.nome"
+                @mouseenter="showHover(slide)"
+                @mouseleave="hideHover"
+                @mousemove="moveHover"
+              >
+
+            </div>
+
+
+
+            <!-- =============================================
+                 INFORMAÇÕES
+            ============================================== -->
+
+            <div class="info-card">
+
+
+              <!-- NOME E PREÇO -->
+
+              <div class="dados-card">
+
+                <span class="nome-card">
+
+                  {{ slide.nome }}
+
+                </span>
+
+
+                <span class="preco-card">
+
+                  R$
+                  {{ slide.preco }}
+
+                </span>
+
+              </div>
+
+
+
+              <!-- =========================================
+                   FAVORITO
+              ========================================== -->
+
+              <button
+                class="favorito-card"
+                @click.stop="alterarFav(slide.id)"
+              >
+
+                <img
+                  :src="
+                    ehFavorito(slide.id)
+                      ? '/img/coracao-cheio.png'
+                      : '/img/coracao-solido.png'
+                  "
+                  alt="Favoritar"
+                >
+
+              </button>
+
+
+            </div>
+
+
           </div>
 
+
         </div>
+
       </div>
 
-      <button class="seguir-mobile" @click="nextSlide">
+
+
+      <!-- BOTÃO PRÓXIMO -->
+
+      <button
+        class="seguir-mobile"
+        @click="nextSlide"
+      >
+
         ❯
+
       </button>
+
+
     </div>
+
+
   </main>
+
 </template>
 
 <style scoped>
@@ -242,48 +629,115 @@ function moveHover(e: MouseEvent) {
   ========================= */
 
   .card {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 
-    width: 42vw;
-    height: 62vw;
+  width: 65vw;
+  height: 82vw;
 
-    border-radius: 3vw;
-    overflow: hidden;
+  background: #f5e9e0;
 
-    transition:
-      transform 0.4s ease,
-      opacity 0.4s ease,
-      width 0.4s ease,
-      height 0.4s ease;
+  border-radius: 4vw;
+  overflow: hidden;
 
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+  transition:
+    transform 0.4s ease,
+    opacity 0.4s ease,
+    width 0.4s ease,
+    height 0.4s ease;
   }
 
-
-  /* Card central */
   .card.active {
-    width: 48vw;
-    height: 70vw;
+    width: 70vw;
+    height: 88vw;
 
     opacity: 1;
     z-index: 5;
   }
 
 
-  /* Imagem */
-  .card img {
-    width: 100%;
-    height: 100%;
+  .imagem-card {
+  width: 100%;
+  height: 72%;
 
-    object-fit: cover;
-    display: block;
+  overflow: hidden;
+}
 
-    cursor: pointer;
-  }
+.imagem-card img {
+  width: 100%;
+  height: 100%;
 
+  object-fit: cover;
 
+  display: block;
+
+  cursor: pointer;
+}
+
+.info-card {
+  width: 100%;
+  height: 25%;
+
+  padding: 3vw 4vw;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #f5e9e0;
+}
+
+.dados-card {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1vw;
+}
+
+.nome-card {
+  font-family: "Playfair", serif;
+
+  font-size: 4.5vw;
+  font-weight: 500;
+
+  color: #311111;
+
+  line-height: 1.1;
+}
+
+.preco-card {
+  font-family: "Playfair", serif;
+
+  font-size: 4vw;
+
+  color: #311111;
+
+  line-height: 1.1;
+}
+
+.favorito-card {
+  background: transparent;
+  border: none;
+
+  color: #311111;
+
+  font-size: 8vw;
+
+  padding: 0;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
   /* =========================
      BOTÕES
   ========================= */

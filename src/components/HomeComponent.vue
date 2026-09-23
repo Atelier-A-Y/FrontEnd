@@ -122,7 +122,7 @@ main{
 
 @media (max-width: 600px){
   main{
-    margin-top: -107vw;
+    margin-top: -103vw;
   }
 
   .bnt-g-desktop{

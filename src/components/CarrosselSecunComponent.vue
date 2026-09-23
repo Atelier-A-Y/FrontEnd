@@ -384,8 +384,8 @@ function moveHover(e: MouseEvent) {
 
   .marca-mobile{
     position: absolute;
-    left: 83vw;
-    bottom: 38vw;
+    left: 80vw;
+    bottom: 35vw;
     transform: translateY(-50%);
     color: white;
     font-family: "Noto Rashi Hebrew", serif;
