@@ -1,101 +1,108 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import api from "../api/api";
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import api from '../api/api'
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 const favorito = ref(false)
 
-const produto = ref<any>(null);
+const produto = ref<any>(null)
 
 function alterarFav() {
-  favorito.value = !favorito.value;
+  favorito.value = !favorito.value
 
-  const favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
+  const favoritos = JSON.parse(localStorage.getItem('favoritos') || '[]')
 
   if (favorito.value) {
-    favoritos.push(produto.value.id);
+    favoritos.push(produto.value.id)
   } else {
-    const index = favoritos.indexOf(produto.value.id);
+    const index = favoritos.indexOf(produto.value.id)
 
     if (index > -1) {
-      favoritos.splice(index, 1);
+      favoritos.splice(index, 1)
     }
   }
 
-  localStorage.setItem("favoritos", JSON.stringify(favoritos));
+  localStorage.setItem('favoritos', JSON.stringify(favoritos))
 }
 
 async function adicionarCarrinho() {
   await api.post(
-    "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/adicionar/",
+    'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/adicionar/',
     {
       roupa: produto.value.id,
       quantidade: 1,
-    }
-  );
+    },
+  )
 
-  router.push("/carrinho");
+  router.push('/carrinho')
 }
 
 async function carregarProduto() {
-  const id = route.params.id;
+  const id = route.params.id
 
   const response = await api.get(
-    `https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/${id}/`
-  );
+    `https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/${id}/`,
+  )
 
-  produto.value = response.data;
+  produto.value = response.data
 }
 
 function voltarProd() {
-  router.push("/produtos");
+  router.push('/produtos')
 }
 
-onMounted(carregarProduto);
+onMounted(carregarProduto)
 </script>
 
 <template>
-  <button class="voltar" @click="voltarProd"><img src="/public/img/flecha.png" alt="flecha"></button>
+  <button class="voltar" @click="voltarProd">
+    <img src="/public/img/flecha.png" alt="flecha" />
+  </button>
 
   <div v-if="produto" class="container">
     <div class="informacoes">
-
       <div class="img-prod">
-        <img
-          v-if="produto.foto"
-          :src="produto.foto.url"
-          :alt="produto.nome"
-        />
+        <img v-if="produto.foto" :src="produto.foto.url" :alt="produto.nome" />
       </div>
 
       <div class="infos">
-
         <h1>{{ produto.nome }}</h1>
 
-        <h2>R$ {{ produto.preco }}</h2>
+        <h2>
+          R$
+          {{
+            Number(produto.preco).toLocaleString('pt-BR', {
+              minimumFractionDigits: 2,
+            })
+          }}
+        </h2>
 
         <div class="detalhes">
-          <p><strong>Tamanho:</strong> {{ produto.tamanho.nome }}</p>
-          <p><strong>Cor:</strong> {{ produto.cor }}</p>
+          <p>
+            <strong>Tamanho:</strong>
+            {{ produto.tamanho.nome }}
+          </p>
+
+          <div class="cor-produto">
+            <strong>Cor:</strong>
+
+            <span class="amostra-cor" :style="{ backgroundColor: produto.cor_hex }"></span>
+
+            <span>{{ produto.cor }}</span>
+          </div>
         </div>
 
         <div class="acoes">
-
-          <button class="btn-carrinho" @click="adicionarCarrinho">
-            Adicionar ao Carrinho
-          </button>
+          <button class="btn-carrinho" @click="adicionarCarrinho">Adicionar ao Carrinho</button>
 
           <button class="btn-favorito" @click="alterarFav">
             <img
-              :src="favorito
-                ? '/img/coracao-solido.png'
-                : '/img/coracao-cheio.png'"
+              :src="favorito ? '/img/coracao-solido.png' : '/img/coracao-cheio.png'"
               alt="Favoritos"
             />
           </button>
-
         </div>
 
         <div class="descricao">
@@ -103,9 +110,7 @@ onMounted(carregarProduto);
 
           <p>{{ produto.descricao }}</p>
         </div>
-
       </div>
-
     </div>
   </div>
 </template>
@@ -161,7 +166,7 @@ onMounted(carregarProduto);
   flex: 1;
   display: flex;
   flex-direction: column;
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Lexend Deca', sans-serif;
 }
 
 .infos h1 {
@@ -180,12 +185,32 @@ onMounted(carregarProduto);
 .detalhes {
   display: flex;
   flex-direction: column;
-  gap: .8rem;
+  gap: 0.8rem;
 }
 
 .detalhes p {
   font-size: 1.1rem;
   color: #444;
+}
+
+.cor-produto {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.amostra-cor {
+  width: 28px;
+  height: 28px;
+
+  border-radius: 20px;
+
+  border: 1px solid rgba(49, 17, 17, 0.3);
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 /* ---------------- BOTÕES ---------------- */
@@ -206,7 +231,7 @@ onMounted(carregarProduto);
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .btn-carrinho:hover {
@@ -226,7 +251,7 @@ onMounted(carregarProduto);
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .btn-favorito:hover {
@@ -255,7 +280,6 @@ onMounted(carregarProduto);
 /* ---------------- RESPONSIVO ---------------- */
 
 @media (max-width: 900px) {
-
   .container {
     padding: 0 1.5rem 3rem;
   }
@@ -289,6 +313,5 @@ onMounted(carregarProduto);
     flex: 1;
     min-width: 220px;
   }
-
 }
 </style>

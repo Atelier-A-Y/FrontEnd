@@ -1,149 +1,166 @@
-```vue
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import ColorPicker from "../components/ColorPicker.vue";
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import ColorPicker from '../components/ColorPicker.vue'
 
-const router = useRouter();
+const router = useRouter()
 
-const API_URL =
-  "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br";
+const API_URL = 'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br'
 
 // Produto
 const produto = ref({
-  categoria: "",
-  continente: "",
-  nome: "",
-  tamanho: "",
-  cor: "",
-  corNome: "",
-  preco: "",
-  descricao: "",
-});
+  categoria: '',
+  continente: '',
+  nome: '',
+  tamanho: '',
+  cor: '',
+  corNome: '',
+  preco: '',
+  descricao: '',
+})
 
 // Imagem
-const imagem = ref(null);
-const previewImagem = ref(null);
+const imagem = ref(null)
+const previewImagem = ref(null)
 
-// Categorias e continentes vindos do banco
-const categorias = ref([]);
-const continentes = ref([]);
+// Categorias, continentes e tamanhos vindos do banco
+const categorias = ref([])
+const continentes = ref([])
+const tamanhos = ref([])
 
 // Selecionar imagem
 function selecionarImagem(event) {
-  imagem.value = event.target.files[0];
+  imagem.value = event.target.files[0]
 
   if (imagem.value) {
-    previewImagem.value = URL.createObjectURL(imagem.value);
+    previewImagem.value = URL.createObjectURL(imagem.value)
   }
 }
 
 // Buscar categorias do banco
 async function carregarCategorias() {
   try {
-    const resposta = await fetch(`${API_URL}/api/categorias/`);
+    const resposta = await fetch(`${API_URL}/api/categorias/`)
 
     if (!resposta.ok) {
-      throw new Error("Erro ao buscar categorias");
+      throw new Error('Erro ao buscar categorias')
     }
 
-    categorias.value = await resposta.json();
+    const dados = await resposta.json()
 
-    console.log("Categorias:", categorias.value);
+    categorias.value = dados.results || dados
+
+    console.log('Categorias:', categorias.value)
   } catch (erro) {
-    console.error("Erro ao carregar categorias:", erro);
+    console.error('Erro ao carregar categorias:', erro)
   }
 }
 
 // Buscar continentes do banco
 async function carregarContinentes() {
   try {
-    const resposta = await fetch(`${API_URL}/api/continentes/`);
+    const resposta = await fetch(`${API_URL}/api/continentes/`)
 
     if (!resposta.ok) {
-      throw new Error("Erro ao buscar continentes");
+      throw new Error('Erro ao buscar continentes')
     }
 
-    continentes.value = await resposta.json();
+    const dados = await resposta.json()
 
-    console.log("Continentes:", continentes.value);
+    continentes.value = dados.results || dados
+
+    console.log('Continentes:', continentes.value)
   } catch (erro) {
-    console.error("Erro ao carregar continentes:", erro);
+    console.error('Erro ao carregar continentes:', erro)
+  }
+}
+
+// Buscar tamanhos do banco
+async function carregarTamanhos() {
+  try {
+    const resposta = await fetch(`${API_URL}/api/tamanhos/`)
+
+    if (!resposta.ok) {
+      throw new Error('Erro ao buscar tamanhos')
+    }
+
+    const dados = await resposta.json()
+
+    tamanhos.value = dados.results || dados
+
+    console.log('Tamanhos:', tamanhos.value)
+  } catch (erro) {
+    console.error('Erro ao carregar tamanhos:', erro)
   }
 }
 
 // Salvar produto
 async function salvarProduto() {
   try {
-    let attachmentKey = null;
+    let attachmentKey = null
 
     // Upload da imagem
     if (imagem.value) {
-      const formData = new FormData();
+      const formData = new FormData()
 
-      formData.append("file", imagem.value);
+      formData.append('file', imagem.value)
 
-      const upload = await fetch(
-        `${API_URL}/api/media/images/`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const upload = await fetch(`${API_URL}/api/media/images/`, {
+        method: 'POST',
+        body: formData,
+      })
 
       if (!upload.ok) {
-        throw new Error("Erro ao enviar imagem");
+        throw new Error('Erro ao enviar imagem')
       }
 
-      const dadosImagem = await upload.json();
+      const dadosImagem = await upload.json()
 
-      attachmentKey = dadosImagem.attachment_key;
+      attachmentKey = dadosImagem.attachment_key
     }
 
     // Cadastrar roupa
-    const resposta = await fetch(
-      `${API_URL}/api/roupas/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nome: produto.value.nome,
-          categoria: produto.value.categoria,
-          continente: produto.value.continente,
-          tamanho: produto.value.tamanho,
-          cor: produto.value.corNome,
-          cor_hex: produto.value.cor,
-          preco: produto.value.preco,
-          descricao: produto.value.descricao,
-          foto_attachment_key: attachmentKey,
-        }),
-      }
-    );
+    const resposta = await fetch(`${API_URL}/api/roupas/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        nome: produto.value.nome,
+        categoria: produto.value.categoria,
+        continente: produto.value.continente,
+        tamanho: produto.value.tamanho,
+        cor: produto.value.corNome,
+        cor_hex: produto.value.cor,
+        preco: produto.value.preco.toFixed(2).replace('.', ','),
+        descricao: produto.value.descricao,
+        foto_attachment_key: attachmentKey,
+      }),
+    })
 
-    const dados = await resposta.json();
+    const dados = await resposta.json()
 
-    console.log("Resposta do backend:", dados);
+    console.log('Resposta do backend:', dados)
 
     if (!resposta.ok) {
-      throw new Error("Erro ao salvar produto");
+      throw new Error('Erro ao salvar produto')
     }
 
-    alert("Produto cadastrado com sucesso!");
+    alert('Produto cadastrado com sucesso!')
 
-    router.push("/produtos");
+    router.push('/produtos')
   } catch (erro) {
-    console.error("Erro:", erro);
-    alert("Erro ao cadastrar produto");
+    console.error('Erro:', erro)
+    alert('Erro ao cadastrar produto')
   }
 }
 
 // Carregar categorias e continentes quando a página abrir
 onMounted(async () => {
-  await carregarCategorias();
-  await carregarContinentes();
-});
+  await carregarCategorias()
+  await carregarContinentes()
+  await carregarTamanhos()
+})
 </script>
 
 <template>
@@ -151,47 +168,24 @@ onMounted(async () => {
     <h1>Adicionar Produto</h1>
 
     <section class="fundo-prod">
-      <form
-        class="form-container"
-        @submit.prevent="salvarProduto"
-      >
+      <form class="form-container" @submit.prevent="salvarProduto">
         <div class="conteudo-formulario">
-
           <!-- IMAGEM -->
           <div class="lado-imagem">
-
             <div class="input-group">
-              <input
-                type="file"
-                accept="image/*"
-                @change="selecionarImagem"
-              />
+              <input type="file" accept="image/*" @change="selecionarImagem" />
             </div>
 
-            <div
-              v-if="previewImagem"
-              class="preview-container"
-            >
-              <img
-                :src="previewImagem"
-                alt="Pré-visualização"
-                class="preview-imagem"
-              />
+            <div v-if="previewImagem" class="preview-container">
+              <img :src="previewImagem" alt="Pré-visualização" class="preview-imagem" />
             </div>
-
           </div>
 
           <!-- CAMPOS -->
           <div class="lado-campos">
-
             <!-- NOME -->
             <div class="input-group">
-              <input
-                type="text"
-                maxlength="100"
-                placeholder="Nome"
-                v-model="produto.nome"
-              />
+              <input type="text" maxlength="100" placeholder="Nome" v-model="produto.nome" />
             </div>
 
             <!-- CATEGORIA -->
@@ -199,18 +193,9 @@ onMounted(async () => {
               <label>Categoria:</label>
 
               <select v-model="produto.categoria">
-                <option
-                  disabled
-                  value=""
-                >
-                  Selecione uma categoria
-                </option>
+                <option disabled value="">Selecione uma categoria</option>
 
-                <option
-                  v-for="categoria in categorias"
-                  :key="categoria.id"
-                  :value="categoria.id"
-                >
+                <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
                   {{ categoria.nome }}
                 </option>
               </select>
@@ -221,12 +206,7 @@ onMounted(async () => {
               <label>Continente:</label>
 
               <select v-model="produto.continente">
-                <option
-                  disabled
-                  value=""
-                >
-                  Selecione um continente
-                </option>
+                <option disabled value="">Selecione um continente</option>
 
                 <option
                   v-for="continente in continentes"
@@ -243,18 +223,11 @@ onMounted(async () => {
               <label>Tamanho:</label>
 
               <select v-model="produto.tamanho">
-                <option
-                  disabled
-                  value=""
-                >
-                  Tamanho
-                </option>
+                <option disabled value="">Selecione um tamanho</option>
 
-                <option :value="1">GG</option>
-                <option :value="2">M</option>
-                <option :value="3">PP</option>
-                <option :value="4">P</option>
-                <option :value="5">G</option>
+                <option v-for="tamanho in tamanhos" :key="tamanho.id" :value="tamanho.id">
+                  {{ tamanho.nome }}
+                </option>
               </select>
             </div>
 
@@ -262,44 +235,28 @@ onMounted(async () => {
             <div class="input-group">
               <color-picker
                 v-model:pureColor="produto.cor"
-                @update:colorName="
-                  produto.corNome = $event
-                "
+                @update:colorName="produto.corNome = $event"
               />
             </div>
 
             <!-- PREÇO -->
             <div class="input-group">
-              <input
-                type="number"
-                step="0.01"
-                placeholder="Preço"
-                v-model="produto.preco"
-              />
+              <input type="number" step="0.01" placeholder="Preço" v-model="produto.preco" />
             </div>
 
             <!-- DESCRIÇÃO -->
             <div class="input-group">
-              <textarea
-                placeholder="Descrição"
-                v-model="produto.descricao"
-              ></textarea>
+              <textarea placeholder="Descrição" v-model="produto.descricao"></textarea>
             </div>
-
           </div>
         </div>
 
         <!-- BOTÕES -->
         <div class="buttons">
-          <button type="reset">
-            Limpar
-          </button>
+          <button type="reset">Limpar</button>
 
-          <button type="submit">
-            Salvar
-          </button>
+          <button type="submit">Salvar</button>
         </div>
-
       </form>
     </section>
   </main>
