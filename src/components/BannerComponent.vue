@@ -1,40 +1,28 @@
 <script setup lang="ts">
-
 import { ref, onMounted } from 'vue'
 import api from "../api/api"
-
 
 /* =========================================================
    ROUPAS
 ========================================================= */
 
-const slides = ref<any[]>([])
-
-const index = ref(0)
-
-const favoritos = ref<number[]>([])
-
+const slidesMobile = ref<any[]>([])
+const indexMobile = ref(0)
+const favoritosMobile = ref<number[]>([])
 
 /* =========================================================
    CARREGAR ROUPAS DO BACKEND
 ========================================================= */
 
-async function carregarRoupas() {
-
+async function carregarRoupasMobile() {
   try {
-
     const resposta = await api.get("/roupas/")
+    slidesMobile.value = resposta.data.results || resposta.data
 
-    slides.value = resposta.data.results || resposta.data
+    console.log("ROUPAS CARREGADAS:", slidesMobile.value)
 
-    console.log("ROUPAS CARREGADAS:", slides.value)
-
-    /*
-      Se existirem roupas, começamos no terceiro card.
-      Caso tenha menos de 3, começamos no primeiro.
-    */
-    if (slides.value.length > 0) {
-      index.value = Math.min(2, slides.value.length - 1)
+    if (slidesMobile.value.length > 0) {
+      indexMobile.value = Math.min(2, slidesMobile.value.length - 1)
     }
 
   } catch (erro: any) {
@@ -45,247 +33,194 @@ async function carregarRoupas() {
       console.log("STATUS:", erro.response.status)
       console.log("DADOS:", erro.response.data)
     }
-
   }
-
 }
-
 
 /* =========================================================
    CARREGAR FAVORITOS
 ========================================================= */
 
-async function carregarFavoritos() {
-
+async function carregarFavoritosMobile() {
   try {
+    const respostaMobile = await api.get("/favoritos/")
+    const listaMobile = respostaMobile.data.results || respostaMobile.data
 
-    const resposta = await api.get("/favoritos/")
+    favoritosMobile.value = listaMobile
+      .map((item: any) => {
+        if (typeof item.roupa === "number"){
+          return item.roupa
+        }
 
-    const lista = resposta.data.results || resposta.data
+        if(item.roupa?.id){
+          return item.roupa.id
+        }
 
-    favoritos.value = lista
-      .map((item: any) => item.roupa?.id)
-      .filter((id: any) => id !== undefined)
+        return null
+      })
+      .filter((id: any) => id !== null)
 
-    console.log("FAVORITOS:", favoritos.value)
+    console.log("IDs DOS FAVORITOS:", favoritosMobile.value)
 
   } catch (erro: any) {
-
     console.error("ERRO AO CARREGAR FAVORITOS:", erro)
 
+    if(erro.response){
+      console.log("STATUS:", erro.response.status)
+      console.log("DADOS:", erro.response.data)
+    }
   }
-
 }
-
 
 /* =========================================================
    ALTERAR FAVORITO
 ========================================================= */
 
-async function alterarFav(id: number) {
+async function alterarFavMobile(id: number) {
 
+  console.log("ID DA ROUPA CLICADA:", id)
+
+  if(!id){
+    console.error("Essa roupa não possui ID")
+    return
+  }
+  
   try {
+    const respostaMobile = await api.get("/favoritos/")
+    const listaMobile = respostaMobile.data.results || respostaMobile.data
 
-    /*
-      Primeiro buscamos os favoritos atuais
-      para descobrir se essa roupa já está favoritada.
-    */
-    const resposta = await api.get("/favoritos/")
+    console.log("FAVORITOS DO USUÁRIO:", listaMobile)
 
-    const lista = resposta.data.results || resposta.data
+    const favoritoExistenteMobile = listaMobile.find((item: any) => {
+      if(typeof item.roupa === "number"){
+        return item.roupa === id
+      }
+      return item.roupa?.id === id
+    })
 
-    const favoritoExistente = lista.find(
-      (item: any) => item.roupa?.id === id
-    )
+    if(favoritoExistenteMobile){
+      console.log("REMOVENDO FAVORITO:", favoritoExistenteMobile.id)
 
+      await api.delete(`/favoritos/${favoritoExistenteMobile.id}/`)
 
-    /* =========================================
-       SE JÁ É FAVORITO → REMOVE
-    ========================================= */
-
-    if (favoritoExistente) {
-
-      await api.delete(
-        `/favoritos/${favoritoExistente.id}/`
+      favoritosMobile.value = favoritosMobile.value.filter(
+        favoritoMobileId => favoritoMobileId !== id
       )
-
-      favoritos.value = favoritos.value.filter(
-        favoritoId => favoritoId !== id
-      )
-
-      console.log("FAVORITO REMOVIDO!")
-
-
+      console.log("FAVORITO REMOVIDO")
     }
-
-    /* =========================================
-       SE NÃO É FAVORITO → ADICIONA
-    ========================================= */
-
+  
     else {
+      console.log("ADICIONANDO ROUPA:", id)
 
       await api.post("/favoritos/", {
         roupa: id
       })
 
-      favoritos.value.push(id)
+      favoritosMobile.value.push(id)
 
       console.log("FAVORITO ADICIONADO!")
-
     }
-
-
   } catch (erro: any) {
-
     console.error("ERRO AO ALTERAR FAVORITO:", erro)
 
     if (erro.response) {
-
       console.log("STATUS:", erro.response.status)
-
       console.log("DADOS:", erro.response.data)
-
     }
-
   }
-
 }
-
 
 /* =========================================================
    VERIFICAR SE É FAVORITO
 ========================================================= */
 
-function ehFavorito(id: number) {
-
-  return favoritos.value.includes(id)
-
+function ehFavoritoMobile(id: number) {
+  return favoritosMobile.value.includes(id)
 }
-
 
 /* =========================================================
    PRÓXIMO SLIDE
 ========================================================= */
 
-function nextSlide() {
+function nextSlideMobile() {
+  if (slidesMobile.value.length === 0) return
 
-  if (slides.value.length === 0) return
-
-  index.value =
-    (index.value + 1) % slides.value.length
-
+  indexMobile.value =
+    (indexMobile.value + 1) % slidesMobile.value.length
 }
-
 
 /* =========================================================
    SLIDE ANTERIOR
 ========================================================= */
 
-function prevSlide() {
+function prevSlideMobile() {
+  if (slidesMobile.value.length === 0) return
 
-  if (slides.value.length === 0) return
-
-  index.value =
-    (index.value - 1 + slides.value.length)
-    % slides.value.length
-
+  indexMobile.value =
+    (indexMobile.value - 1 + slidesMobile.value.length)
+    % slidesMobile.value.length
 }
-
 
 /* =========================================================
    POSIÇÃO DOS CARDS
 ========================================================= */
 
 function getOffset(i: number) {
-
-  const total = slides.value.length
+  const total = slidesMobile.value.length
 
   if (total === 0) return 0
 
-  let diff = i - index.value
-
+  let diff = i - indexMobile.value
 
   if (diff > total / 2) {
     diff -= total
   }
 
-
   if (diff < -total / 2) {
     diff += total
   }
 
-
   /*
     Distância entre os cards no mobile.
   */
-  return diff * 45
-
+  return diff * 285
 }
-
 
 /* =========================================================
    HOVER
 ========================================================= */
 
 const hover = ref(false)
-
 const hoverItem = ref<any>(null)
-
 const mouseX = ref(0)
-
 const mouseY = ref(0)
 
-
 function showHover(item: any) {
-
   hover.value = true
-
   hoverItem.value = item
-
 }
-
 
 function hideHover() {
-
   hover.value = false
-
 }
 
-
 function moveHover(e: MouseEvent) {
-
   const cardWidth = 320
 
-
   if (window.innerWidth - e.clientX < cardWidth) {
-
     mouseX.value = e.clientX - 120
-
   }
 
   else {
-
     mouseX.value = e.clientX + 40
-
   }
-
-
   mouseY.value = e.clientY
-
 }
-
 
 /* =========================================================
    IMAGEM DA ROUPA
 ========================================================= */
 
 function getImagem(slide: any) {
-
-  /*
-    O backend pode retornar a imagem com nomes diferentes.
-    O primeiro que existir será usado.
-  */
-
   return (
     slide.foto ||
     slide.imagem ||
@@ -293,29 +228,21 @@ function getImagem(slide: any) {
     slide.image ||
     ''
   )
-
 }
-
 
 /* =========================================================
    CARREGAMENTO INICIAL
 ========================================================= */
 
 onMounted(async () => {
-
-  await carregarRoupas()
-
-  await carregarFavoritos()
-
+  await carregarRoupasMobile()
+  await carregarFavoritosMobile()
 })
-
 </script>
 
 
 <template>
-
   <main>
-
 
     <!-- =====================================================
          BANNER DESKTOP
@@ -370,57 +297,32 @@ onMounted(async () => {
     ====================================================== -->
 
     <div class="carrossel-container-mobile">
-
-
-      <!-- BOTÃO ANTERIOR -->
-
       <button
         class="voltar-mobile"
-        @click="prevSlide"
+        @click="prevSlideMobile"
       >
-
         ❮
-
       </button>
 
-
-
-      <!-- ÁREA DO CARROSSEL -->
-
       <div class="carrossel-mobile">
-
-
         <div class="carrossel-track-mobile">
-
-
-          <!-- =================================================
-               CARDS
-          ================================================== -->
-
           <div
-            v-for="(slide, i) in slides"
+            v-for="(slide, i) in slidesMobile"
             :key="slide.id"
             class="card"
             :class="{
-              active: i === index
+              active: i === indexMobile
             }"
             :style="{
               transform: `
                 translate(-50%, -50%)
                 translateX(${getOffset(i)}px)
               `,
-              opacity: i === index ? 1 : 0.45,
-              zIndex: i === index ? 5 : 1
+              opacity: i === indexMobile ? 1 : 0.45,
+              zIndex: i === indexMobile ? 100 : 1
             }"
           >
-
-
-            <!-- =============================================
-                 IMAGEM
-            ============================================== -->
-
             <div class="imagem-card">
-
               <img
                 :src="getImagem(slide)"
                 :alt="slide.nome"
@@ -428,94 +330,52 @@ onMounted(async () => {
                 @mouseleave="hideHover"
                 @mousemove="moveHover"
               >
-
             </div>
-
-
-
-            <!-- =============================================
-                 INFORMAÇÕES
-            ============================================== -->
-
             <div class="info-card">
-
-
-              <!-- NOME E PREÇO -->
-
               <div class="dados-card">
 
                 <span class="nome-card">
-
                   {{ slide.nome }}
-
                 </span>
-
 
                 <span class="preco-card">
-
                   R$
                   {{ slide.preco }}
-
                 </span>
-
+                
               </div>
-
-
-
-              <!-- =========================================
-                   FAVORITO
-              ========================================== -->
 
               <button
                 class="favorito-card"
-                @click.stop="alterarFav(slide.id)"
+                @click.stop="alterarFavMobile(slide.id)"
               >
 
                 <img
                   :src="
-                    ehFavorito(slide.id)
+                    ehFavoritoMobile(slide.id)
                       ? '/img/coracao-cheio.png'
                       : '/img/coracao-solido.png'
                   "
                   alt="Favoritar"
                 >
-
               </button>
-
-
             </div>
-
-
           </div>
-
-
         </div>
-
       </div>
-
-
-
-      <!-- BOTÃO PRÓXIMO -->
 
       <button
         class="seguir-mobile"
-        @click="nextSlide"
+        @click="nextSlideMobile"
       >
-
         ❯
-
       </button>
-
-
     </div>
-
-
   </main>
-
 </template>
 
 <style scoped>
-.carrossel-container{
+.carrossel-container-mobile{
   display: none;
 }
 
@@ -606,23 +466,19 @@ onMounted(async () => {
   ========================= */
 
   .carrossel-mobile {
-    position: relative;
-    width: 100%;
-    height: 85vw;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  position: relative;
 
+  width: 100%;
+  height: 95vw;
 
-  /* Área onde os cards ficam */
-  .carrossel-track-mobile {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
+  overflow: hidden;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  isolation: isolate;
+}
 
   /* =========================
      CARDS
@@ -724,19 +580,26 @@ onMounted(async () => {
   background: transparent;
   border: none;
 
-  color: #311111;
-
-  font-size: 8vw;
-
   padding: 0;
+  margin: 0;
 
-  line-height: 1;
-
-  cursor: pointer;
+  width: 9vw;
+  height: 9vw;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.favorito-card img {
+  width: 8vw;
+  height: 8vw;
+
+  object-fit: contain;
+  display: block;
 }
   /* =========================
      BOTÕES
