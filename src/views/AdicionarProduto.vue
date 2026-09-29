@@ -119,6 +119,9 @@ async function salvarProduto() {
       attachmentKey = dadosImagem.attachment_key
     }
 
+    console.log('COR HEX:', produto.value.cor)
+    console.log('NOME DA COR:', produto.value.corNome)
+
     // Cadastrar roupa
     const resposta = await fetch(`${API_URL}/api/roupas/`, {
       method: 'POST',
@@ -132,7 +135,7 @@ async function salvarProduto() {
         tamanho: produto.value.tamanho,
         cor: produto.value.corNome,
         cor_hex: produto.value.cor,
-        preco: produto.value.preco.toFixed(2).replace('.', ','),
+        preco: Number(produto.value.preco).toFixed(2),
         descricao: produto.value.descricao,
         foto_attachment_key: attachmentKey,
       }),

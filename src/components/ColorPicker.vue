@@ -20,7 +20,10 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 
-const emit = defineEmits(['update:colorName'])
+const emit = defineEmits([
+  'update:pureColor',
+  'update:colorName'
+])
 
 const color = ref('#ff0000')
 
@@ -163,8 +166,17 @@ const colorName = computed(() => {
   return hexToColorName(color.value)
 })
 
+// Envia o nome da cor para o componente pai
 watch(colorName, (novoNome) => {
   emit('update:colorName', novoNome)
+})
+
+// Envia o HEX da cor para o componente pai
+watch(color, (novaCor) => {
+  console.log('COR ENVIADA PELO COLOR PICKER:', novaCor)
+  console.log('TAMANHO:', novaCor.length)
+
+  emit('update:pureColor', novaCor)
 })
 </script>
 
@@ -185,4 +197,3 @@ watch(colorName, (novoNome) => {
   gap: 5px;
 }
 </style>
-```
