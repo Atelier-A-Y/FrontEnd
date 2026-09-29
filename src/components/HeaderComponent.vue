@@ -392,10 +392,6 @@ function irParaHome(){
 </template>
 
 <style scoped>
-.topo{
-  display: block;
-}
-
 .topo-mobile{
   display: none;
 }
@@ -641,7 +637,6 @@ function irParaHome(){
       background 0.4s ease,
       backdrop-filter 0.4s ease,
       box-shadow 0.4s ease;
-      box-sizing: border-box;
   }
 
   .topo-mobile.scrolled {
@@ -794,7 +789,6 @@ function irParaHome(){
       background: transparent;
       cursor: pointer;
   }
-
   .icon-lupa-mobile {
       display: block;
       width: 4vw;

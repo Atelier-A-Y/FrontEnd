@@ -151,4 +151,118 @@ main{
   font-weight: 400;
   font-style: normal;
 }
+
+@media (max-width: 600px) {
+    .bnt-pequenos {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4vw;
+        margin-top: 4vw;
+    }
+
+    .card {
+        width: 44%;
+        height: 34vw;
+        position: relative;
+        overflow: hidden;
+        border-radius: 1vw;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card img {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.4s;
+    }
+
+    .card:hover img {
+        transform: scale(1.03);
+    }
+
+    .overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 5vw;
+        background: linear-gradient(
+            to top,
+            rgba(26, 17, 17, 0.95) 10%,
+            rgba(26, 17, 17, 0.55) 50%,
+            rgba(26, 17, 17, 0) 100%
+        );
+    }
+
+    .overlay h1 {
+        text-align: center;
+        z-index: 2;
+        color: white;
+        font-size: 4vw;
+        line-height: 1.2;
+        letter-spacing: 0.5px;
+        margin: 0;
+
+    }
+
+    .card-reverso {
+        width: 44%;
+        height: 34vw;
+        position: relative;
+        overflow: hidden;
+        border-radius: 1vw;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card-reverso img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.4s;
+    }
+
+    .card-reverso:hover img {
+        transform: scale(1.03);
+    }
+
+    .overlay-reverso {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 5vw;
+        background: linear-gradient(
+            to top,
+            rgba(26, 17, 17, 0.95) 10%,
+            rgba(26, 17, 17, 0.55) 50%,
+            rgba(26, 17, 17, 0) 100%
+        );
+    }
+
+    .overlay-reverso h1 {
+        text-align: center;
+        z-index: 2;
+        color: white;
+        font-size: 4vw;
+        line-height: 1.2;
+        letter-spacing: 0.5px;
+        margin: 0;
+    }
+}
 </style>

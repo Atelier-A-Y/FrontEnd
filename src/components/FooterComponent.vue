@@ -103,21 +103,21 @@ footer span {
 @media (max-width: 768px) {
   footer > div {
     flex-direction: column;
-    gap: 40px;
+    gap: 30px;
 
-    padding: 40px 30px;
+    padding: 25px 30px;
   }
 
   footer h1 {
-    font-size: 1.7rem;
+    font-size: 1.3rem;
   }
 
   footer p {
-    font-size: 0.95rem;
+    font-size: 0.8rem;
   }
 
   .endereço {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     line-height: 1.5;
     padding: 15px;
   }

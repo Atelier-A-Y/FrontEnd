@@ -612,8 +612,8 @@ onMounted(async () => {
     top: 50%;
     transform: translateY(-50%);
 
-    width: 12vw;
-    height: 12vw;
+    width: 9vw;
+    height: 9vw;
 
     display: flex;
     align-items: center;
@@ -625,7 +625,7 @@ onMounted(async () => {
 
     color: white;
 
-    font-size: 7vw;
+    font-size: 5vw;
     line-height: 1;
 
     cursor: pointer;
