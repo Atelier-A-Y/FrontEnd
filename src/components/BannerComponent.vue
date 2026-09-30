@@ -77,7 +77,7 @@ async function carregarFavoritosMobile() {
 
 async function alterarFavMobile(id: number) {
 
-  console.log("ID DA ROUPA CLICADA:", id)
+  console.log("ID DA ROUPA SELECIONADA:", id)
 
   if(!id){
     console.error("Essa roupa não possui ID")
