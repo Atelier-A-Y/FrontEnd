@@ -316,43 +316,4 @@ onMounted(async () => {
   text-align: justify;
 }
 
-/* ---------------- RESPONSIVO ---------------- */
-
-@media (max-width: 900px) {
-
-  .container {
-    padding: 0 1.5rem 3rem;
-  }
-
-  .informacoes {
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .img-prod {
-    max-width: 100%;
-  }
-
-  .img-prod img {
-    height: auto;
-  }
-
-  .infos h1 {
-    font-size: 2rem;
-  }
-
-  .infos h2 {
-    font-size: 1.6rem;
-  }
-
-  .acoes {
-    flex-wrap: wrap;
-  }
-
-  .btn-comprar {
-    flex: 1;
-    min-width: 220px;
-  }
-
-}
 </style>
