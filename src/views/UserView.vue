@@ -702,18 +702,4 @@ img{
   }
 
 }
-
-@media(max-width:768px){
-
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .full,
-  .save-btn{
-    grid-column:span 1;
-  }
-
-}
-
 </style>

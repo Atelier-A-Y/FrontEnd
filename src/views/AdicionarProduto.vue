@@ -333,24 +333,4 @@ textarea {
   background: #311111;
   color: #f5e9e0;
 }
-
-@media (max-width: 768px) {
-
-  .conteudo-formulario {
-    flex-direction: column;
-  }
-
-  .lado-imagem,
-  .lado-campos {
-    width: 100%;
-  }
-
-  .preview-container {
-    height: 300px;
-  }
-
-  .buttons {
-    justify-content: center;
-  }
-}
 </style>
