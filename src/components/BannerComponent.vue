@@ -516,91 +516,91 @@ onMounted(async () => {
 
 
   .imagem-card {
-  width: 100%;
-  height: 72%;
+    width: 100%;
+    height: 72%;
 
-  overflow: hidden;
-}
+    overflow: hidden;
+  }
 
-.imagem-card img {
-  width: 100%;
-  height: 100%;
+  .imagem-card img {
+    width: 100%;
+    height: 100%;
 
-  object-fit: cover;
+    object-fit: cover;
 
-  display: block;
+    display: block;
 
-  cursor: pointer;
-}
+    cursor: pointer;
+  }
 
-.info-card {
-  width: 100%;
-  height: 25%;
+  .info-card {
+    width: 100%;
+    height: 25%;
 
-  padding: 3vw 4vw;
+    padding: 3vw 4vw;
 
-  box-sizing: border-box;
+    box-sizing: border-box;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  background: #f5e9e0;
-}
+    background: #f5e9e0;
+  }
 
-.dados-card {
-  display: flex;
-  flex-direction: column;
+  .dados-card {
+    display: flex;
+    flex-direction: column;
 
-  gap: 1vw;
-}
+    gap: 1vw;
+  }
 
-.nome-card {
-  font-family: "Playfair", serif;
+  .nome-card {
+    font-family: "Playfair", serif;
 
-  font-size: 4.5vw;
-  font-weight: 500;
+    font-size: 4.5vw;
+    font-weight: 500;
 
-  color: #311111;
+    color: #311111;
 
-  line-height: 1.1;
-}
+    line-height: 1.1;
+  }
 
-.preco-card {
-  font-family: "Playfair", serif;
+  .preco-card {
+    font-family: "Playfair", serif;
 
-  font-size: 4vw;
+    font-size: 4vw;
 
-  color: #311111;
+    color: #311111;
 
-  line-height: 1.1;
-}
+    line-height: 1.1;
+  }
 
-.favorito-card {
-  background: transparent;
-  border: none;
+  .favorito-card {
+    background: transparent;
+    border: none;
 
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 
-  width: 9vw;
-  height: 9vw;
+    width: 9vw;
+    height: 9vw;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  cursor: pointer;
-  flex-shrink: 0;
-}
+    cursor: pointer;
+    flex-shrink: 0;
+  }
 
-.favorito-card img {
-  width: 8vw;
-  height: 8vw;
+  .favorito-card img {
+    width: 8vw;
+    height: 8vw;
 
-  object-fit: contain;
-  display: block;
-}
+    object-fit: contain;
+    display: block;
+  }
   /* =========================
      BOTÕES
   ========================= */
