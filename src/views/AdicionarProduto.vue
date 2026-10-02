@@ -135,7 +135,7 @@ async function salvarProduto() {
         tamanho: produto.value.tamanho,
         cor: produto.value.corNome,
         cor_hex: produto.value.cor,
-        preco: Number(produto.value.preco).toFixed(2),
+        preco: produto.value.preco.toFixed(2),
         descricao: produto.value.descricao,
         foto_attachment_key: attachmentKey,
       }),
@@ -234,12 +234,12 @@ onMounted(async () => {
               </select>
             </div>
 
-            <!-- COR -->
-            <div class="input-group">
-              <color-picker
-                v-model:pureColor="produto.cor"
-                @update:colorName="produto.corNome = $event"
-              />
+            <!-- COR --> 
+            <div class="input-group"> 
+              <color-picker v-model:pureColor="produto.cor" @update:colorName="produto.corNome = $event" 
+              /> 
+              <!-- Mostra o HEX escolhido --> 
+               <input type="text" maxlength="7" placeholder="Hex" v-model="produto.cor" class="hex"/> 
             </div>
 
             <!-- PREÇO -->
@@ -305,6 +305,10 @@ h1 {
 
 .input-group {
   margin-bottom: 1rem;
+}
+
+.hex {
+  margin-top: 1rem;
 }
 
 input,

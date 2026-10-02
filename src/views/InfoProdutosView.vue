@@ -85,12 +85,12 @@ onMounted(carregarProduto)
             {{ produto.tamanho.nome }}
           </p>
 
-          <div class="cor-produto">
-            <strong>Cor:</strong>
+         <div class="cor-produto">
+          <strong>Cor:</strong>
 
-            <span class="amostra-cor" :style="{ backgroundColor: produto.cor_hex }"></span>
+          <span class="amostra-cor" :style="{ backgroundColor: produto.cor_hex }"></span>
 
-            <span>{{ produto.cor }}</span>
+          <span>{{ produto.cor }}</span>
           </div>
         </div>
 

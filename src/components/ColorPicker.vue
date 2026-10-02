@@ -9,10 +9,10 @@
 
     <div
       class="selected-color"
-      :style="{ backgroundColor: color }"
+      :style="{ backgroundColor: colorHex }"
     >
       <strong>{{ colorName }}</strong>
-      <span>{{ color }}</span>
+      <span>{{ colorHex }}</span>
     </div>
   </div>
 </template>
@@ -21,8 +21,9 @@
 import { ref, computed, watch } from 'vue'
 
 const emit = defineEmits([
-  'update:pureColor',
-  'update:colorName'
+
+  'update:colorName',
+  'update:pureColor'
 ])
 
 const color = ref('#ff0000')
@@ -31,25 +32,98 @@ const gradient = ref(
   'linear-gradient(90deg, #ff0000 0%, #0000ff 100%)'
 )
 
-// Converte HEX para RGB
-function hexToRgb(hex) {
-  hex = hex.replace('#', '')
+// --------------------------------------------------
+// Converte RGB/RGBA para HEX
+// --------------------------------------------------
 
-  if (hex.length === 3) {
-    hex = hex
-      .split('')
-      .map(char => char + char)
-      .join('')
+function rgbToHex(r, g, b) {
+  const red = Math.max(0, Math.min(255, Math.round(r)))
+  const green = Math.max(0, Math.min(255, Math.round(g)))
+  const blue = Math.max(0, Math.min(255, Math.round(b)))
+
+  return (
+    '#' +
+    red.toString(16).padStart(2, '0') +
+    green.toString(16).padStart(2, '0') +
+    blue.toString(16).padStart(2, '0')
+  ).toUpperCase()
+}
+
+// --------------------------------------------------
+// Garante que a cor esteja em HEX
+// --------------------------------------------------
+
+function normalizeToHex(value) {
+  if (!value) {
+    return '#FF0000'
   }
 
-  const r = parseInt(hex.substring(0, 2), 16)
-  const g = parseInt(hex.substring(2, 4), 16)
-  const b = parseInt(hex.substring(4, 6), 16)
+  const valor = String(value).trim()
+
+  // Já é HEX
+  if (/^#[0-9A-Fa-f]{6}$/.test(valor)) {
+    return valor.toUpperCase()
+  }
+
+  // HEX de 3 caracteres
+  if (/^#[0-9A-Fa-f]{3}$/.test(valor)) {
+    const hex = valor.substring(1)
+
+    return (
+      '#' +
+      hex[0] +
+      hex[0] +
+      hex[1] +
+      hex[1] +
+      hex[2] +
+      hex[2]
+    ).toUpperCase()
+  }
+
+  // RGB ou RGBA
+  const rgbMatch = valor.match(
+    /^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*[\d.]+)?\s*\)$/i
+  )
+
+  if (rgbMatch) {
+    return rgbToHex(
+      Number(rgbMatch[1]),
+      Number(rgbMatch[2]),
+      Number(rgbMatch[3])
+    )
+  }
+
+  // Se não conseguir identificar a cor,
+  // mantém vermelho como padrão
+  return '#FF0000'
+}
+
+// --------------------------------------------------
+// HEX usado no componente
+// --------------------------------------------------
+
+const colorHex = computed(() => {
+  return normalizeToHex(color.value)
+})
+
+// --------------------------------------------------
+// Converte HEX para RGB
+// --------------------------------------------------
+
+function hexToRgb(hex) {
+  const valor = normalizeToHex(hex).replace('#', '')
+
+  const r = parseInt(valor.substring(0, 2), 16)
+  const g = parseInt(valor.substring(2, 4), 16)
+  const b = parseInt(valor.substring(4, 6), 16)
 
   return { r, g, b }
 }
 
+// --------------------------------------------------
 // Converte RGB para HSL
+// --------------------------------------------------
+
 function rgbToHsl(r, g, b) {
   r /= 255
   g /= 255
@@ -58,15 +132,12 @@ function rgbToHsl(r, g, b) {
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
 
-  let h
-  let s
+  let h = 0
+  let s = 0
 
   const l = (max + min) / 2
 
-  if (max === min) {
-    h = 0
-    s = 0
-  } else {
+  if (max !== min) {
     const d = max - min
 
     s = l > 0.5
@@ -97,7 +168,10 @@ function rgbToHsl(r, g, b) {
   }
 }
 
+// --------------------------------------------------
 // Converte HEX para nome da cor
+// --------------------------------------------------
+
 function hexToColorName(hex) {
   const { r, g, b } = hexToRgb(hex)
   const { h, s, l } = rgbToHsl(r, g, b)
@@ -115,11 +189,6 @@ function hexToColorName(hex) {
   // Cinza
   if (s <= 15) {
     return 'cinza'
-  }
-
-  // Marrom
-  if (h >= 15 && h < 45 && l < 50) {
-    return 'marrom'
   }
 
   // Vermelho
@@ -160,24 +229,42 @@ function hexToColorName(hex) {
   return 'outra'
 }
 
-// Nome da cor é atualizado automaticamente
-// sempre que "color" mudar
+// --------------------------------------------------
+// Nome da cor
+// --------------------------------------------------
+
 const colorName = computed(() => {
-  return hexToColorName(color.value)
+  return hexToColorName(colorHex.value)
 })
 
+// --------------------------------------------------
+// Envia o HEX para o componente pai
+// --------------------------------------------------
+
+watch(
+  colorHex,
+  (novaCor) => {
+    console.log('HEX selecionado:', novaCor)
+
+    emit('update:pureColor', novaCor)
+  },
+  { immediate: true }
+)
+
+// --------------------------------------------------
 // Envia o nome da cor para o componente pai
-watch(colorName, (novoNome) => {
-  emit('update:colorName', novoNome)
-})
+// --------------------------------------------------
 
-// Envia o HEX da cor para o componente pai
-watch(color, (novaCor) => {
-  console.log('COR ENVIADA PELO COLOR PICKER:', novaCor)
-  console.log('TAMANHO:', novaCor.length)
+watch(
+  colorName,
+  (novoNome) => {
+    console.log('Nome da cor:', novoNome)
 
-  emit('update:pureColor', novaCor)
-})
+    emit('update:colorName', novoNome)
+  },
+  { immediate: true }
+)
+
 </script>
 
 <style scoped>
