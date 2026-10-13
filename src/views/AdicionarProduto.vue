@@ -1,204 +1,267 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import ColorPicker from '../components/ColorPicker.vue'
 
-import { useRouter } from "vue-router";
+const router = useRouter()
 
-const router = useRouter();
+const API_URL = 'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br'
 
+// Produto
 const produto = ref({
-  categoria: "",
-  continente: "",
-  nome: "",
-  tamanho: "",
-  cor: "",
-  preco: "",
-  descricao: "",
-});
+  categoria: '',
+  continente: '',
+  nome: '',
+  tamanho: '',
+  cor: '',
+  corNome: '',
+  preco: '',
+  descricao: '',
+})
 
-const imagem = ref(null);
-const previewImagem = ref(null);
+// Imagem
+const imagem = ref(null)
+const previewImagem = ref(null)
 
+// Categorias, continentes e tamanhos vindos do banco
+const categorias = ref([])
+const continentes = ref([])
+const tamanhos = ref([])
+
+// Selecionar imagem
 function selecionarImagem(event) {
-  imagem.value = event.target.files[0];
+  imagem.value = event.target.files[0]
 
   if (imagem.value) {
-    previewImagem.value = URL.createObjectURL(imagem.value);
+    previewImagem.value = URL.createObjectURL(imagem.value)
   }
 }
 
+// Buscar categorias do banco
+async function carregarCategorias() {
+  try {
+    const resposta = await fetch(`${API_URL}/api/categorias/`)
+
+    if (!resposta.ok) {
+      throw new Error('Erro ao buscar categorias')
+    }
+
+    const dados = await resposta.json()
+
+    categorias.value = dados.results || dados
+
+    console.log('Categorias:', categorias.value)
+  } catch (erro) {
+    console.error('Erro ao carregar categorias:', erro)
+  }
+}
+
+// Buscar continentes do banco
+async function carregarContinentes() {
+  try {
+    const resposta = await fetch(`${API_URL}/api/continentes/`)
+
+    if (!resposta.ok) {
+      throw new Error('Erro ao buscar continentes')
+    }
+
+    const dados = await resposta.json()
+
+    continentes.value = dados.results || dados
+
+    console.log('Continentes:', continentes.value)
+  } catch (erro) {
+    console.error('Erro ao carregar continentes:', erro)
+  }
+}
+
+// Buscar tamanhos do banco
+async function carregarTamanhos() {
+  try {
+    const resposta = await fetch(`${API_URL}/api/tamanhos/`)
+
+    if (!resposta.ok) {
+      throw new Error('Erro ao buscar tamanhos')
+    }
+
+    const dados = await resposta.json()
+
+    tamanhos.value = dados.results || dados
+
+    console.log('Tamanhos:', tamanhos.value)
+  } catch (erro) {
+    console.error('Erro ao carregar tamanhos:', erro)
+  }
+}
+
+// Salvar produto
 async function salvarProduto() {
   try {
-
     let attachmentKey = null
 
+    // Upload da imagem
     if (imagem.value) {
-
       const formData = new FormData()
 
       formData.append('file', imagem.value)
 
-      const upload = await fetch(
-        'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/media/images/',
-        {
-          method: 'POST',
-          body: formData
-        }
-      )
+      const upload = await fetch(`${API_URL}/api/media/images/`, {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!upload.ok) {
+        throw new Error('Erro ao enviar imagem')
+      }
 
       const dadosImagem = await upload.json()
 
       attachmentKey = dadosImagem.attachment_key
     }
 
-   const resposta = await fetch(
-  'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/',
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      nome: produto.value.nome,
-      tamanho: produto.value.tamanho,
-      cor: produto.value.cor,
-      preco: produto.value.preco,
-      descricao: produto.value.descricao,
-      foto_attachment_key: attachmentKey
+    console.log('COR HEX:', produto.value.cor)
+    console.log('NOME DA COR:', produto.value.corNome)
+
+    // Cadastrar roupa
+    const resposta = await fetch(`${API_URL}/api/roupas/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        nome: produto.value.nome,
+        categoria: produto.value.categoria,
+        continente: produto.value.continente,
+        tamanho: produto.value.tamanho,
+        cor: produto.value.corNome,
+        cor_hex: produto.value.cor,
+        preco: produto.value.preco.toFixed(2),
+        descricao: produto.value.descricao,
+        foto_attachment_key: attachmentKey,
+      }),
     })
-  }
-)
 
-const dados = await resposta.json()
+    const dados = await resposta.json()
 
-console.log(dados)
+    console.log('Resposta do backend:', dados)
 
     if (!resposta.ok) {
-      throw new Error('Erro ao salvar')
+      throw new Error('Erro ao salvar produto')
     }
 
     alert('Produto cadastrado com sucesso!')
-    router.push('/produtos')
 
+    router.push('/produtos')
   } catch (erro) {
-    console.error(erro)
+    console.error('Erro:', erro)
     alert('Erro ao cadastrar produto')
   }
 }
+
+// Carregar categorias e continentes quando a página abrir
+onMounted(async () => {
+  await carregarCategorias()
+  await carregarContinentes()
+  await carregarTamanhos()
+})
 </script>
 
 <template>
   <main>
     <h1>Adicionar Produto</h1>
-        <!-- <div class="input-group">
-          <label>Categoria:</label>
 
-          <select v-model="produto.categoria">
-            <option>Vestidos de Festas</option>
-            <option>Vestidos de Madrinhas</option>
-            <option>Vestidos de Casamento</option>
-            <option>Vestidos de Formatura</option>
-            <option>Ternos Femininos</option>
-          </select>
+    <section class="fundo-prod">
+      <form class="form-container" @submit.prevent="salvarProduto">
+        <div class="conteudo-formulario">
+          <!-- IMAGEM -->
+          <div class="lado-imagem">
+            <div class="input-group">
+              <input type="file" accept="image/*" @change="selecionarImagem" />
+            </div>
+
+            <div v-if="previewImagem" class="preview-container">
+              <img :src="previewImagem" alt="Pré-visualização" class="preview-imagem" />
+            </div>
+          </div>
+
+          <!-- CAMPOS -->
+          <div class="lado-campos">
+            <!-- NOME -->
+            <div class="input-group">
+              <input type="text" maxlength="100" placeholder="Nome" v-model="produto.nome" />
+            </div>
+
+            <!-- CATEGORIA -->
+            <div class="input-group">
+              <label>Categoria:</label>
+
+              <select v-model="produto.categoria">
+                <option disabled value="">Selecione uma categoria</option>
+
+                <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
+                  {{ categoria.nome }}
+                </option>
+              </select>
+            </div>
+
+            <!-- CONTINENTE -->
+            <div class="input-group">
+              <label>Continente:</label>
+
+              <select v-model="produto.continente">
+                <option disabled value="">Selecione um continente</option>
+
+                <option
+                  v-for="continente in continentes"
+                  :key="continente.id"
+                  :value="continente.id"
+                >
+                  {{ continente.nome }}
+                </option>
+              </select>
+            </div>
+
+            <!-- TAMANHO -->
+            <div class="input-group">
+              <label>Tamanho:</label>
+
+              <select v-model="produto.tamanho">
+                <option disabled value="">Selecione um tamanho</option>
+
+                <option v-for="tamanho in tamanhos" :key="tamanho.id" :value="tamanho.id">
+                  {{ tamanho.nome }}
+                </option>
+              </select>
+            </div>
+
+            <!-- COR --> 
+            <div class="input-group"> 
+              <color-picker v-model:pureColor="produto.cor" @update:colorName="produto.corNome = $event" 
+              /> 
+              <!-- Mostra o HEX escolhido --> 
+               <input type="text" maxlength="7" placeholder="Hex" v-model="produto.cor" class="hex"/> 
+            </div>
+
+            <!-- PREÇO -->
+            <div class="input-group">
+              <input type="number" step="0.01" placeholder="Preço" v-model="produto.preco" />
+            </div>
+
+            <!-- DESCRIÇÃO -->
+            <div class="input-group">
+              <textarea placeholder="Descrição" v-model="produto.descricao"></textarea>
+            </div>
+          </div>
         </div>
 
+        <!-- BOTÕES -->
+        <div class="buttons">
+          <button type="reset">Limpar</button>
 
-        <div class="input-group">
-          <label>Continente:</label>
-
-          <select v-model="produto.continente">
-            <option>América</option>
-            <option>África</option>
-            <option>Ásia</option>
-            <option>Europa</option>
-            <option>Oceania</option>
-          </select>
-        </div>-->
-<section class="fundo-prod">
-  <form class="form-container" @submit.prevent="salvarProduto">
-
-    <div class="conteudo-formulario">
-
-      <div class="lado-imagem">
-
-        <div class="input-group">
-          <input
-            type="file"
-            accept="image/*"
-            @change="selecionarImagem"
-          />
+          <button type="submit">Salvar</button>
         </div>
-
-        <div v-if="previewImagem" class="preview-container">
-          <img
-            :src="previewImagem"
-            alt="Pré-visualização"
-            class="preview-imagem"
-          />
-        </div>
-
-      </div>
-
-      <div class="lado-campos">
-
-        <div class="input-group">
-          <input
-            type="text"
-            maxlength="100"
-            placeholder="Nome"
-            v-model="produto.nome"
-          />
-        </div>
-
-        <div class="input-group">
-          <input
-            type="text"
-            maxlength="100"
-            placeholder="Tamanho"
-            v-model="produto.tamanho"
-          />
-        </div>
-
-        <div class="input-group">
-          <input
-            type="text"
-            maxlength="30"
-            placeholder="Cor"
-            v-model="produto.cor"
-          />
-        </div>
-
-        <div class="input-group">
-          <input
-            type="number"
-            step="0.01"
-            placeholder="Preço"
-            v-model="produto.preco"
-          />
-        </div>
-
-        <div class="input-group">
-          <textarea
-            placeholder="Descrição"
-            v-model="produto.descricao"
-          ></textarea>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="buttons">
-      <button type="reset">
-        Limpar
-      </button>
-
-      <button type="submit">
-        Salvar
-      </button>
-    </div>
-
-  </form>
-</section>
+      </form>
+    </section>
   </main>
 </template>
 
@@ -218,9 +281,7 @@ h1 {
   background-color: #f5e9e0;
   border: 0.8px solid #311111;
   border-radius: 1.7rem;
-
   padding: 2vw;
-
   margin: 0 10vw 2vw;
 }
 
@@ -246,6 +307,10 @@ h1 {
   margin-bottom: 1rem;
 }
 
+.hex {
+  margin-top: 1rem;
+}
+
 input,
 textarea,
 select,
@@ -258,14 +323,10 @@ textarea,
 select {
   width: 100%;
   padding: 1rem;
-
   border: none;
   border-radius: 1rem;
-
   background-color: #fff;
-
   font-size: 0.9rem;
-
   outline: none;
 }
 
@@ -277,49 +338,28 @@ textarea {
 .preview-container {
   width: 100%;
   height: 450px;
-
   margin-top: 1rem;
-
   border-radius: 1rem;
-
   overflow: hidden;
-
   background: white;
-
   border: 1px solid rgba(49, 17, 17, 0.2);
-
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .preview-imagem {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
 }
 
 .buttons {
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-
-  margin-top: 2rem;
-
-  padding-top: 1.5rem;
-
-  border-top: 1px solid rgba(49, 17, 17, 0.15);
-}
-
-.buttons {
-  display: flex;
   justify-content: center;
-  cursor: pointer;
   align-items: center;
-  color: #311111;
   gap: 2rem;
-  padding: 0.8rem 2rem;
   margin-top: 2rem;
   padding-top: 1.5rem;
+  border-top: 1px solid rgba(49, 17, 17, 0.15);
 }
 
 .buttons button {
@@ -327,6 +367,8 @@ textarea {
   border-radius: 0.7rem;
   transition: 0.3s;
   border: 0.1vw solid #311111;
+  cursor: pointer;
+  color: #311111;
 }
 
 .buttons button:hover {
@@ -335,7 +377,6 @@ textarea {
 }
 
 @media (max-width: 768px) {
-
   .conteudo-formulario {
     flex-direction: column;
   }
