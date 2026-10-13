@@ -131,7 +131,7 @@ main{
 
   .bnt-g-mobile{
     display: block;
-    background-color: #F9EBE7;
+    background-color: #F5E9E0;
     padding-bottom: 8vw;
   }
 
@@ -166,7 +166,7 @@ main{
         width: 18vw;
         height: 18vw;
         border-radius: 50%;
-        background-color: #F3DDCB;
+        background-color: #eed2c2;
         display: flex;
         align-items: center;
         justify-content: center;

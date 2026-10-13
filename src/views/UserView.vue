@@ -691,15 +691,290 @@ img{
   transition:.3s;
 }
 
-@media(max-width:1024px){
 
-  .perfil-container{
-    grid-template-columns:1fr;
+/* ===== VERSÃO MOBILE DO PERFIL ===== */
+
+@media (max-width: 768px) {
+
+  .perfil-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 0 85px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
 
-  .cards-grid{
-    grid-template-columns:1fr;
+  /* Cartão do usuário */
+  .sidebar {
+    width: 100%;
+    gap: 16px;
   }
 
+  .welcome-card {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 0 20px 24px;
+    border: none;
+    border-radius: 0 0 24px 24px;
+    background: #F5E9E0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    text-align: center;
+  }
+
+  /* Faixa colorida atrás da foto */
+  .welcome-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 125px;
+    background: #B18A7E;
+    border-radius: 0 0 50% 50% / 0 0 25% 25%;
+    z-index: 0;
+  }
+
+  /* Foto ou ícone do usuário */
+  .welcome-card .icon {
+    position: relative;
+    z-index: 1;
+    margin-top: 65px;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 4px solid #F5E9E0;
+    border-radius: 50%;
+    background: #F5E9E0;
+  }
+
+  .welcome-card .icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  /* Nome, e-mail e botões */
+  .welcome-card > div:not(.icon) {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .welcome-card p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+
+  .welcome-card h1 {
+    margin: 8px 0;
+    font-size: 23px;
+    overflow-wrap: anywhere;
+  }
+
+  .email-box {
+    width: 100%;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+
+  .change-password {
+    width: 170px;
+    max-width: 100%;
+    height: 40px;
+    margin: 10px auto;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  .logout {
+    display: block;
+    margin: 10px auto 0;
+    font-size: 14px;
+  }
+
+  /* Navegação do perfil */
+  .sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 16px;
+  }
+
+  .menu-card {
+    width: 100%;
+    margin-top: 0;
+    padding: 16px 14px;
+    gap: 14px;
+    align-items: center;
+    border: none;
+    border-bottom: 1px solid #DCCBC0;
+    border-radius: 0;
+    background: transparent;
+    transform: none;
+  }
+
+  .menu-card:hover {
+    transform: none;
+  }
+
+  .menu-card img {
+    width: 23px;
+    height: 23px;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  .menu-card h4 {
+    margin: 0 0 4px;
+    font-size: 15px;
+  }
+
+  .menu-card p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  /* Remove a seta lateral do desktop */
+  .menu-card.active::after {
+    display: none;
+  }
+
+  .menu-card.active {
+    background: #E8D5C9;
+    color: #311111;
+    border-radius: 10px;
+  }
+
+  /* Área de conteúdo */
+  .content {
+    width: 100%;
+    min-width: 0;
+    padding: 20px 16px;
+    border-radius: 16px;
+    background: #F5E9E0;
+  }
+
+  .title {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .title img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .title h1 {
+    margin: 0;
+    font-size: 22px;
+  }
+
+  /* Formulário em uma coluna */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .form-card {
+    min-width: 0;
+    padding: 18px 14px;
+    border-radius: 12px;
+  }
+
+  .form-card h2 {
+    margin-bottom: 18px;
+    font-size: 18px;
+  }
+
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .field {
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+
+  .field label {
+    font-size: 13px;
+  }
+
+  .field input,
+  .field select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    font-size: 14px;
+    border: 1px solid #D6BFB1;
+    border-radius: 8px;
+    background: #FFFAF6;
+  }
+
+  .save-btn {
+    grid-column: auto;
+    width: 100%;
+    min-height: 46px;
+    height: auto;
+    font-size: 14px;
+    border-radius: 8px;
+    background: #311111;
+    color: #F5E9E0;
+  }
+
+  /* Modal de alteração de senha */
+  .modal-content {
+    width: calc(100% - 32px);
+    max-width: 420px;
+    padding: 22px 18px;
+    gap: 14px;
+    border-radius: 16px;
+  }
+
+  .modal-content input {
+    width: 100%;
+    height: 46px;
+    padding: 0 42px 0 12px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+
+  .senha-field button {
+    right: 10px;
+  }
+
+  .senha-field button img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .bnt-senha {
+    width: 100%;
+    height: 42px;
+    transform: none;
+    border-radius: 8px;
+    font-size: 14px;
+  }
 }
 </style>

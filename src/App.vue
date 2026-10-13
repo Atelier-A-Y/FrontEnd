@@ -49,7 +49,7 @@ onMounted(async () => {
         </li>
 
         <li>
-          <a href="/favortios"><img src="/img/coracao-solido.png" alt="coracao"></a>
+          <a href="/favoritos"><img src="/img/coracao-solido.png" alt="coracao"></a>
         </li>
       </ul>
     </div>
@@ -86,11 +86,36 @@ main {
     }
 
     .barra-paginas li{
-      width: 8vw;
+      width: 13vw;
+      height: 13vw;
+      border-radius: 50%;
+      background: linear-gradient(
+      to bottom,
+      rgba(207, 177, 146, 0) 0%,
+      rgba(255, 247, 239, 0.341) 1%,
+      rgba(235, 203, 171, 0.654) 80%
+    );
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .barra-paginas .home{
+      width: 13vw;
+      height: 13vw;
+      border-radius: 50%;
+      background-color: #d6b498;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .home img{
       width: 9vw;
+    }
+
+    li img{
+      width: 8vw;
     }
   }
 </style>
