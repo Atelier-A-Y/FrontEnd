@@ -267,6 +267,12 @@ function irParaHome(){
             </a>
           </li>
 
+          <li>
+            <a href="/produtos">
+              <img src="/img/dress.png" alt="dress.png"> Produtos
+            </a>
+          </li>
+
           <div
             class="dropdown-mobile"
             @click="continentesAtivo = !continentesAtivo"

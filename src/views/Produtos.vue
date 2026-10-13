@@ -346,7 +346,7 @@ onMounted(() => {
 
   .produtos-mobile {
     padding: 1rem 0rem;
-    margin-top: 5vw;
+    margin-top: 1vw;
     display: block;
   }
 
@@ -415,7 +415,7 @@ onMounted(() => {
 
     font-size: 1rem;
 
-    margin: 0 0 2.5vw 2.5vw;
+    margin: 0 2.5vw 2.5vw 2.5vw;
     font-weight: 600;
   }
 
@@ -427,37 +427,37 @@ onMounted(() => {
     }
 
     .favorito-card-mobile {
-    background: transparent;
-    border: none;
+      background: transparent;
+      border: none;
 
-    padding: 0;
-    margin: 0;
+      padding: 0;
+      margin: 0 0 1vw 2vw;
 
-    width: 9vw;
-    height: 9vw;
+      width: 9vw;
+      height: 9vw;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-
-  .favorito-card-mobile img {
-    width: 8vw;
-    height: 8vw;
-
-    object-fit: contain;
-    display: block;
-  }
-
-    .sem-produtos-mobile {
-      margin-top: 2rem;
+      cursor: pointer;
+      flex-shrink: 0;
     }
 
-    .sem-produtos-mobile h2 {
-      font-size: 1rem;
+    .favorito-card-mobile img {
+      width: 8vw;
+      height: 8vw;
+
+      object-fit: contain;
+      display: block;
     }
+
+      .sem-produtos-mobile {
+        margin-top: 2rem;
+      }
+
+      .sem-produtos-mobile h2 {
+        font-size: 1rem;
+      }
 }
 </style>

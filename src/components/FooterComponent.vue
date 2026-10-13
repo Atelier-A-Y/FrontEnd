@@ -103,7 +103,7 @@ footer span {
 @media (max-width: 768px) {
   footer > div {
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 
     padding: 25px 30px;
   }
@@ -120,6 +120,7 @@ footer span {
     font-size: 0.7rem;
     line-height: 1.5;
     padding: 15px;
+    margin-bottom: 15vw;
   }
 }
 </style>
