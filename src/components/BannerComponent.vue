@@ -83,7 +83,7 @@ async function alterarFavMobile(id: number) {
     console.error("Essa roupa não possui ID")
     return
   }
-  
+
   try {
     const respostaMobile = await api.get("/favoritos/")
     const listaMobile = respostaMobile.data.results || respostaMobile.data
@@ -107,7 +107,7 @@ async function alterarFavMobile(id: number) {
       )
       console.log("FAVORITO REMOVIDO")
     }
-  
+
     else {
       console.log("ADICIONANDO ROUPA:", id)
 
@@ -342,7 +342,7 @@ onMounted(async () => {
                   R$
                   {{ slide.preco }}
                 </span>
-                
+
               </div>
 
               <button
@@ -619,7 +619,7 @@ onMounted(async () => {
     align-items: center;
     justify-content: center;
 
-    background: rgba(49, 17, 17, 0.75);
+    background: #af8072;
     border: none;
     border-radius: 50%;
 

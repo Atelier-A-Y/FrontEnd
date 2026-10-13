@@ -120,7 +120,7 @@ footer span {
     font-size: 0.7rem;
     line-height: 1.5;
     padding: 15px;
-    margin-bottom: 15vw;
+    margin-bottom: 20vw;
   }
 }
 </style>

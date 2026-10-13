@@ -691,16 +691,13 @@ img{
   transition:.3s;
 }
 
-
-/* ===== VERSÃO MOBILE DO PERFIL ===== */
-
 @media (max-width: 768px) {
 
   .perfil-container {
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 0 85px;
+    padding: 0 0 30px;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -737,7 +734,7 @@ img{
     left: 0;
     width: 100%;
     height: 125px;
-    background: #B18A7E;
+    background: #af8072;
     border-radius: 0 0 50% 50% / 0 0 25% 25%;
     z-index: 0;
   }
@@ -856,8 +853,8 @@ img{
   }
 
   .menu-card.active {
-    background: #E8D5C9;
-    color: #311111;
+    background: #af8072;
+    color: #fffdfd;
     border-radius: 10px;
   }
 
