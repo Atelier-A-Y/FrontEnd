@@ -7,7 +7,7 @@ const carrinho = ref<any[]>([]);
 async function carregarCarrinho() {
   try {
     const resposta = await api.get(
-      "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/"
+      "/carrinho/"
     );
 
     console.log("CARRINHO RECEBIDO:", resposta.data);
@@ -23,7 +23,7 @@ async function carregarCarrinho() {
 
 async function tirarCarrinho(id: number) {
   try{
-    await api.delete(`https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/${id}/`)
+    await api.delete(`/carrinho/${id}/`)
 
     carrinho.value = carrinho.value.filter(
     item => item.id !== id
@@ -70,13 +70,11 @@ function totalCompra(){
     return total + preco * quantidade
   }, 0)
 }
-
 onMounted(carregarCarrinho);
 </script>
 
 <template>
   <main class="produtos">
-
     <section
       v-if="carrinho.length > 0"
       class="container-produtos"
@@ -145,9 +143,7 @@ onMounted(carregarCarrinho);
       v-else
       class="sem-produtos"
     >
-
       <ul>
-
         <li class="icone">
           <img src="/img/carrinho.png">
         </li>
@@ -170,11 +166,8 @@ onMounted(carregarCarrinho);
             </router-link>
           </button>
         </li>
-
       </ul>
-
     </section>
-
   </main>
 </template>
 

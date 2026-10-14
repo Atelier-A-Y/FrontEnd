@@ -48,7 +48,6 @@ async function alterarSenha() {
   }
 
   try {
-    // chamada para sua API
     await changePassword({
       current_password: senhaAtual.value,
       new_password: novaSenha.value
@@ -118,9 +117,7 @@ onMounted(() => {
 
 <template>
   <main class="perfil-container">
-
     <aside class="sidebar">
-
       <div class="welcome-card">
         <div class="icon">
           <img src="/img/user-solido.png" alt="user.png">
@@ -131,11 +128,9 @@ onMounted(() => {
           <h1>{{ form.name }}</h1>
 
           <div class="email-box">
-
             <span>
               {{form.email}}
             </span>
-
           </div>
 
           <button
@@ -408,7 +403,6 @@ onMounted(() => {
 
     <FavoritosComponent />
     </section>
-
   </main>
 </template>
 
@@ -703,7 +697,6 @@ img{
     gap: 18px;
   }
 
-  /* Cartão do usuário */
   .sidebar {
     width: 100%;
     gap: 16px;
@@ -726,7 +719,6 @@ img{
     text-align: center;
   }
 
-  /* Faixa colorida atrás da foto */
   .welcome-card::before {
     content: "";
     position: absolute;
@@ -739,7 +731,6 @@ img{
     z-index: 0;
   }
 
-  /* Foto ou ícone do usuário */
   .welcome-card .icon {
     position: relative;
     z-index: 1;
@@ -764,7 +755,6 @@ img{
     border-radius: 50%;
   }
 
-  /* Nome, e-mail e botões */
   .welcome-card > div:not(.icon) {
     position: relative;
     z-index: 1;
@@ -804,7 +794,6 @@ img{
     font-size: 14px;
   }
 
-  /* Navegação do perfil */
   .sidebar nav {
     display: flex;
     flex-direction: column;
@@ -847,7 +836,6 @@ img{
     line-height: 1.4;
   }
 
-  /* Remove a seta lateral do desktop */
   .menu-card.active::after {
     display: none;
   }
@@ -858,7 +846,6 @@ img{
     border-radius: 10px;
   }
 
-  /* Área de conteúdo */
   .content {
     width: 100%;
     min-width: 0;
@@ -882,7 +869,6 @@ img{
     font-size: 22px;
   }
 
-  /* Formulário em uma coluna */
   .cards-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

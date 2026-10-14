@@ -1,7 +1,6 @@
 <template>
   <main>
     <div class="bnt-pequenos">
-
       <router-link to="/terno" class="card">
         <img src="/img/modelo15.png" alt="terno">
 
@@ -17,13 +16,11 @@
           <h1>VESTIDOS <br> CURTOS</h1>
         </div>
       </router-link>
-
     </div>
   </main>
 </template>
 
 <style scoped>
-
 main{
   margin-bottom: 4vw;
 }

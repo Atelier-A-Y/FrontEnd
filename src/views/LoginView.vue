@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import api from '../api/api'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
@@ -15,8 +16,8 @@ const mostrarSenha = ref(false)
 
 async function entrar() {
   try {
-    const response = await axios.post(
-      'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/token/',
+    const response = await api.post(
+      '/token/',
       {
         email: email.value,
         password: senha.value

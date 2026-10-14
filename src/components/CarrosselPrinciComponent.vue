@@ -72,10 +72,6 @@ setInterval(nextSlide, 4000)
 </template>
 
 <style scoped>
-/*==============================
-          CASAMENTO
-==============================*/
-
 .marca1-noiva{
   position: absolute;
   bottom: 72%;
@@ -128,10 +124,6 @@ setInterval(nextSlide, 4000)
   font-style: normal;
 }
 
-/*==============================
-          FORMATURA
-==============================*/
-
 .marca1-formanda{
   position: absolute;
   bottom: 72%;
@@ -181,10 +173,6 @@ setInterval(nextSlide, 4000)
   font-weight: 400;
   font-style: normal;
 }
-
-/*=========================
-          GERAL
-=========================*/
 
 .carrossel-principal {
   position: relative;
@@ -261,10 +249,6 @@ button:last-of-type { right: 10px; }
 }
 
 @media (max-width: 600px){
-  /*==============================
-          CASAMENTO
-==============================*/
-
 .marca1-noiva{
   position: absolute;
   bottom: 86%;
@@ -317,10 +301,6 @@ button:last-of-type { right: 10px; }
   font-style: normal;
 }
 
-/*==============================
-          FORMATURA
-==============================*/
-
 .marca1-formanda{
   position: absolute;
   bottom: 86%;
@@ -370,10 +350,6 @@ button:last-of-type { right: 10px; }
   font-weight: 400;
   font-style: normal;
 }
-
-/*=========================
-          GERAL
-=========================*/
 
 .carrossel-principal {
   position: relative;

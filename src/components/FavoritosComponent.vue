@@ -6,7 +6,7 @@ const favorito = ref<any[]>([])
 
 async function carregarFavoritos() {
   try {
-    const resposta = await api.get("https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/favoritos/")
+    const resposta = await api.get("/favoritos/")
 
     console.log(
       "FAVORITOS JSON:",
@@ -29,7 +29,7 @@ async function carregarFavoritos() {
 
 async function alterarFav(id: number) {
   try{
-    await api.delete(`https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/favoritos/${id}/`)
+    await api.delete(`/favoritos/${id}/`)
 
     favorito.value = favorito.value.filter(
     item => item.id !== id

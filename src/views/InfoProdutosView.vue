@@ -69,7 +69,7 @@ async function verificarFavorito(id: number) {
 async function adicionarCarrinho() {
   try {
     await api.post(
-      "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/",
+      "/carrinho/",
       {
         roupa: produto.value.id,
         quantidade: 1,
@@ -94,7 +94,7 @@ async function carregarProduto() {
   const id = route.params.id;
 
   const response = await api.get(
-    `https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/${id}/`
+    `/roupas/${id}/`
   );
 
   produto.value = response.data;
@@ -139,7 +139,6 @@ onMounted(async () => {
         </div>
 
         <div class="acoes">
-
           <button class="btn-carrinho" @click="adicionarCarrinho">
             Adicionar ao Carrinho
           </button>
@@ -157,7 +156,6 @@ onMounted(async () => {
               alt="Favorito"
             />
           </button>
-
         </div>
 
         <div class="descricao">
@@ -165,9 +163,7 @@ onMounted(async () => {
 
           <p>{{ produto.descricao }}</p>
         </div>
-
       </div>
-
     </div>
   </div>
 </template>

@@ -109,7 +109,6 @@ function moveHover(e: MouseEvent) {
         ❯
       </button>
 
-      <!-- HOVER PREMIUM -->
       <Transition name="fade">
         <div
           v-if="hover"

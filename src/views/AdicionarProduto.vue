@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-
+import api from "../api/api";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -37,8 +37,8 @@ async function salvarProduto() {
 
       formData.append('file', imagem.value)
 
-      const upload = await fetch(
-        'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/media/images/',
+      const upload = await api.post(
+        '/media/images/',
         {
           method: 'POST',
           body: formData
@@ -50,8 +50,8 @@ async function salvarProduto() {
       attachmentKey = dadosImagem.attachment_key
     }
 
-   const resposta = await fetch(
-  'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/',
+   const resposta = await api.post(
+  '/roupas/',
   {
     method: 'POST',
     headers: {
@@ -89,30 +89,7 @@ console.log(dados)
 <template>
   <main>
     <h1>Adicionar Produto</h1>
-        <!-- <div class="input-group">
-          <label>Categoria:</label>
 
-          <select v-model="produto.categoria">
-            <option>Vestidos de Festas</option>
-            <option>Vestidos de Madrinhas</option>
-            <option>Vestidos de Casamento</option>
-            <option>Vestidos de Formatura</option>
-            <option>Ternos Femininos</option>
-          </select>
-        </div>
-
-
-        <div class="input-group">
-          <label>Continente:</label>
-
-          <select v-model="produto.continente">
-            <option>América</option>
-            <option>África</option>
-            <option>Ásia</option>
-            <option>Europa</option>
-            <option>Oceania</option>
-          </select>
-        </div>-->
 <section class="fundo-prod">
   <form class="form-container" @submit.prevent="salvarProduto">
 
@@ -135,7 +112,6 @@ console.log(dados)
             class="preview-imagem"
           />
         </div>
-
       </div>
 
       <div class="lado-campos">
@@ -182,9 +158,7 @@ console.log(dados)
             v-model="produto.descricao"
           ></textarea>
         </div>
-
       </div>
-
     </div>
 
     <div class="buttons">
@@ -196,7 +170,6 @@ console.log(dados)
         Salvar
       </button>
     </div>
-
   </form>
 </section>
   </main>

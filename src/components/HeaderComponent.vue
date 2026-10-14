@@ -12,7 +12,6 @@ const authStore = useAuthStore();
 const router = useRouter();
 const headerAtivo = ref(false);
 const menuAtivo = ref(false);
-const continentesAtivo = ref(false);
 
 function abrirUsuario() {
   if (authStore.token) {
@@ -115,37 +114,6 @@ function irParaHome(){
 
       </div>
 
-      <!-- GLOBO -->
-      <div
-        class="dropdown"
-        @click="showDropdown = !showDropdown"
-      >
-        <a href="#" class="globo">
-          <img
-              :src="headerAtivo
-                ? '/img/globo-solido.png'
-                : '/img/globo.png'"
-              alt="Globo"
-            />
-        </a>
-
-        <div v-if="showDropdown" class="submenu">
-
-          <ul class="cima">
-            <li><RouterLink to="/">África</RouterLink></li>
-            <li><RouterLink to="/">América</RouterLink></li>
-            <li><RouterLink to="/">Ásia</RouterLink></li>
-          </ul>
-
-          <ul class="baixo">
-            <li><RouterLink to="/">Europa</RouterLink></li>
-            <li><RouterLink to="/">Oceania</RouterLink></li>
-          </ul>
-
-        </div>
-      </div>
-
-      <!-- BUSCA -->
       <div class="search-container">
 
         <input
@@ -169,7 +137,6 @@ function irParaHome(){
           v-if="resultados.length"
         >
           <ul>
-
             <li
               v-for="(item, index) in resultados"
               :key="item.id"
@@ -185,17 +152,12 @@ function irParaHome(){
               <span class="item-text">
                 {{ item.nome }}
               </span>
-
             </li>
-
           </ul>
         </div>
-
       </div>
 
-      <!-- ÍCONES -->
       <ul class="icones">
-
         <li>
           <a @click.prevent="abrirUsuario">
             <img
@@ -230,7 +192,6 @@ function irParaHome(){
         </li>
       </ul>
   </div>
-
 
   <div :class="{ scrolled: headerAtivo }" class="topo-mobile">
   <div>
@@ -272,37 +233,6 @@ function irParaHome(){
               <img src="/img/dress.png" alt="dress.png"> Produtos
             </a>
           </li>
-
-          <div
-            class="dropdown-mobile"
-            @click="continentesAtivo = !continentesAtivo"
-          >
-            <a href="#" class="globo-mobile">
-              <img src="/img/globo-solido.png" alt="globo-solido.png"> Continentes
-
-              <span
-                class="seta-continentes"
-                :class="{ aberta: continentesAtivo }"
-              >
-                ▼
-              </span>
-            </a>
-
-            <div v-if="continentesAtivo" class="submenu-mobile">
-
-              <ul class="cima-mobile">
-                <li><RouterLink to="/">África</RouterLink></li>
-                <li><RouterLink to="/">América</RouterLink></li>
-                <li><RouterLink to="/">Ásia</RouterLink></li>
-              </ul>
-
-              <ul class="baixo-mobile">
-                <li><RouterLink to="/">Europa</RouterLink></li>
-                <li><RouterLink to="/">Oceania</RouterLink></li>
-              </ul>
-
-            </div>
-          </div>
         </ul>
       </div>
     </div>
@@ -312,7 +242,6 @@ function irParaHome(){
 
     <div class="search-container-mobile">
 
-  <!-- LUPA DO HEADER -->
   <button
     class="botao-lupa-mobile"
     @click="showDropdown = !showDropdown"
@@ -326,16 +255,12 @@ function irParaHome(){
     />
   </button>
 
-
-  <!-- PAINEL DE PESQUISA -->
   <div
     v-if="showDropdown"
     class="painel-pesquisa-mobile"
   >
 
-    <!-- BARRA DE PESQUISA -->
     <div class="barra-pesquisa-mobile">
-
       <img  class="lupa-barra-mobile" src="/img/lupa-solido.png" alt="lupa.png">
 
       <input
@@ -347,25 +272,19 @@ function irParaHome(){
         autofocus
       />
 
-      <!-- FECHAR -->
       <button
         class="fechar-pesquisa-mobile"
         @click="showDropdown = false"
       >
         <img src="/img/x-solido.png" alt="fechar">
       </button>
-
     </div>
 
-
-    <!-- RESULTADOS -->
     <div
       class="results-list-mobile"
       v-if="resultados.length"
     >
-
       <ul>
-
         <li
           v-for="(item, index) in resultados"
           :key="item.id"
@@ -373,7 +292,6 @@ function irParaHome(){
           @click="abrirNavegacao(item)"
           class="result-item-mobile"
         >
-
           <span class="item-icon-mobile">
             <img
               src="/img/lupa-solido.png"
@@ -384,17 +302,12 @@ function irParaHome(){
           <span class="item-text-mobile">
             {{ item.nome }}
           </span>
-
         </li>
-
       </ul>
-
     </div>
-
   </div>
-
 </div>
-  </div>
+</div>
 </template>
 
 <style scoped>
@@ -477,11 +390,6 @@ function irParaHome(){
 
 .menu li a:hover {
   opacity: 0.7;
-}
-
-.globo img {
-  width: 1.8vw;
-  margin-left: 35vw;
 }
 
 .submenu {
@@ -702,20 +610,6 @@ function irParaHome(){
     margin-bottom: 7vw;
   }
 
-  .globo-mobile {
-    display: flex;
-    align-items: center;
-    gap: 4vw;
-    color: #311111;
-    font-size: 4vw;
-    font-family: "Inria Serif", serif;
-    font-weight: 300;
-  }
-
-  .globo-mobile img {
-    width: 7vw;
-  }
-
   .seta-continentes {
     font-size: 3vw;
     margin-left: auto;
@@ -925,5 +819,4 @@ function irParaHome(){
     color: #311111;
   }
 }
-
 </style>

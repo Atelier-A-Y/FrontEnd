@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import axios from 'axios'
+import api from '../api/api';
 
 const nome = ref('');
 const email = ref('');
@@ -9,13 +9,13 @@ const mostrarSenha = ref(false)
 
 async function cadastrar(){
   try {
-    await axios.post('https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/registro/', {
+    await api.post('/registro/', {
       name: nome.value,
       email: email.value,
       password: senha.value,
     })
 
-    const response = await axios.post('https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/token/', {
+    const response = await api.post('/token/', {
       email: email.value,
       password: senha.value
     })

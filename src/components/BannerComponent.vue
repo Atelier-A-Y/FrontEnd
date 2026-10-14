@@ -2,17 +2,9 @@
 import { ref, onMounted } from 'vue'
 import api from "../api/api"
 
-/* =========================================================
-   ROUPAS
-========================================================= */
-
 const slidesMobile = ref<any[]>([])
 const indexMobile = ref(0)
 const favoritosMobile = ref<number[]>([])
-
-/* =========================================================
-   CARREGAR ROUPAS DO BACKEND
-========================================================= */
 
 async function carregarRoupasMobile() {
   try {
@@ -35,10 +27,6 @@ async function carregarRoupasMobile() {
     }
   }
 }
-
-/* =========================================================
-   CARREGAR FAVORITOS
-========================================================= */
 
 async function carregarFavoritosMobile() {
   try {
@@ -70,10 +58,6 @@ async function carregarFavoritosMobile() {
     }
   }
 }
-
-/* =========================================================
-   ALTERAR FAVORITO
-========================================================= */
 
 async function alterarFavMobile(id: number) {
 
@@ -129,17 +113,9 @@ async function alterarFavMobile(id: number) {
   }
 }
 
-/* =========================================================
-   VERIFICAR SE É FAVORITO
-========================================================= */
-
 function ehFavoritoMobile(id: number) {
   return favoritosMobile.value.includes(id)
 }
-
-/* =========================================================
-   PRÓXIMO SLIDE
-========================================================= */
 
 function nextSlideMobile() {
   if (slidesMobile.value.length === 0) return
@@ -148,10 +124,6 @@ function nextSlideMobile() {
     (indexMobile.value + 1) % slidesMobile.value.length
 }
 
-/* =========================================================
-   SLIDE ANTERIOR
-========================================================= */
-
 function prevSlideMobile() {
   if (slidesMobile.value.length === 0) return
 
@@ -159,10 +131,6 @@ function prevSlideMobile() {
     (indexMobile.value - 1 + slidesMobile.value.length)
     % slidesMobile.value.length
 }
-
-/* =========================================================
-   POSIÇÃO DOS CARDS
-========================================================= */
 
 function getOffset(i: number) {
   const total = slidesMobile.value.length
@@ -179,15 +147,8 @@ function getOffset(i: number) {
     diff += total
   }
 
-  /*
-    Distância entre os cards no mobile.
-  */
   return diff * 285
 }
-
-/* =========================================================
-   HOVER
-========================================================= */
 
 const hover = ref(false)
 const hoverItem = ref<any>(null)
@@ -216,10 +177,6 @@ function moveHover(e: MouseEvent) {
   mouseY.value = e.clientY
 }
 
-/* =========================================================
-   IMAGEM DA ROUPA
-========================================================= */
-
 function getImagem(slide: any) {
   return (
     slide.foto ||
@@ -230,71 +187,39 @@ function getImagem(slide: any) {
   )
 }
 
-/* =========================================================
-   CARREGAMENTO INICIAL
-========================================================= */
-
 onMounted(async () => {
   await carregarRoupasMobile()
   await carregarFavoritosMobile()
 })
 </script>
 
-
 <template>
   <main>
-
-    <!-- =====================================================
-         BANNER DESKTOP
-    ====================================================== -->
-
     <router-link
       to="/formatura"
       class="banner"
     >
-
       <img
         src="/img/formanda_banner.png"
         alt="banner"
       >
-
-
       <div class="overlay">
-
         <div class="marca">
-
           <span class="marca1">
             ATELIER
           </span>
-
           <span class="marca2">
             A.Y.
           </span>
-
         </div>
-
 
         <div class="texto">
-
           <h2>
-            50% OFF
-            <br>
-            PARA
-            <br>
-            FORMANDOS
+            50% OFF <br>PARA<br>FORMANDOS
           </h2>
-
         </div>
-
       </div>
-
     </router-link>
-
-
-
-    <!-- =====================================================
-         CARROSSEL MOBILE
-    ====================================================== -->
 
     <div class="carrossel-container-mobile">
       <button
