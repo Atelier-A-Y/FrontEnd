@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
-
+import axios from 'axios'
 import { useAuthStore } from '../stores/auth'
 console.log('TOKEN SALVO:', localStorage.getItem('token'))
 
