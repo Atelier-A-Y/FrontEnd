@@ -99,25 +99,27 @@ function limparFiltros() {
           </button>
         </header>
 
-        <!-- Categoria -->
-        <section class="grupo-filtro">
-          <label for="categoria-filtro">Categoria</label>
+        
+<!-- Categoria -->
+<section class="grupo-filtro">
+  <label for="categoria-filtro">Categoria</label>
 
-          <select
-            id="categoria-filtro"
-            v-model="categoriaSelecionada"
-          >
-            <option value="">Todas as categorias</option>
+  <select
+    id="categoria-filtro"
+    v-model="categoriaSelecionada"
+  >
+    <option value="">Todas as categorias</option>
 
-            <option
-              v-for="categoria in categorias"
-              :key="typeof categoria === 'object' ? categoria.id : categoria"
-              :value="typeof categoria === 'object' ? (categoria.nome ?? categoria.id) : categoria"
-            >
-              {{ typeof categoria === "object" ? categoria.nome : categoria }}
-            </option>
-          </select>
-        </section>
+    <option
+      v-for="categoria in categorias"
+      :key="categoria.id"
+      :value="categoria.id"
+    >
+      {{ categoria.nome }}
+    </option>
+  </select>
+</section>
+
 
         <!-- Preço -->
         <section class="grupo-filtro">
