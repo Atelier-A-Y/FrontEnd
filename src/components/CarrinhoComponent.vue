@@ -110,7 +110,6 @@ onMounted(carregarCarrinho);
       <div class="quantidade">
         <button @click="decrementar(item)"><img src="/img/menos.png" alt="menos.png"></button>
         <p>
-          Quantidade:
           {{ item.quantidade }}
         </p>
         <button @click="incrementar(item)"><img src="/img/mais.png" alt="mais.png"></button>
@@ -252,7 +251,7 @@ ul{
 .remover-carrinho img{
   width: 1.5vw;
   height: 1.5vw;
-  margin-left: 5vw;
+  margin-left: 2vw;
 }
 
 .botao{
@@ -360,14 +359,13 @@ max-width: 1250px;
 
 @media(max-width:768px){
   .card-produto {
-    display: grid;
-    grid-template-columns: 150px 1fr auto;
+    display: flex;
     align-items: center;
     gap: 1rem;
 
     background-color: #f5e9e0;
     border: 1px solid #dfcec4;
-    border-radius: 12px;
+    border-radius: 8px;
 
     padding: 1rem;
     margin-bottom: 1rem;
@@ -389,13 +387,13 @@ max-width: 1250px;
 
   .infos h2{
     color: #311111;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     margin-bottom: 1vw;
   }
 
   .infos p{
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #277c00;
     font-weight: 600;
   }
@@ -403,12 +401,17 @@ max-width: 1250px;
   .sem-produtos {
     background-color: #f5e9e0;
     border: #311111 solid 0.8px;
-    border-radius: 1.7rem;
+    border-radius: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 120px 30px;
-    margin: 4vw 13vw 5vw 13vw;
+    margin: 4vw 9vw 4vw 9vw;
+  }
+
+  .icone img{
+    width: 15vw;
+    height: 15vw;
   }
 
   ul{
@@ -419,9 +422,13 @@ max-width: 1250px;
     justify-content: center;
     color: #311111;
     font-weight: bold;
-    padding: 0;
     margin-bottom: 0.7rem;
     padding-top: 1vw;
+    font-size: 1rem;
+  }
+
+  .texto{
+    font-size: 0.88rem;
   }
 
   .remover-carrinho img{
@@ -453,22 +460,13 @@ max-width: 1250px;
     justify-content: center;
   }
 
-  .icone{
-    display: flex;
-    justify-content: center;
-  }
-
-  img{
-    width: 11vw;
-    height: 11vw;
-  }
-
   .quantidade{
     display: flex;
     margin-bottom: 1vw;
   }
 
   .quantidade p{
+    font-size: 4vw;
     margin: 0 1vw 0 1vw;
     margin-top: 0.4vw;
     color: rgb(95, 87, 87);

@@ -207,23 +207,34 @@ onMounted(carregarFavoritos)
 .sem-produtos {
   background-color: #f5e9e0;
   border: #311111 solid 0.8px;
-  border-radius: 1.7rem;
+  border-radius: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 120px 30px;
-  margin: 4vw 13vw 5vw 13vw;
+  margin: 4vw 9vw 4vw 9vw;
 }
+
+.icone img{
+  width: 15vw;
+  height: 15vw;
+}
+
 ul{
   list-style-type: none;
 }
+
 .titulo{
   justify-content: center;
   color: #311111;
   font-weight: bold;
-  padding: 0;
   margin-bottom: 0.7rem;
   padding-top: 1vw;
+  font-size: 1rem;
+}
+
+.texto{
+  font-size: 0.88rem;
 }
 
 .remover-favorito img{

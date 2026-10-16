@@ -92,8 +92,8 @@ main {
       background: linear-gradient(
       to bottom,
       rgba(207, 177, 146, 0) 0%,
-      rgba(255, 247, 239, 0.341) 1%,
-      rgba(235, 203, 171, 0.654) 80%
+      rgba(255, 247, 239, 0.349) 1%,
+      rgba(236, 200, 177, 0.767) 80%
     );
       display: flex;
       align-items: center;

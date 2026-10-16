@@ -19,4 +19,16 @@ h1 {
   border-bottom: 1px solid #d8c6bd;
   padding-bottom: 1rem;
 }
+
+@media(max-width:768px){
+  h1 {
+  margin: 0 auto;
+  color: #311111;
+  font-size: 1.7rem;
+  font-weight: 600;
+  border-bottom: 1px solid #d8c6bd;
+  padding-bottom: 1rem;
+  margin: 10vw 8vw 7vw 8vw;
+}
+}
 </style>
