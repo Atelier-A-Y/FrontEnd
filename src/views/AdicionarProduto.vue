@@ -9,7 +9,7 @@ const router = useRouter()
 const API_URL = 'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br'
 
 const produto = ref({
-  categoria: '',
+  categoria: [], // Alterado para Array para suportar múltiplas seleções
   nome: '',
   tamanho: '',
   cor: '',
@@ -61,7 +61,7 @@ async function salvarProduto() {
       formData.append('file', imagem.value)
 
       const upload = await axios.post(`${API_URL}/api/media/images/`, formData)
-      
+
       const dadosImagem = upload.data
       attachmentKey = dadosImagem.attachment_key
     }
@@ -73,7 +73,7 @@ async function salvarProduto() {
 
     const resposta = await axios.post(`${API_URL}/api/roupas/`, {
       nome: produto.value.nome,
-      categoria: produto.value.categoria,
+      categoria: produto.value.categoria, // Envia o array com as IDs das categorias selecionadas
       tamanho: produto.value.tamanho,
       cor: produto.value.corNome,
       cor_hex: produto.value.cor,
@@ -123,11 +123,10 @@ onMounted(async () => {
             </div>
 
             <div class="input-group">
-              <label>Categoria:</label>
+              <label>Categorias (Segure Ctrl / Cmd para selecionar mais de uma):</label>
 
-              <select v-model="produto.categoria">
-                <option disabled value="">Selecione uma categoria</option>
-
+              <!-- Adicionado o atributo 'multiple' -->
+              <select v-model="produto.categoria" multiple class="select-multiplo">
                 <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
                   {{ categoria.nome }}
                 </option>
@@ -146,10 +145,18 @@ onMounted(async () => {
               </select>
             </div>
 
-            <div class="input-group"> 
-              <color-picker v-model:pureColor="produto.cor" @update:colorName="produto.corNome = $event" 
-              /> 
-               <input type="text" maxlength="7" placeholder="Hex" v-model="produto.cor" class="hex"/> 
+            <div class="input-group">
+              <color-picker
+                v-model:pureColor="produto.cor"
+                @update:colorName="produto.corNome = $event"
+              />
+              <input
+                type="text"
+                maxlength="7"
+                placeholder="Hex"
+                v-model="produto.cor"
+                class="hex"
+              />
             </div>
 
             <div class="input-group">
@@ -235,6 +242,12 @@ select {
   background-color: #fff;
   font-size: 0.9rem;
   outline: none;
+}
+
+/* Estilo ajustado para visualização do select múltiplo */
+.select-multiplo {
+  height: 120px;
+  padding: 0.5rem;
 }
 
 textarea {
