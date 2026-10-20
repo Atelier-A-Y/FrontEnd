@@ -1,22 +1,3 @@
-<template>
-  <div class="color-picker-container">
-    <h3>Escolha uma cor</h3>
-
-    <color-picker
-      v-model:pureColor="color"
-      v-model:gradientColor="gradient"
-    />
-
-    <div
-      class="selected-color"
-      :style="{ backgroundColor: colorHex }"
-    >
-      <strong>{{ colorName }}</strong>
-      <span>{{ colorHex }}</span>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, computed, watch } from 'vue'
 
@@ -178,55 +159,55 @@ function hexToColorName(hex) {
 
   // Preto
   if (l <= 10) {
-    return 'preto'
+    return 'Preto'
   }
 
   // Branco
   if (l >= 90 && s <= 15) {
-    return 'branco'
+    return 'Branco'
   }
 
   // Cinza
   if (s <= 15) {
-    return 'cinza'
+    return 'Cinza'
   }
 
   // Vermelho
   if (h >= 345 || h < 15) {
-    return 'vermelho'
+    return 'Vermelho'
   }
 
   // Laranja
   if (h >= 15 && h < 45) {
-    return 'laranja'
+    return 'Laranja'
   }
 
   // Amarelo
   if (h >= 45 && h < 75) {
-    return 'amarelo'
+    return 'Amarelo'
   }
 
   // Verde
   if (h >= 75 && h < 165) {
-    return 'verde'
+    return 'Verde'
   }
 
   // Azul
   if (h >= 165 && h < 255) {
-    return 'azul'
+    return 'Azul'
   }
 
   // Roxo
   if (h >= 255 && h < 285) {
-    return 'roxo'
+    return 'Roxo'
   }
 
   // Rosa
   if (h >= 285 && h < 345) {
-    return 'rosa'
+    return 'Rosa'
   }
 
-  return 'outra'
+  return 'Outra'
 }
 
 // --------------------------------------------------
@@ -266,6 +247,25 @@ watch(
 )
 
 </script>
+
+<template>
+  <div class="color-picker-container">
+    <h3>Escolha uma cor</h3>
+
+    <color-picker
+      v-model:pureColor="color"
+      v-model:gradientColor="gradient"
+    />
+
+    <div
+      class="selected-color"
+      :style="{ backgroundColor: colorHex }"
+    >
+      <strong>{{ colorName }}</strong>
+      <span>{{ colorHex }}</span>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .color-picker-container {
