@@ -1,31 +1,154 @@
+
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import FiltragemComponent from "../components/FiltragemComponent.vue";
 
 const router = useRouter();
 
 const produtos = ref([]);
+const categorias = ref([]);
+const filtros = ref({
+  categoria: "",
+  cor: "",
+  precoMinimo: "",
+  precoMaximo: "",
+});
 
+const carregando = ref(true);
+const erro = ref("");
+
+const API_URL =
+  "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api";
+
+// Carrega os produtos da API
 async function carregarProdutos() {
+  carregando.value = true;
+  erro.value = "";
+
   try {
-    const resposta = await fetch("https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/");
+    const resposta = await fetch(`${API_URL}/roupas/`);
+
+    if (!resposta.ok) {
+      throw new Error(`Erro ao buscar produtos: ${resposta.status}`);
+    }
 
     const dados = await resposta.json();
 
-    console.log(dados);
-
-    produtos.value = dados.results || dados;
-  } catch (erro) {
-    console.error("Erro ao carregar produtos:", erro);
+    // Aceita tanto paginação do Django REST Framework
+    // quanto uma lista simples.
+    produtos.value = Array.isArray(dados)
+      ? dados
+      : dados.results || [];
+  } catch (error) {
+    console.error("Erro ao carregar produtos:", error);
+    erro.value = "Não foi possível carregar os produtos.";
+  } finally {
+    carregando.value = false;
   }
 }
 
+// Carrega as categorias cadastradas no backend
+async function carregarCategorias() {
+  try {
+    const resposta = await fetch(`${API_URL}/categorias/`);
+
+    if (!resposta.ok) {
+      throw new Error(`Erro ao buscar categorias: ${resposta.status}`);
+    }
+
+    const dados = await resposta.json();
+
+    categorias.value = Array.isArray(dados)
+      ? dados
+      : dados.results || [];
+  } catch (error) {
+    console.error("Erro ao carregar categorias:", error);
+  }
+}
+
+// Obtém as cores existentes nos produtos
+const cores = computed(() => {
+  const coresEncontradas = produtos.value
+    .map((produto) => produto.cor)
+    .filter((cor) => typeof cor === "string" && cor.trim() !== "");
+
+  return [...new Set(coresEncontradas)];
+});
+
+// Aplica os filtros selecionados
+const produtosFiltrados = computed(() => {
+  return produtos.value.filter((produto) => {
+    // Categoria: pode vir como ID ou como objeto
+    const categoriaProduto =
+      produto.categoria && typeof produto.categoria === "object"
+        ? produto.categoria.id
+        : produto.categoria;
+
+    const categoriaSelecionada = filtros.value.categoria;
+
+    const categoriaCorreta =
+      categoriaSelecionada === "" ||
+      String(categoriaProduto) === String(categoriaSelecionada);
+
+    // Cor: compara o nome da cor
+    const corCorreta =
+      filtros.value.cor === "" ||
+      String(produto.cor || "").toLowerCase() ===
+        String(filtros.value.cor).toLowerCase();
+
+    // Preço mínimo e máximo
+    const preco = Number(produto.preco);
+
+    const precoMinimoCorreto =
+      filtros.value.precoMinimo === "" ||
+      preco >= Number(filtros.value.precoMinimo);
+
+    const precoMaximoCorreto =
+      filtros.value.precoMaximo === "" ||
+      preco <= Number(filtros.value.precoMaximo);
+
+    return (
+      categoriaCorreta &&
+      corCorreta &&
+      precoMinimoCorreto &&
+      precoMaximoCorreto
+    );
+  });
+});
+
+// Recebe os filtros do componente
+function receberFiltros(novosFiltros) {
+  filtros.value = {
+    categoria: novosFiltros.categoria ?? "",
+    cor: novosFiltros.cor ?? "",
+    precoMinimo: novosFiltros.precoMinimo ?? "",
+    precoMaximo: novosFiltros.precoMaximo ?? "",
+  };
+}
+
+// Abre a página de detalhes do produto
 function abrirProdutos(id) {
-  router.push(`/info_prod/${id}`)
+  router.push(`/info_prod/${id}`);
+}
+
+// Formata o preço em reais
+function formatarPreco(preco) {
+  const valor = Number(preco);
+
+  if (!Number.isFinite(valor)) {
+    return "0,00";
+  }
+
+  return valor.toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 onMounted(() => {
   carregarProdutos();
+  carregarCategorias();
 });
 </script>
 
@@ -33,203 +156,210 @@ onMounted(() => {
   <main class="produtos">
     <h1>Produtos</h1>
 
-    <section class="container-produtos" v-if="produtos.length > 0">
-      <div class="card-produto" v-for="item in produtos" :key="item.id" @click="abrirProdutos(item.id)">
+    <div class="barra-acoes">
+      <FiltragemComponent
+        :categorias="categorias"
+        :cores="cores"
+        :total-produtos="produtosFiltrados.length"
+        @filtrar="receberFiltros"
+      />
+    </div>
 
-        <img
-          v-if="item.foto"
-          :src="item.foto.url"
-          :alt="item.nome"
-          class="imagem-produto"
-        />
+    <p v-if="carregando" class="mensagem">
+      Carregando produtos...
+    </p>
 
-        <h2>{{ item.nome }}</h2>
+    <p v-else-if="erro" class="mensagem erro">
+      {{ erro }}
+    </p>
 
-        <p>
-          <strong>Preço:</strong>
+    <template v-else>
+      <p class="contador">
+        {{ produtosFiltrados.length }}
+        {{ produtosFiltrados.length === 1 ? "produto encontrado" : "produtos encontrados" }}
+      </p>
 
-          R$
-          {{ Number(item.preco).toFixed(2).replace(".", ",") }}
-        </p>
-      </div>
-    </section>
+      <section
+        v-if="produtosFiltrados.length > 0"
+        class="container-produtos"
+      >
+        <article
+          v-for="item in produtosFiltrados"
+          :key="item.id"
+          class="card-produto"
+          @click="abrirProdutos(item.id)"
+        >
+          <img
+            v-if="item.foto"
+            :src="
+              typeof item.foto === 'object'
+                ? item.foto.url
+                : item.foto
+            "
+            :alt="item.nome"
+            class="imagem-produto"
+          />
 
-    <section v-else class="sem-produtos">
-      <h2>Nenhum produto cadastrado.</h2>
-    </section>
+          <div v-else class="imagem-sem-foto">
+            Sem imagem
+          </div>
+
+          <div class="informacoes-produto">
+            <h2>{{ item.nome }}</h2>
+
+            <p class="preco">
+              R$ {{ formatarPreco(item.preco) }}
+            </p>
+
+            <p v-if="item.cor" class="cor-produto">
+              Cor: {{ item.cor }}
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <section v-else class="sem-produtos">
+        <h2>Nenhum produto encontrado.</h2>
+        <p>Tente alterar ou limpar os filtros.</p>
+      </section>
+    </template>
   </main>
 </template>
 
 <style scoped>
 .produtos {
-  padding: 1rem;
-  margin-top: 5vw;
-  min-height: 100vh;
+  width: 100%;
+  min-height: 60vh;
+  padding: 30px 5%;
+  box-sizing: border-box;
+  color: #351414;
 }
 
 .produtos h1 {
+  margin-bottom: 25px;
   text-align: center;
-  color: #311111;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 3rem;
-  position: relative;
+  font-size: 2rem;
+  font-weight: 500;
 }
 
-.produtos h1::after {
-  content: "";
-  width: 8vw;
-  height: 0.3vw;
-  background: #311111;
-  border-radius: 10px;
+.barra-acoes {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-  position: absolute;
-  left: 50%;
-  bottom: -1vw;
-
-  transform: translateX(-50%);
+.contador {
+  margin: 15px 0;
+  color: #705858;
+  font-size: 0.95rem;
 }
 
 .container-produtos {
   display: grid;
-
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(18vw, 1fr)
-  );
-
-  gap: 2rem;
-
-  max-width: 100vw;
-  margin: 0 auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 25px;
 }
 
 .card-produto {
-  background-color: #F5E9E0;
-
-  border-radius: 1.2rem;
-
-  padding: 1.2rem;
-
-  border: 0.1vw solid rgba(49, 17, 17, 0.15);
-
+  min-width: 0;
   overflow: hidden;
-
-  transition: all 0.3s ease;
-
-  box-shadow: 0 0.3vw 1vw rgba(0, 0, 0, 0.08);
+  background: #f6e9df;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .card-produto:hover {
-  transform: translateY(-0.4vw);
-
-  box-shadow: 0 1vw 2vw rgba(49, 17, 17, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 5px 15px rgb(53 20 20 / 12%);
 }
 
-.imagem-produto {
+.imagem-produto,
+.imagem-sem-foto {
   width: 100%;
-
-  height: 25vw;
-
+  height: 260px;
   object-fit: cover;
-
-  border-radius: 1rem;
-
-  margin-bottom: 1rem;
-
-  transition: transform 0.4s ease;
 }
 
-.card-produto:hover .imagem-produto {
-  transform: scale(1.05);
+.imagem-sem-foto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e7d5c8;
+  color: #705858;
 }
 
-.card-produto h2 {
-  color: #311111;
-
-  font-size: 1.3rem;
-
-  margin-bottom: 0.8rem;
-
-  font-weight: 600;
+.informacoes-produto {
+  padding: 15px;
 }
 
-.card-produto p {
-  color: #444444;
-
-  margin-bottom: 0.5rem;
-
-  line-height: 1.5;
-}
-
-.card-produto strong {
-  color: #311111;
+.informacoes-produto h2 {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
 .preco {
-  font-size: 1.4rem;
-
-  font-weight: bold;
-
-  color: #311111;
-
-  margin-top: 1rem;
-
-  padding-top: 1rem;
-
-  border-top: 0.1vw solid rgba(49, 17, 17, 0.15);
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
+.cor-produto {
+  margin: 0;
+  color: #705858;
+  font-size: 0.9rem;
+}
+
+.mensagem,
 .sem-produtos {
+  padding: 30px 10px;
   text-align: center;
+}
 
-  margin-top: 4rem;
-
-  color: #666;
+.erro {
+  color: #a32323;
 }
 
 .sem-produtos h2 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 500;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1000px) {
   .container-produtos {
-    grid-template-columns: repeat(
-      auto-fit,
-      minmax(250px, 1fr)
-    );
-  }
-
-  .imagem-produto {
-    height: 300px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 768px) {
-  .produtos {
-    padding: 1rem;
-    margin-top: 5rem;
-  }
-
-  .produtos h1 {
-    font-size: 2rem;
-  }
-
+@media (max-width: 700px) {
   .container-produtos {
-    gap: 1.2rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
   }
 
-  .imagem-produto {
-    height: 260px;
+  .imagem-produto,
+  .imagem-sem-foto {
+    height: 210px;
   }
 
-  .card-produto h2 {
-    font-size: 1.1rem;
+  .produtos {
+    padding: 25px 4%;
+  }
+}
+
+@media (max-width: 420px) {
+  .container-produtos {
+    grid-template-columns: 1fr;
   }
 
-  .preco {
-    font-size: 1.2rem;
+  .imagem-produto,
+  .imagem-sem-foto {
+    height: 280px;
   }
 }
 </style>
