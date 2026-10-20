@@ -286,15 +286,11 @@ img{
 
   /* Container principal */
   .produtos {
-    width: 100%;
-    min-height: 100vh;
     padding: 20px 14px 35px;
     box-sizing: border-box;
   }
 
   .container-produtos {
-    width: 100%;
-    max-width: 100%;
     margin: 0 auto;
     box-sizing: border-box;
   }
@@ -480,3 +476,4 @@ img{
   }
 }
 </style>
+ 

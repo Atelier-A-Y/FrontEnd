@@ -114,9 +114,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <button class="voltar" @click="voltarProd"><img src="/public/img/flecha.png" alt="flecha"></button>
-
   <div v-if="produto" class="container">
+    <button class="voltar" @click="voltarProd"><img src="/public/img/flecha.png" alt="flecha"></button>
     <div class="informacoes">
 
       <div class="img-prod">
@@ -312,41 +311,122 @@ onMounted(async () => {
 
 /* ---------------- RESPONSIVO ---------------- */
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
 
-  .container {
-    padding: 0 1.5rem 3rem;
-  }
+  .voltar {
+  width: 6vw;
+  height: 2vw;
+}
+/* ---------------- CONTAINER ---------------- */
 
-  .informacoes {
-    flex-direction: column;
-    gap: 2rem;
-  }
+.container {
+  margin: auto;
+  padding: 0 3rem 5rem;
+}
 
-  .img-prod {
-    max-width: 100%;
-  }
+.informacoes {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0;
+}
 
-  .img-prod img {
-    height: auto;
-  }
+/* ---------------- IMAGEM ---------------- */
 
-  .infos h1 {
-    font-size: 2rem;
-  }
+.img-prod img {
+  width: 100%;
+  height: 50px;
+}
+/* ---------------- INFOS ---------------- */
 
-  .infos h2 {
-    font-size: 1.6rem;
-  }
+.infos {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-family: "Lexend Deca", sans-serif;
+}
 
-  .acoes {
-    flex-wrap: wrap;
-  }
+.infos h1 {
+  color: #311111;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
 
-  .btn-comprar {
-    flex: 1;
-    min-width: 220px;
-  }
+.infos h2 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
 
+.detalhes {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+
+.detalhes p {
+  font-size: 1rem;
+  color: #444;
+}
+
+/* ---------------- BOTÕES ---------------- */
+
+.acoes {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.btn-carrinho {
+  min-width: 260px;
+  padding: 14px 10px;
+  background: #311111;
+  color: #f5e9e0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: .3s;
+}
+
+.btn-carrinho:active {
+  background-color: #7a2d2d;
+}
+
+.btn-favorito {
+  width: 30px;
+  height: 30px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.btn-favorito:hover {
+  transform: scale(1.05);
+}
+
+/* ---------------- DESCRIÇÃO ---------------- */
+
+.descricao {
+  margin-top: 1rem;
+}
+
+.descricao h3 {
+  color: #311111;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.descricao p {
+  font-size: 1.05rem;
+  color: #555;
+  line-height: 1.8;
+  text-align: justify;
+}
 }
 </style>
