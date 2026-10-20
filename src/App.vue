@@ -1,12 +1,21 @@
-
 <script setup lang="ts">
 import FooterComponent from './components/FooterComponent.vue';
 import HeaderComponent from './components/HeaderComponent.vue';
 import { onMounted } from 'vue'
 import { useAuthStore } from './stores/auth.ts'
 import { getProfile } from './services/user.ts'
+import { useRouter } from "vue-router";
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
+const router = useRouter();
+
+function abrirUsuario() {
+  if (authStore.token) {
+    router.push('/user')
+  } else {
+    router.push('/login')
+  }
+}
 
 onMounted(async () => {
   if (!authStore.token) return
@@ -37,7 +46,8 @@ onMounted(async () => {
         </li>
 
         <li>
-          <a href="/user"><img src="/img/user-solido.png" alt="user"></a>
+          <a @click.prevent="abrirUsuario"><img src="/img/user-solido.png" alt="user">
+          </a>
         </li>
 
         <li class="home">

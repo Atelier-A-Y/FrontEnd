@@ -276,4 +276,207 @@ img{
   width: 11vw;
   height: 11vw;
 }
+
+
+/* ============================= */
+/*       FAVORITOS MOBILE        */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+  /* Container principal */
+  .produtos {
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px 14px 35px;
+    box-sizing: border-box;
+  }
+
+  .container-produtos {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  /* Card de cada favorito */
+  .card-produto {
+    display: grid;
+    grid-template-columns: 95px minmax(0, 1fr) 30px;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px;
+    margin: 0 0 14px;
+
+    background-color: #f5e9e0;
+    border: 1px solid #dfcec4;
+    border-radius: 12px;
+
+    transition: none;
+  }
+
+  .card-produto:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Imagem da roupa */
+  .imagem-produto {
+    width: 95px;
+    height: 125px;
+
+    object-fit: cover;
+    object-position: center;
+
+    display: block;
+    border-radius: 8px;
+  }
+
+  /* Nome e preço */
+  .infos {
+    min-width: 0;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+
+  .infos h2 {
+    margin: 0 0 10px;
+
+    color: #311111;
+    font-size: 16px;
+    line-height: 1.35;
+    font-weight: 600;
+  }
+
+  .infos p {
+    margin: 0;
+
+    color: #277c00;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  /* Botão para remover dos favoritos */
+  .remover-favorito {
+    width: 30px;
+    height: 36px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 5px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .remover-favorito img {
+    width: 20px;
+    height: 20px;
+
+    margin: 0;
+    object-fit: contain;
+  }
+
+  /* Mensagem de favoritos vazios */
+  .sem-produtos {
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 25px 0;
+    padding: 50px 18px;
+
+    background-color: #f5e9e0;
+    border: 1px solid #311111;
+    border-radius: 18px;
+  }
+
+  .sem-produtos ul {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .sem-produtos .icone img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+  }
+
+  .sem-produtos .titulo {
+    padding-top: 15px;
+    margin-bottom: 8px;
+
+    color: #311111;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .sem-produtos .titulo h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .sem-produtos .texto {
+    color: #5f5757;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .sem-produtos .texto p {
+    margin: 0;
+  }
+
+  /* Botão voltar às compras */
+  .botao {
+    width: 100%;
+    max-width: 220px;
+    min-height: 42px;
+    height: auto;
+
+    display: block;
+    box-sizing: border-box;
+
+    margin: 20px auto 0;
+    padding: 10px;
+
+    background-color: #311111;
+    border: none;
+    border-radius: 5px;
+
+    color: #f5e9e0;
+    cursor: pointer;
+  }
+
+  .botao:hover {
+    background-color: #311111;
+    transform: none;
+  }
+
+  .link {
+    color: #f5e9e0;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  /* Centralização dos elementos da mensagem vazia */
+  .sem-produtos li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
 </style>

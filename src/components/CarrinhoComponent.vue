@@ -357,172 +357,286 @@ max-width: 1250px;
   transform: scale(1.03);
 }
 
-@media(max-width:768px){
+
+/* ============================= */
+/*        CARRINHO MOBILE        */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+  .produtos {
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px 14px 35px;
+    box-sizing: border-box;
+  }
+
+  /* Lista de produtos */
+  .container-produtos {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  /* Card individual */
   .card-produto {
-    display: flex;
+    display: grid;
+    grid-template-columns: 95px minmax(0, 1fr);
     align-items: center;
-    gap: 1rem;
+    gap: 12px;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px;
+    margin: 0 0 14px;
 
     background-color: #f5e9e0;
     border: 1px solid #dfcec4;
-    border-radius: 8px;
+    border-radius: 12px;
 
-    padding: 1rem;
-    margin-bottom: 1rem;
+    transition: none;
   }
 
+  .card-produto:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Imagem do produto */
   .imagem-produto {
-    width: 110px;
-    height: 150px;
+    width: 95px;
+    height: 125px;
 
     object-fit: cover;
-    border-radius: 8px;
+    object-position: center;
 
+    border-radius: 8px;
     display: block;
   }
 
-  .infos{
+  /* Informações do produto */
+  .infos {
+    min-width: 0;
     text-align: left;
+    align-self: start;
+    padding-top: 5px;
   }
 
-  .infos h2{
+  .infos h2 {
+    margin: 0 0 10px;
+
     color: #311111;
-    font-size: 1rem;
+    font-size: 16px;
+    line-height: 1.35;
     font-weight: 600;
-    margin-bottom: 1vw;
+
+    overflow-wrap: anywhere;
   }
 
-  .infos p{
-    font-size: 0.85rem;
+  .infos p {
+    margin: 0;
+
     color: #277c00;
+    font-size: 15px;
     font-weight: 600;
   }
 
-  .sem-produtos {
-    background-color: #f5e9e0;
-    border: #311111 solid 0.8px;
-    border-radius: 1rem;
+  /* Área dos controles:
+     ocupa a segunda coluna, abaixo das informações */
+  .card-produto > div:last-child {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    min-width: 0;
+    margin-top: -36px;
+    align-self: end;
+  }
+
+  /* Quantidade */
+  .quantidade {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+
+    margin: 0;
+  }
+
+  .quantidade p {
+    min-width: 16px;
+    margin: 0;
+
+    color: #5f5757;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  .quantidade button {
+    width: 30px;
+    height: 30px;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 120px 30px;
-    margin: 4vw 9vw 4vw 9vw;
-  }
 
-  .icone img{
-    width: 15vw;
-    height: 15vw;
-  }
+    padding: 5px;
+    border: 1px solid #dfcec4;
+    border-radius: 6px;
+    background: transparent;
 
-  ul{
-    list-style-type: none;
-  }
-
-  .titulo{
-    justify-content: center;
-    color: #311111;
-    font-weight: bold;
-    margin-bottom: 0.7rem;
-    padding-top: 1vw;
-    font-size: 1rem;
-  }
-
-  .texto{
-    font-size: 0.88rem;
-  }
-
-  .remover-carrinho img{
-    width: 1.2rem;
-    height: 1.2rem;
-    margin-left: 5vw;
-  }
-
-  .botao{
-    background-color: #311111;
-    border: none;
-    border-radius: 3px;
-    width: 160px;
-    height: 35px;
     cursor: pointer;
-    display: block;
-    margin: 20px auto 0;
-    justify-content: center;
-    margin-bottom: 0.8rem;
-    color: #f5e9e0;
   }
 
-  .botao:active {
-    background-color: #7a2d2d;
+  .quantidade img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
   }
 
-  li {
+  /* Remover produto */
+  .remover-carrinho {
     display: flex;
     justify-content: center;
+    align-items: center;
+
+    flex-shrink: 0;
+    padding: 7px;
+
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
   }
 
-  .quantidade{
-    display: flex;
-    margin-bottom: 1vw;
+  .remover-carrinho img {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    object-fit: contain;
   }
 
-  .quantidade p{
-    font-size: 4vw;
-    margin: 0 1vw 0 1vw;
-    margin-top: 0.4vw;
-    color: rgb(95, 87, 87);
-  }
-
-  .quantidade img{
-    width: 1rem;
-    height: 1rem;
-  }
-
+  /* Total da compra */
   .total {
-    max-width: 1250px;
-    margin: 2rem auto 4rem;
-    padding: 1.5rem 2rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    margin: 22px 0 0;
+    padding: 22px 18px;
 
     background-color: #f5e9e0;
     border: 1px solid #dfcec4;
     border-radius: 12px;
 
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    align-items: stretch;
+    gap: 12px;
   }
 
   .total span {
     color: #5f5757;
-    font-size: 1rem;
+    font-size: 15px;
+    text-align: left;
   }
 
   .total strong {
     color: #277c00;
-    font-size: 1.7rem;
+    font-size: 25px;
+    text-align: left;
   }
 
   .botao-finalizar {
+    width: 100%;
+    min-height: 46px;
+    box-sizing: border-box;
+
+    margin-top: 8px;
+    padding: 12px 16px;
+
     background-color: #311111;
     color: #f5e9e0;
 
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
 
-    padding: 12px 25px;
-
-    font-size: 1rem;
+    font-size: 15px;
     font-weight: bold;
 
     cursor: pointer;
-    transition: 0.3s ease;
   }
 
   .botao-finalizar:hover {
-    background-color: #5a1f1f;
-    transform: scale(1.03);
+    background-color: #311111;
+    transform: none;
+  }
+
+  /* Carrinho vazio */
+  .sem-produtos {
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 25px 0;
+    padding: 50px 18px;
+
+    background-color: #f5e9e0;
+    border: 1px solid #311111;
+    border-radius: 18px;
+  }
+
+  .sem-produtos ul {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sem-produtos .icone img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+  }
+
+  .sem-produtos .titulo {
+    padding-top: 15px;
+    margin-bottom: 8px;
+
+    color: #311111;
+    text-align: center;
+  }
+
+  .sem-produtos .titulo h1 {
+    font-size: 24px;
+    margin: 0;
+  }
+
+  .sem-produtos .texto p {
+    margin: 0;
+    color: #5f5757;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .botao {
+    width: 100%;
+    max-width: 220px;
+    min-height: 42px;
+    height: auto;
+
+    margin: 20px auto 0;
+    padding: 10px;
+
+    box-sizing: border-box;
+  }
+
+  .link {
+    color: #f5e9e0;
+    text-decoration: none;
+    font-size: 14px;
   }
 }
 </style>
