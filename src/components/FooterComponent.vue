@@ -103,9 +103,9 @@ footer span {
 @media (max-width: 768px) {
   footer > div {
     flex-direction: column;
-    gap: 20px;
+    gap: 17px;
 
-    padding: 25px 30px;
+    padding: 20px 25px;
   }
 
   footer h1 {
@@ -119,7 +119,7 @@ footer span {
   .endereço {
     font-size: 0.7rem;
     line-height: 1.5;
-    padding: 15px;
+    padding: 10px;
     margin-bottom: 20vw;
   }
 }

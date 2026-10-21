@@ -312,121 +312,125 @@ onMounted(async () => {
 /* ---------------- RESPONSIVO ---------------- */
 
 @media (max-width: 768px) {
-
   .voltar {
-  width: 6vw;
-  height: 2vw;
-}
-/* ---------------- CONTAINER ---------------- */
+    width: 6vw;
+    height: 2vw;
+  }
+  /* ---------------- CONTAINER ---------------- */
+ 
+ .container {
+    width: 100%;
+    padding: 0 0 4rem 0;
+    box-sizing: border-box;
+    margin-top: -13vw;
+  }
 
-.container {
-  margin: auto;
-  padding: 0 3rem 5rem;
-}
+  .informacoes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+    width: 100%;
+    margin: 0;
+  }
 
-.informacoes {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0;
-}
+  .img-prod {
+    order: -1;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+    margin: 0;
+  }
 
-/* ---------------- IMAGEM ---------------- */
+  .img-prod img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 3/4;
+    border-radius: 0%;
+  }
 
-.img-prod img {
-  width: 100%;
-  height: 50px;
-}
-/* ---------------- INFOS ---------------- */
+  .infos {
+    order: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 0 5vw;
+  }
+  /* ---------------- INFOS ---------------- */
 
-.infos {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-family: "Lexend Deca", sans-serif;
-}
+  .infos h1 {
+    color: #311111;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
 
-.infos h1 {
-  color: #311111;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
+  .infos h2 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    color: #7a2d2d;
+  }
 
-.infos h2 {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin-bottom: 2rem;
-}
+  .detalhes {
+    gap: .8rem;
+  }
 
-.detalhes {
-  display: flex;
-  flex-direction: column;
-  gap: .8rem;
-}
+  .detalhes p {
+    font-size: 0.9rem;
+    color: #444;
+  }
 
-.detalhes p {
-  font-size: 1rem;
-  color: #444;
-}
+  /* ---------------- BOTÕES ---------------- */
 
-/* ---------------- BOTÕES ---------------- */
+  .acoes {
+    gap: 2rem;
+    margin: 3rem 0;
+  }
 
-.acoes {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin: 3rem 0;
-}
+  .btn-carrinho {
+    padding: 14px 10px;
+    background: #311111;
+    color: #f5e9e0;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: .3s;
+  }
 
-.btn-carrinho {
-  min-width: 260px;
-  padding: 14px 10px;
-  background: #311111;
-  color: #f5e9e0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: .3s;
-}
+  .btn-carrinho:active {
+    background-color: #7a2d2d;
+  }
 
-.btn-carrinho:active {
-  background-color: #7a2d2d;
-}
+  .btn-favorito {
+    width: 30px;
+    height: 30px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .3s;
+  }
 
-.btn-favorito {
-  width: 30px;
-  height: 30px;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: .3s;
-}
+  /* ---------------- DESCRIÇÃO ---------------- */
 
-.btn-favorito:hover {
-  transform: scale(1.05);
-}
+  .descricao {
+    margin-top: 1rem;
+  }
 
-/* ---------------- DESCRIÇÃO ---------------- */
+  .descricao h3 {
+    color: #311111;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
 
-.descricao {
-  margin-top: 1rem;
-}
-
-.descricao h3 {
-  color: #311111;
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
-}
-
-.descricao p {
-  font-size: 1.05rem;
-  color: #555;
-  line-height: 1.8;
-  text-align: justify;
-}
+  .descricao p {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.8;
+    text-align: justify;
+  }
 }
 </style>
