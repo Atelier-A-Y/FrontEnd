@@ -276,7 +276,7 @@ function irParaHome(){
         class="fechar-pesquisa-mobile"
         @click="showDropdown = false"
       >
-        <img src="/img/x-solido.png" alt="fechar">
+        <img src="/img/upload.png" alt="fechar">
       </button>
     </div>
 
@@ -605,39 +605,6 @@ function irParaHome(){
     margin-bottom: 7vw;
   }
 
-  .dropdown-mobile {
-    position: relative;
-    margin-bottom: 7vw;
-  }
-
-  .seta-continentes {
-    font-size: 3vw;
-    margin-left: auto;
-    transition: transform 0.3s ease;
-  }
-
-  .seta-continentes.aberta {
-      transform: rotate(180deg);
-  }
-
-  .submenu-mobile {
-    margin-top: 6vw;
-    margin-left: 2vw;
-  }
-
-  .submenu-mobile li {
-    margin-bottom: 4vw;
-    padding-right: 5vw;
-  }
-
-  .cima-mobile {
-    display: flex;
-  }
-
-  .baixo-mobile {
-    display: flex;
-  }
-
   .texto-mobile {
     text-align: center;
     margin-left: 20vw;
@@ -670,9 +637,7 @@ function irParaHome(){
     align-items: center;
     justify-content: center;
     width: 5vw;
-    height: 100%;
   }
-
 
   /* ========================================
           LUPA DO HEADER
@@ -702,9 +667,9 @@ function irParaHome(){
   .painel-pesquisa-mobile {
       position: fixed;
       top: 10vw;
-      left: 0;
+      right: 0;
       width: 100vw;
-      height: calc(100vh - 10vw);
+      height: calc(20vh - 8vw);
       background: white;
       z-index: 98;
       overflow-y: auto;
