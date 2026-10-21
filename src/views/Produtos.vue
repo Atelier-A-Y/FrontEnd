@@ -1,69 +1,63 @@
-
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import FiltragemComponent from "../components/FiltragemComponent.vue";
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import FiltragemComponent from '../components/FiltragemComponent.vue'
 
-const router = useRouter();
+const router = useRouter()
 
-const produtos = ref([]);
-const categorias = ref([]);
+const produtos = ref([])
+const categorias = ref([])
 const filtros = ref({
-  categoria: "",
-  cor: "",
-  precoMinimo: "",
-  precoMaximo: "",
-});
+  categoria: '',
+  cor: '',
+  precoMinimo: '',
+  precoMaximo: '',
+})
 
-const carregando = ref(true);
-const erro = ref("");
+const carregando = ref(true)
+const erro = ref('')
 
-const API_URL =
-  "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api";
+const API_URL = 'http://127.0.0.1:8000/api'
 
 // Carrega os produtos da API
 async function carregarProdutos() {
-  carregando.value = true;
-  erro.value = "";
+  carregando.value = true
+  erro.value = ''
 
   try {
-    const resposta = await fetch(`${API_URL}/roupas/`);
+    const resposta = await fetch(`${API_URL}/roupas/`)
 
     if (!resposta.ok) {
-      throw new Error(`Erro ao buscar produtos: ${resposta.status}`);
+      throw new Error(`Erro ao buscar produtos: ${resposta.status}`)
     }
 
-    const dados = await resposta.json();
+    const dados = await resposta.json()
 
     // Aceita tanto paginação do Django REST Framework
     // quanto uma lista simples.
-    produtos.value = Array.isArray(dados)
-      ? dados
-      : dados.results || [];
+    produtos.value = Array.isArray(dados) ? dados : dados.results || []
   } catch (error) {
-    console.error("Erro ao carregar produtos:", error);
-    erro.value = "Não foi possível carregar os produtos.";
+    console.error('Erro ao carregar produtos:', error)
+    erro.value = 'Não foi possível carregar os produtos.'
   } finally {
-    carregando.value = false;
+    carregando.value = false
   }
 }
 
 // Carrega as categorias cadastradas no backend
 async function carregarCategorias() {
   try {
-    const resposta = await fetch(`${API_URL}/categorias/`);
+    const resposta = await fetch(`${API_URL}/categorias/`)
 
     if (!resposta.ok) {
-      throw new Error(`Erro ao buscar categorias: ${resposta.status}`);
+      throw new Error(`Erro ao buscar categorias: ${resposta.status}`)
     }
 
-    const dados = await resposta.json();
+    const dados = await resposta.json()
 
-    categorias.value = Array.isArray(dados)
-      ? dados
-      : dados.results || [];
+    categorias.value = Array.isArray(dados) ? dados : dados.results || []
   } catch (error) {
-    console.error("Erro ao carregar categorias:", error);
+    console.error('Erro ao carregar categorias:', error)
   }
 }
 
@@ -71,85 +65,76 @@ async function carregarCategorias() {
 const cores = computed(() => {
   const coresEncontradas = produtos.value
     .map((produto) => produto.cor)
-    .filter((cor) => typeof cor === "string" && cor.trim() !== "");
+    .filter((cor) => typeof cor === 'string' && cor.trim() !== '')
 
-  return [...new Set(coresEncontradas)];
-});
+  return [...new Set(coresEncontradas)]
+})
 
 // Aplica os filtros selecionados
 const produtosFiltrados = computed(() => {
   return produtos.value.filter((produto) => {
     // Categoria: pode vir como ID ou como objeto
     const categoriaProduto =
-      produto.categoria && typeof produto.categoria === "object"
+      produto.categoria && typeof produto.categoria === 'object'
         ? produto.categoria.id
-        : produto.categoria;
+        : produto.categoria
 
-    const categoriaSelecionada = filtros.value.categoria;
+    const categoriaSelecionada = filtros.value.categoria
 
     const categoriaCorreta =
-      categoriaSelecionada === "" ||
-      String(categoriaProduto) === String(categoriaSelecionada);
+      categoriaSelecionada === '' || String(categoriaProduto) === String(categoriaSelecionada)
 
     // Cor: compara o nome da cor
     const corCorreta =
-      filtros.value.cor === "" ||
-      String(produto.cor || "").toLowerCase() ===
-        String(filtros.value.cor).toLowerCase();
+      filtros.value.cor === '' ||
+      String(produto.cor || '').toLowerCase() === String(filtros.value.cor).toLowerCase()
 
     // Preço mínimo e máximo
-    const preco = Number(produto.preco);
+    const preco = Number(produto.preco)
 
     const precoMinimoCorreto =
-      filtros.value.precoMinimo === "" ||
-      preco >= Number(filtros.value.precoMinimo);
+      filtros.value.precoMinimo === '' || preco >= Number(filtros.value.precoMinimo)
 
     const precoMaximoCorreto =
-      filtros.value.precoMaximo === "" ||
-      preco <= Number(filtros.value.precoMaximo);
+      filtros.value.precoMaximo === '' || preco <= Number(filtros.value.precoMaximo)
 
-    return (
-      categoriaCorreta &&
-      corCorreta &&
-      precoMinimoCorreto &&
-      precoMaximoCorreto
-    );
-  });
-});
+    return categoriaCorreta && corCorreta && precoMinimoCorreto && precoMaximoCorreto
+  })
+})
 
 // Recebe os filtros do componente
 function receberFiltros(novosFiltros) {
   filtros.value = {
-    categoria: novosFiltros.categoria ?? "",
-    cor: novosFiltros.cor ?? "",
-    precoMinimo: novosFiltros.precoMinimo ?? "",
-    precoMaximo: novosFiltros.precoMaximo ?? "",
-  };
+    categoria: novosFiltros.categoria ?? '',
+    cor: novosFiltros.cor ?? '',
+    precoMinimo: novosFiltros.precoMinimo ?? '',
+    precoMaximo: novosFiltros.precoMaximo ?? '',
+  }
 }
 
 // Abre a página de detalhes do produto
 function abrirProdutos(id) {
-  router.push(`/info_prod/${id}`);
+  router.push(`/info_prod/${id}`)
 }
 
 // Formata o preço em reais
 function formatarPreco(preco) {
-  const valor = Number(preco);
+  const valor = Number(preco)
 
   if (!Number.isFinite(valor)) {
-    return "0,00";
+    return '0,00'
   }
 
-  return valor.toLocaleString("pt-BR", {
+  return valor.toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  });
+  })
 }
 
 onMounted(() => {
-  carregarProdutos();
-  carregarCategorias();
-});
+  carregarProdutos()
+  carregarCategorias()
+})
 </script>
 
 <template>
@@ -165,9 +150,7 @@ onMounted(() => {
       />
     </div>
 
-    <p v-if="carregando" class="mensagem">
-      Carregando produtos...
-    </p>
+    <p v-if="carregando" class="mensagem">Carregando produtos...</p>
 
     <p v-else-if="erro" class="mensagem erro">
       {{ erro }}
@@ -176,13 +159,10 @@ onMounted(() => {
     <template v-else>
       <p class="contador">
         {{ produtosFiltrados.length }}
-        {{ produtosFiltrados.length === 1 ? "produto encontrado" : "produtos encontrados" }}
+        {{ produtosFiltrados.length === 1 ? 'produto encontrado' : 'produtos encontrados' }}
       </p>
 
-      <section
-        v-if="produtosFiltrados.length > 0"
-        class="container-produtos"
-      >
+      <section v-if="produtosFiltrados.length > 0" class="container-produtos">
         <article
           v-for="item in produtosFiltrados"
           :key="item.id"
@@ -191,29 +171,19 @@ onMounted(() => {
         >
           <img
             v-if="item.foto"
-            :src="
-              typeof item.foto === 'object'
-                ? item.foto.url
-                : item.foto
-            "
+            :src="typeof item.foto === 'object' ? item.foto.url : item.foto"
             :alt="item.nome"
             class="imagem-produto"
           />
 
-          <div v-else class="imagem-sem-foto">
-            Sem imagem
-          </div>
+          <div v-else class="imagem-sem-foto">Sem imagem</div>
 
           <div class="informacoes-produto">
             <h2>{{ item.nome }}</h2>
 
-            <p class="preco">
-              R$ {{ formatarPreco(item.preco) }}
-            </p>
+            <p class="preco">R$ {{ formatarPreco(item.preco) }}</p>
 
-            <p v-if="item.cor" class="cor-produto">
-              Cor: {{ item.cor }}
-            </p>
+            <p v-if="item.cor" class="cor-produto">Cor: {{ item.cor }}</p>
           </div>
         </article>
       </section>
