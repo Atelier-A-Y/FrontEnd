@@ -1,23 +1,308 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import api from "../api/api"
+
+const slidesMobile = ref<any[]>([])
+const indexMobile = ref(0)
+const favoritosMobile = ref<number[]>([])
+
+async function carregarRoupasMobile() {
+  try {
+    const resposta = await api.get("/roupas/")
+    slidesMobile.value = resposta.data.results || resposta.data
+
+    console.log("ROUPAS CARREGADAS:", slidesMobile.value)
+
+    if (slidesMobile.value.length > 0) {
+      indexMobile.value = Math.min(2, slidesMobile.value.length - 1)
+    }
+
+  } catch (erro: any) {
+
+    console.error("ERRO AO CARREGAR ROUPAS:", erro)
+
+    if (erro.response) {
+      console.log("STATUS:", erro.response.status)
+      console.log("DADOS:", erro.response.data)
+    }
+  }
+}
+
+async function carregarFavoritosMobile() {
+  try {
+    const respostaMobile = await api.get("/favoritos/")
+    const listaMobile = respostaMobile.data.results || respostaMobile.data
+
+    favoritosMobile.value = listaMobile
+      .map((item: any) => {
+        if (typeof item.roupa === "number"){
+          return item.roupa
+        }
+
+        if(item.roupa?.id){
+          return item.roupa.id
+        }
+
+        return null
+      })
+      .filter((id: any) => id !== null)
+
+    console.log("IDs DOS FAVORITOS:", favoritosMobile.value)
+
+  } catch (erro: any) {
+    console.error("ERRO AO CARREGAR FAVORITOS:", erro)
+
+    if(erro.response){
+      console.log("STATUS:", erro.response.status)
+      console.log("DADOS:", erro.response.data)
+    }
+  }
+}
+
+async function alterarFavMobile(id: number) {
+
+  console.log("ID DA ROUPA SELECIONADA:", id)
+
+  if(!id){
+    console.error("Essa roupa não possui ID")
+    return
+  }
+
+  try {
+    const respostaMobile = await api.get("/favoritos/")
+    const listaMobile = respostaMobile.data.results || respostaMobile.data
+
+    console.log("FAVORITOS DO USUÁRIO:", listaMobile)
+
+    const favoritoExistenteMobile = listaMobile.find((item: any) => {
+      if(typeof item.roupa === "number"){
+        return item.roupa === id
+      }
+      return item.roupa?.id === id
+    })
+
+    if(favoritoExistenteMobile){
+      console.log("REMOVENDO FAVORITO:", favoritoExistenteMobile.id)
+
+      await api.delete(`/favoritos/${favoritoExistenteMobile.id}/`)
+
+      favoritosMobile.value = favoritosMobile.value.filter(
+        favoritoMobileId => favoritoMobileId !== id
+      )
+      console.log("FAVORITO REMOVIDO")
+    }
+
+    else {
+      console.log("ADICIONANDO ROUPA:", id)
+
+      await api.post("/favoritos/", {
+        roupa: id
+      })
+
+      favoritosMobile.value.push(id)
+
+      console.log("FAVORITO ADICIONADO!")
+    }
+  } catch (erro: any) {
+    console.error("ERRO AO ALTERAR FAVORITO:", erro)
+
+    if (erro.response) {
+      console.log("STATUS:", erro.response.status)
+      console.log("DADOS:", erro.response.data)
+    }
+  }
+}
+
+function ehFavoritoMobile(id: number) {
+  return favoritosMobile.value.includes(id)
+}
+
+function nextSlideMobile() {
+  if (slidesMobile.value.length === 0) return
+
+  indexMobile.value =
+    (indexMobile.value + 1) % slidesMobile.value.length
+}
+
+function prevSlideMobile() {
+  if (slidesMobile.value.length === 0) return
+
+  indexMobile.value =
+    (indexMobile.value - 1 + slidesMobile.value.length)
+    % slidesMobile.value.length
+}
+
+function getOffset(i: number) {
+  const total = slidesMobile.value.length
+
+  if (total === 0) return 0
+
+  let diff = i - indexMobile.value
+
+  if (diff > total / 2) {
+    diff -= total
+  }
+
+  if (diff < -total / 2) {
+    diff += total
+  }
+
+  return diff * 285
+}
+
+const hover = ref(false)
+const hoverItem = ref<any>(null)
+const mouseX = ref(0)
+const mouseY = ref(0)
+
+function showHover(item: any) {
+  hover.value = true
+  hoverItem.value = item
+}
+
+function hideHover() {
+  hover.value = false
+}
+
+function moveHover(e: MouseEvent) {
+  const cardWidth = 320
+
+  if (window.innerWidth - e.clientX < cardWidth) {
+    mouseX.value = e.clientX - 120
+  }
+
+  else {
+    mouseX.value = e.clientX + 40
+  }
+  mouseY.value = e.clientY
+}
+
+function getImagem(slide: any) {
+  return (
+    slide.foto ||
+    slide.imagem ||
+    slide.foto_url ||
+    slide.image ||
+    ''
+  )
+}
+
+onMounted(async () => {
+  await carregarRoupasMobile()
+  await carregarFavoritosMobile()
+})
+</script>
+
 <template>
   <main>
-    <router-link to="/formatura" class="banner">
-      <img src="/img/formanda_banner.png" alt="banner">
-
+    <router-link
+      to="/formatura"
+      class="banner"
+    >
+      <img
+        src="/img/formanda_banner.png"
+        alt="banner"
+      >
       <div class="overlay">
         <div class="marca">
-          <span class="marca1">ATELIER</span>
-          <span class="marca2">A.Y.</span>
+          <span class="marca1">
+            ATELIER
+          </span>
+          <span class="marca2">
+            A.Y.
+          </span>
         </div>
+
         <div class="texto">
-          <h2>50% OFF<br>PARA<br>FORMANDOS</h2>
+          <h2>
+            50% OFF <br>PARA<br>FORMANDOS
+          </h2>
         </div>
       </div>
     </router-link>
+
+    <div class="carrossel-container-mobile">
+      <button
+        class="voltar-mobile"
+        @click="prevSlideMobile"
+      >
+        ❮
+      </button>
+
+      <div class="carrossel-mobile">
+        <div class="carrossel-track-mobile">
+          <div
+            v-for="(slide, i) in slidesMobile"
+            :key="slide.id"
+            class="card"
+            :class="{
+              active: i === indexMobile
+            }"
+            :style="{
+              transform: `
+                translate(-50%, -50%)
+                translateX(${getOffset(i)}px)
+              `,
+              opacity: i === indexMobile ? 1 : 0.45,
+              zIndex: i === indexMobile ? 100 : 1
+            }"
+          >
+            <div class="imagem-card">
+              <img
+                :src="getImagem(slide)"
+                :alt="slide.nome"
+                @mouseenter="showHover(slide)"
+                @mouseleave="hideHover"
+                @mousemove="moveHover"
+              >
+            </div>
+            <div class="info-card">
+              <div class="dados-card">
+
+                <span class="nome-card">
+                  {{ slide.nome }}
+                </span>
+
+                <span class="preco-card">
+                  R$
+                  {{ slide.preco }}
+                </span>
+
+              </div>
+
+              <button
+                class="favorito-card"
+                @click.stop="alterarFavMobile(slide.id)"
+              >
+
+                <img
+                  :src="
+                    ehFavoritoMobile(slide.id)
+                      ? '/img/coracao-cheio.png'
+                      : '/img/coracao-solido.png'
+                  "
+                  alt="Favoritar"
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="seguir-mobile"
+        @click="nextSlideMobile"
+      >
+        ❯
+      </button>
+    </div>
   </main>
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+.carrossel-container-mobile{
+  display: none;
+}
 
 .banner {
   position: relative;
@@ -83,5 +368,232 @@
   letter-spacing: 0.1vw;
   display: block;
   margin-left: 1.5vw;
+}
+
+@media(max-width: 600px) {
+  .banner{
+    display: none;
+  }
+
+  .carrossel-container-mobile {
+    position: relative;
+    width: 100%;
+    height: 95vw;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  /* =========================
+     ÁREA DO CARROSSEL
+  ========================= */
+
+  .carrossel-mobile {
+  position: relative;
+
+  width: 100%;
+  height: 95vw;
+
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  isolation: isolate;
+}
+
+  /* =========================
+     CARDS
+  ========================= */
+
+  .card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 65vw;
+  height: 82vw;
+
+  background: #f5e9e0;
+
+  border-radius: 4vw;
+  overflow: hidden;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+  transition:
+    transform 0.4s ease,
+    opacity 0.4s ease,
+    width 0.4s ease,
+    height 0.4s ease;
+  }
+
+  .card.active {
+    width: 70vw;
+    height: 88vw;
+
+    opacity: 1;
+    z-index: 5;
+  }
+
+
+  .imagem-card {
+    width: 100%;
+    height: 72%;
+
+    overflow: hidden;
+  }
+
+  .imagem-card img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    cursor: pointer;
+  }
+
+  .info-card {
+    width: 100%;
+    height: 25%;
+
+    padding: 3vw 4vw;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #f5e9e0;
+  }
+
+  .dados-card {
+    display: flex;
+    flex-direction: column;
+
+    gap: 1vw;
+  }
+
+  .nome-card {
+    font-family: "Playfair", serif;
+
+    font-size: 4.5vw;
+    font-weight: 500;
+
+    color: #311111;
+
+    line-height: 1.1;
+  }
+
+  .preco-card {
+    font-family: "Playfair", serif;
+
+    font-size: 4vw;
+
+    color: #311111;
+
+    line-height: 1.1;
+  }
+
+  .favorito-card {
+    background: transparent;
+    border: none;
+
+    padding: 0;
+    margin: 0;
+
+    width: 9vw;
+    height: 9vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .favorito-card img {
+    width: 8vw;
+    height: 8vw;
+
+    object-fit: contain;
+    display: block;
+  }
+  /* =========================
+     BOTÕES
+  ========================= */
+
+  .voltar-mobile,
+  .seguir-mobile {
+    position: absolute;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 9vw;
+    height: 9vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #af8072;
+    border: none;
+    border-radius: 50%;
+
+    color: white;
+
+    font-size: 5vw;
+    line-height: 1;
+
+    cursor: pointer;
+
+    z-index: 20;
+
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+
+  .voltar-mobile {
+    left: 3vw;
+  }
+
+
+  .seguir-mobile {
+    right: 3vw;
+  }
+
+
+  /* Efeito ao tocar/clicar */
+  .voltar-mobile:active,
+  .seguir-mobile:active {
+    transform: translateY(-50%) scale(0.9);
+  }
+
+
+  /* =========================
+     HOVER
+     ========================= */
+
+  .hover-card-mobile {
+    display: none;
+  }
+
+  .hover-card-mobile img {
+    display: none;
+  }
+
+  .hover-info-mobile {
+    display: none;
+  }
 }
 </style>

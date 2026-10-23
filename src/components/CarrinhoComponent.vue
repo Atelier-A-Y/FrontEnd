@@ -7,7 +7,7 @@ const carrinho = ref<any[]>([]);
 async function carregarCarrinho() {
   try {
     const resposta = await api.get(
-      "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/"
+      "/carrinho/"
     );
 
     console.log("CARRINHO RECEBIDO:", resposta.data);
@@ -23,7 +23,7 @@ async function carregarCarrinho() {
 
 async function tirarCarrinho(id: number) {
   try{
-    await api.delete(`https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/${id}/`)
+    await api.delete(`/carrinho/${id}/`)
 
     carrinho.value = carrinho.value.filter(
     item => item.id !== id
@@ -70,13 +70,11 @@ function totalCompra(){
     return total + preco * quantidade
   }, 0)
 }
-
 onMounted(carregarCarrinho);
 </script>
 
 <template>
   <main class="produtos">
-
     <section
       v-if="carrinho.length > 0"
       class="container-produtos"
@@ -112,7 +110,6 @@ onMounted(carregarCarrinho);
       <div class="quantidade">
         <button @click="decrementar(item)"><img src="/img/menos.png" alt="menos.png"></button>
         <p>
-          Quantidade:
           {{ item.quantidade }}
         </p>
         <button @click="incrementar(item)"><img src="/img/mais.png" alt="mais.png"></button>
@@ -145,9 +142,7 @@ onMounted(carregarCarrinho);
       v-else
       class="sem-produtos"
     >
-
       <ul>
-
         <li class="icone">
           <img src="/img/carrinho.png">
         </li>
@@ -170,27 +165,16 @@ onMounted(carregarCarrinho);
             </router-link>
           </button>
         </li>
-
       </ul>
-
     </section>
-
   </main>
 </template>
 
 <style scoped>
-/* ================================
-   CONTAINER PRINCIPAL
-================================ */
-
 .container-produtos {
   max-width: 1250px;
   margin: 0 auto;
 }
-
-/* ================================
-   CARD DO PRODUTO
-================================ */
 
 .card-produto {
   display: grid;
@@ -213,10 +197,6 @@ onMounted(carregarCarrinho);
   box-shadow: 0 8px 20px rgba(49, 17, 17, 0.08);
 }
 
-/* ================================
-   IMAGEM
-================================ */
-
 .imagem-produto {
   width: 150px;
   height: 190px;
@@ -226,10 +206,6 @@ onMounted(carregarCarrinho);
 
   display: block;
 }
-
-/* ================================
-   INFORMAÇÕES
-================================ */
 
 .infos{
   text-align: left;
@@ -275,7 +251,7 @@ ul{
 .remover-carrinho img{
   width: 1.5vw;
   height: 1.5vw;
-  margin-left: 5vw;
+  margin-left: 2vw;
 }
 
 .botao{
@@ -379,5 +355,283 @@ max-width: 1250px;
 .botao-finalizar:hover {
   background-color: #5a1f1f;
   transform: scale(1.03);
+}
+
+
+/* ============================= */
+/*        CARRINHO MOBILE        */
+/* ============================= */
+
+@media (max-width: 768px) {
+  .produtos {
+    padding: 20px 14px 35px;
+    box-sizing: border-box;
+  }
+
+  /* Lista de produtos */
+  .container-produtos {
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  /* Card individual */
+  .card-produto {
+    display: grid;
+    grid-template-columns: 95px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px;
+    margin: 0 0 14px;
+
+    background-color: #f5e9e0;
+    border: 1px solid #dfcec4;
+    border-radius: 12px;
+
+    transition: none;
+  }
+
+  .card-produto:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Imagem do produto */
+  .imagem-produto {
+    width: 95px;
+    height: 125px;
+
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: 8px;
+    display: block;
+  }
+
+  /* Informações do produto */
+  .infos {
+    min-width: 0;
+    text-align: left;
+    align-self: start;
+    padding-top: 5px;
+  }
+
+  .infos h2 {
+    margin: 0 0 10px;
+
+    color: #311111;
+    font-size: 16px;
+    line-height: 1.35;
+    font-weight: 600;
+
+    overflow-wrap: anywhere;
+  }
+
+  .infos p {
+    margin: 0;
+
+    color: #277c00;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  /* Área dos controles:
+     ocupa a segunda coluna, abaixo das informações */
+  .card-produto > div:last-child {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    min-width: 0;
+    margin-top: -36px;
+    align-self: end;
+  }
+
+  /* Quantidade */
+  .quantidade {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+
+    margin: 0;
+  }
+
+  .quantidade p {
+    min-width: 16px;
+    margin: 0;
+
+    color: #5f5757;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  .quantidade button {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 5px;
+    border: 1px solid #dfcec4;
+    border-radius: 6px;
+    background: transparent;
+
+    cursor: pointer;
+  }
+
+  .quantidade img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+  }
+
+  /* Remover produto */
+  .remover-carrinho {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-shrink: 0;
+    padding: 7px;
+
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .remover-carrinho img {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    object-fit: contain;
+  }
+
+  /* Total da compra */
+  .total {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    margin: 22px 0 0;
+    padding: 22px 18px;
+
+    background-color: #f5e9e0;
+    border: 1px solid #dfcec4;
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .total span {
+    color: #5f5757;
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .total strong {
+    color: #277c00;
+    font-size: 25px;
+    text-align: left;
+  }
+
+  .botao-finalizar {
+    width: 100%;
+    min-height: 46px;
+    box-sizing: border-box;
+
+    margin-top: 8px;
+    padding: 12px 16px;
+
+    background-color: #311111;
+    color: #f5e9e0;
+
+    border: none;
+    border-radius: 6px;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+  }
+
+  .botao-finalizar:hover {
+    background-color: #311111;
+    transform: none;
+  }
+
+  /* Carrinho vazio */
+  .sem-produtos {
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 25px 0;
+    padding: 50px 18px;
+
+    background-color: #f5e9e0;
+    border: 1px solid #311111;
+    border-radius: 18px;
+  }
+
+  .sem-produtos ul {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sem-produtos .icone img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+  }
+
+  .sem-produtos .titulo {
+    padding-top: 15px;
+    margin-bottom: 8px;
+
+    color: #311111;
+    text-align: center;
+  }
+
+  .sem-produtos .titulo h1 {
+    font-size: 24px;
+    margin: 0;
+  }
+
+  .sem-produtos .texto p {
+    margin: 0;
+    color: #5f5757;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .botao {
+    width: 100%;
+    max-width: 220px;
+    min-height: 42px;
+    height: auto;
+
+    margin: 20px auto 0;
+    padding: 10px;
+
+    box-sizing: border-box;
+  }
+
+  .link {
+    color: #f5e9e0;
+    text-decoration: none;
+    font-size: 14px;
+  }
 }
 </style>

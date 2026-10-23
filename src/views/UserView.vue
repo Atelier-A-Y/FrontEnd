@@ -8,15 +8,6 @@ import FavoritosComponent from '../components/FavoritosComponent.vue'
 
 const loading = ref(false)
 const menuAtivo = ref('cadastros')
-const modalSenha = ref(false)
-const senhaAtual = ref('')
-const novaSenha = ref('')
-const confirmarSenha = ref('')
-const mostrarSenhaAtual = ref(false)
-const mostrarNovaSenha = ref(false)
-const mostrarConfirmarSenha = ref(false)
-const router = useRouter()
-const authStore = useAuthStore()
 
 const form = ref({
   name: '',
@@ -48,7 +39,6 @@ async function alterarSenha() {
   }
 
   try {
-    // chamada para sua API
     await changePassword({
       current_password: senhaAtual.value,
       new_password: novaSenha.value
@@ -118,9 +108,7 @@ onMounted(() => {
 
 <template>
   <main class="perfil-container">
-
     <aside class="sidebar">
-
       <div class="welcome-card">
         <div class="icon">
           <img src="/img/user-solido.png" alt="user.png">
@@ -131,11 +119,9 @@ onMounted(() => {
           <h1>{{ form.name }}</h1>
 
           <div class="email-box">
-
             <span>
               {{form.email}}
             </span>
-
           </div>
 
           <button
@@ -302,6 +288,7 @@ onMounted(() => {
 
     </aside>
 
+    <!-- Conteúdo dinâmico de acordo com o menu selecionado -->
     <section
       class="content"
       v-if="menuAtivo === 'pedidos'"
@@ -312,78 +299,12 @@ onMounted(() => {
     </div>
     </section>
 
-   <section
-      class="content"
+    <CadastroSection
       v-if="menuAtivo === 'cadastros'"
-    >
-      <div class="title">
-        <img src="/img/user-solido.png" alt="user.png">
-        <h1>Cadastro</h1>
-      </div>
-
-      <div class="cards-grid">
-
-        <div class="form-card">
-
-          <h2>Dados Pessoais</h2>
-
-          <div class="form-grid">
-
-            <div class="field full">
-              <label>Nome Completo*</label>
-              <input
-              v-model="form.name"
-                type="text"
-                placeholder="Ex: Julia Gabriela da Silva"
-              >
-            </div>
-
-            <div class="field">
-              <label>CPF*</label>
-              <input
-              v-model="form.cpf"
-                type="text"
-                placeholder="Ex: 000.000.000-00"
-              >
-            </div>
-
-            <div class="field">
-              <label>Data de Nascimento</label>
-              <input
-                type="text"
-                placeholder="Ex: 09/07/1995"
-              >
-            </div>
-
-            <div class="field">
-              <label>Telefone Celular*</label>
-              <input
-              v-model="form.telefone"
-                type="text"
-                placeholder="Ex: (DD) + Número"
-              >
-            </div>
-
-            <div class="field">
-              <label>Email</label>
-              <input
-              v-model="form.email"
-                type="email"
-                placeholder="Ex: julia@gmail.com"
-              >
-            </div>
-
-            <button
-                class="save-btn"
-                @click="salvar"
-                :disabled="loading"
-              >
-                {{ loading ? 'Salvando...' : '✓ Salvar Alterações' }}
-            </button>
-          </div>
-        </div>
-        </div>
-    </section>
+      :form="form"
+      :loading="loading"
+      @salvar="salvar"
+    />
 
     <section
       class="content"
@@ -408,54 +329,12 @@ onMounted(() => {
 
     <FavoritosComponent />
     </section>
-
   </main>
 </template>
 
 <style scoped>
-
 *{
   box-sizing:border-box;
-}
-
-img{
-  width: 1.5vw;
-  height: 1.5vw;
-}
-
-.senha-field {
-  position: relative;
-}
-
-.senha-field input {
-  width: 100%;
-  padding-right: 50px;
-}
-
-.senha-field button {
-  position: absolute;
-  right: 1vw;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  cursor: pointer;
-}
-
-.bnt-senha{
-  width:50%;
-  height:2.5vw;
-  transform: translateX(50%);
-  border:0.1vw solid #31111192;
-  border-radius:0.5vw;
-  background:#F5E9E0;
-  color:#311111;
-  cursor:pointer;
-}
-
-.bnt-senha:hover{
-  background-color: #311111;
-  color: #F5E9E0;
-  transition:.3s;
 }
 
 .perfil-container{
@@ -464,125 +343,6 @@ img{
   display:grid;
   grid-template-columns:20vw 1fr;
   gap:3vw;
-}
-
-.modal{
-  position: fixed;
-  inset: 0;
-
-  background: rgba(0,0,0,.5);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 999;
-}
-
-.modal-content{
-  background: white;
-  padding: 2vw;
-  border-radius: 1vw;
-  width: 30vw;
-  max-width: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: 1vw;
-}
-
-.modal-content h2{
-  color: #311111;
-  text-align: center;
-}
-
-.modal-content input{
-  height: 5vw;
-  padding: 0 5vw;
-  background:#F5E9E0;
-  border:0.1vw solid #31111152;
-  border-radius: 1vw;
-}
-
-.sidebar{
-  display:flex;
-  flex-direction:column;
-  gap:0.5vw;
-}
-
-.welcome-card h1{
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin: 0.3vw 0;
-  overflow-wrap: break-word;
-  word-break: break-word;
-}
-
-.welcome-card,
-.menu-card{
-  background:#F5E9E0;
-  border:0.1vw solid #31111152;
-  border-radius:0.5vw;
-}
-
-.welcome-card{
-  display:flex;
-  gap:2vw;
-  padding:1.1vw;
-}
-
-.welcome-card h3{
-  margin:0.5vw 0;
-  font-size:1.5vw;
-  overflow-wrap: break-word;
-  word-break: break-word;
-}
-
-.logout{
-  border:none;
-  background:none;
-  color:#960c19;
-  cursor:pointer;
-  padding:0;
-}
-
-.menu-card{
-  display:flex;
-  margin-top: 0.5vw;
-  gap:1vw;
-  padding:1.5vw;
-  cursor:pointer;
-  transition:.3s;
-  position:relative;
-}
-
-.menu-card:hover{
-  transform:translateX(0.5vw);
-}
-
-.menu-card h4{
-  margin:0 0 0.5vw;
-}
-
-.menu-card p{
-  margin:0;
-  font-size:0.9vw;
-}
-
-.menu-card.active{
-  background:#311111;
-  color:white;
-}
-
-.menu-card.active::after{
-  content:"";
-  position:absolute;
-  right:-1vw;
-  top:50%;
-  transform:translateY(-50%);
-
-  border-top:1vw solid transparent;
-  border-bottom:1vw solid transparent;
-  border-left:1vw solid #311111;
 }
 
 .content{
@@ -691,29 +451,279 @@ img{
   transition:.3s;
 }
 
-@media(max-width:1024px){
+@media (max-width: 768px) {
 
-  .perfil-container{
-    grid-template-columns:1fr;
+  .perfil-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 0 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
 
-  .cards-grid{
-    grid-template-columns:1fr;
+  .sidebar {
+    width: 100%;
+    gap: 16px;
   }
 
+  .welcome-card {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 0 20px 24px;
+    border: none;
+    border-radius: 0 0 24px 24px;
+    background: #F5E9E0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    text-align: center;
+  }
+
+  .welcome-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 125px;
+    background: #af8072;
+    border-radius: 0 0 50% 50% / 0 0 25% 25%;
+    z-index: 0;
+  }
+
+  .welcome-card .icon {
+    position: relative;
+    z-index: 1;
+    margin-top: 65px;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 4px solid #F5E9E0;
+    border-radius: 50%;
+    background: #F5E9E0;
+  }
+
+  .welcome-card .icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .welcome-card > div:not(.icon) {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .welcome-card p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+
+  .welcome-card h1 {
+    margin: 8px 0;
+    font-size: 23px;
+    overflow-wrap: anywhere;
+  }
+
+  .email-box {
+    width: 100%;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+
+  .change-password {
+    width: 170px;
+    max-width: 100%;
+    height: 40px;
+    margin: 10px auto;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  .logout {
+    display: block;
+    margin: 10px auto 0;
+    font-size: 14px;
+  }
+
+  .sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 16px;
+  }
+
+  .menu-card {
+    width: 100%;
+    margin-top: 0;
+    padding: 16px 14px;
+    gap: 14px;
+    align-items: center;
+    border: none;
+    border-bottom: 1px solid #DCCBC0;
+    border-radius: 0;
+    background: transparent;
+    transform: none;
+  }
+
+  .menu-card:hover {
+    transform: none;
+  }
+
+  .menu-card img {
+    width: 23px;
+    height: 23px;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  .menu-card h4 {
+    margin: 0 0 4px;
+    font-size: 15px;
+  }
+
+  .menu-card p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .menu-card.active::after {
+    display: none;
+  }
+
+  .menu-card.active {
+    background: #af8072;
+    color: #fffdfd;
+    border-radius: 10px;
+  }
+
+  .content {
+    width: 100%;
+    min-width: 0;
+    padding: 20px 16px;
+    border-radius: 16px;
+    background: #F5E9E0;
+  }
+
+  .title {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .title img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .title h1 {
+    margin: 0;
+    font-size: 22px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .form-card {
+    min-width: 0;
+    padding: 18px 14px;
+    border-radius: 12px;
+  }
+
+  .form-card h2 {
+    margin-bottom: 18px;
+    font-size: 18px;
+  }
+
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .field {
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+
+  .field label {
+    font-size: 13px;
+  }
+
+  .field input,
+  .field select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    font-size: 14px;
+    border: 1px solid #D6BFB1;
+    border-radius: 8px;
+    background: #FFFAF6;
+  }
+
+  .save-btn {
+    grid-column: auto;
+    width: 100%;
+    min-height: 46px;
+    height: auto;
+    font-size: 14px;
+    border-radius: 8px;
+    background: #311111;
+    color: #F5E9E0;
+  }
+
+  /* Modal de alteração de senha */
+  .modal-content {
+    width: calc(100% - 32px);
+    max-width: 420px;
+    padding: 22px 18px;
+    gap: 14px;
+    border-radius: 16px;
+  }
+
+  .modal-content input {
+    width: 100%;
+    height: 46px;
+    padding: 0 42px 0 12px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+
+  .senha-field button {
+    right: 10px;
+  }
+
+  .senha-field button img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .bnt-senha {
+    width: 100%;
+    height: 42px;
+    transform: none;
+    border-radius: 8px;
+    font-size: 14px;
+  }
 }
-
-@media(max-width:768px){
-
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .full,
-  .save-btn{
-    grid-column:span 1;
-  }
-
-}
-
 </style>

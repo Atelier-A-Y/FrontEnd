@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth";
-import api from "../api/api";
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import api from '../api/api'
 
 const route = useRoute();
 const router = useRouter();
-const favorito = ref(false)
+const favorito = ref(false);
 const produto = ref<any>(null);
-const authStore = useAuthStore();
 
 async function alterarFav(id: number) {
   try {
@@ -71,7 +69,7 @@ async function verificarFavorito(id: number) {
 async function adicionarCarrinho() {
   try {
     await api.post(
-      "https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/",
+      "/carrinho/",
       {
         roupa: produto.value.id,
         quantidade: 1,
@@ -93,17 +91,17 @@ async function adicionarCarrinho() {
 }
 
 async function carregarProduto() {
-  const id = route.params.id;
+  const id = route.params.id
 
   const response = await api.get(
-    `https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/${id}/`
+    `/roupas/${id}/`
   );
 
-  produto.value = response.data;
+  produto.value = response.data
 }
 
 function voltarProd() {
-  router.push("/produtos");
+  router.push('/produtos')
 }
 
 onMounted(async () => {
@@ -116,21 +114,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <button class="voltar" @click="voltarProd"><img src="/public/img/flecha.png" alt="flecha"></button>
-
   <div v-if="produto" class="container">
+    <button class="voltar" @click="voltarProd"><img src="/public/img/flecha.png" alt="flecha"></button>
     <div class="informacoes">
-
       <div class="img-prod">
-        <img
-          v-if="produto.foto"
-          :src="produto.foto.url"
-          :alt="produto.nome"
-        />
+        <img v-if="produto.foto" :src="produto.foto.url" :alt="produto.nome" />
       </div>
 
       <div class="infos">
-
         <h1>{{ produto.nome }}</h1>
 
         <h2>R$ {{ Number(produto.preco).toFixed(2).replace(".", ",") }}</h2>
@@ -141,7 +132,6 @@ onMounted(async () => {
         </div>
 
         <div class="acoes">
-
           <button class="btn-carrinho" @click="adicionarCarrinho">
             Adicionar ao Carrinho
           </button>
@@ -159,7 +149,6 @@ onMounted(async () => {
               alt="Favorito"
             />
           </button>
-
         </div>
 
         <div class="descricao">
@@ -167,9 +156,7 @@ onMounted(async () => {
 
           <p>{{ produto.descricao }}</p>
         </div>
-
       </div>
-
     </div>
   </div>
 </template>
@@ -225,7 +212,7 @@ onMounted(async () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Lexend Deca', sans-serif;
 }
 
 .infos h1 {
@@ -244,12 +231,32 @@ onMounted(async () => {
 .detalhes {
   display: flex;
   flex-direction: column;
-  gap: .8rem;
+  gap: 0.8rem;
 }
 
 .detalhes p {
   font-size: 1.1rem;
   color: #444;
+}
+
+.cor-produto {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.amostra-cor {
+  width: 28px;
+  height: 28px;
+
+  border-radius: 20px;
+
+  border: 1px solid rgba(49, 17, 17, 0.3);
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 /* ---------------- BOTÕES ---------------- */
@@ -270,7 +277,7 @@ onMounted(async () => {
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .btn-carrinho:hover {
@@ -290,7 +297,7 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .btn-favorito:hover {
@@ -316,4 +323,128 @@ onMounted(async () => {
   text-align: justify;
 }
 
+/* ---------------- RESPONSIVO ---------------- */
+
+@media (max-width: 768px) {
+  .voltar {
+    width: 6vw;
+    height: 2vw;
+  }
+  /* ---------------- CONTAINER ---------------- */
+ 
+ .container {
+    width: 100%;
+    padding: 0 0 4rem 0;
+    box-sizing: border-box;
+    margin-top: -13vw;
+  }
+
+  .informacoes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+    width: 100%;
+    margin: 0;
+  }
+
+  .img-prod {
+    order: -1;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+    margin: 0;
+  }
+
+  .img-prod img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 3/4;
+    border-radius: 0%;
+  }
+
+  .infos {
+    order: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 0 5vw;
+  }
+  /* ---------------- INFOS ---------------- */
+
+  .infos h1 {
+    color: #311111;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .infos h2 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    color: #7a2d2d;
+  }
+
+  .detalhes {
+    gap: .8rem;
+  }
+
+  .detalhes p {
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  /* ---------------- BOTÕES ---------------- */
+
+  .acoes {
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  .btn-carrinho {
+    padding: 14px 10px;
+    background: #311111;
+    color: #f5e9e0;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: .3s;
+  }
+
+  .btn-carrinho:active {
+    background-color: #7a2d2d;
+  }
+
+  .btn-favorito {
+    width: 30px;
+    height: 30px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .3s;
+  }
+
+  /* ---------------- DESCRIÇÃO ---------------- */
+
+  .descricao {
+    margin-top: 1rem;
+  }
+
+  .descricao h3 {
+    color: #311111;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .descricao p {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.8;
+    text-align: justify;
+  }
+}
 </style>

@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import {
-  ref,
-  computed,
-  onMounted,
-  onUnmounted
-} from "vue";
+import {ref, computed, onMounted, onUnmounted} from "vue";
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from "vue-router";
 
 const authStore = useAuthStore();
 const router = useRouter();
 const headerAtivo = ref(false);
+const menuAtivo = ref(false);
 
 function abrirUsuario() {
   if (authStore.token) {
@@ -98,7 +94,7 @@ function irParaHome(){
 </script>
 
 <template>
-  <header :class="{ scrolled: headerAtivo }" class="topo">
+  <div :class="{ scrolled: headerAtivo }" class="topo">
 
       <div @click="irParaHome" class="logo">
         <img :src="headerAtivo
@@ -113,37 +109,6 @@ function irParaHome(){
 
       </div>
 
-      <!-- GLOBO -->
-      <div
-        class="dropdown"
-        @click="showDropdown = !showDropdown"
-      >
-        <a href="#" class="globo">
-          <img
-              :src="headerAtivo
-                ? '/img/globo-solido.png'
-                : '/img/globo.png'"
-              alt="Globo"
-            />
-        </a>
-
-        <div v-if="showDropdown" class="submenu">
-
-          <ul class="cima">
-            <li><RouterLink to="/">África</RouterLink></li>
-            <li><RouterLink to="/">América</RouterLink></li>
-            <li><RouterLink to="/">Ásia</RouterLink></li>
-          </ul>
-
-          <ul class="baixo">
-            <li><RouterLink to="/">Europa</RouterLink></li>
-            <li><RouterLink to="/">Oceania</RouterLink></li>
-          </ul>
-
-        </div>
-      </div>
-
-      <!-- BUSCA -->
       <div class="search-container">
 
         <input
@@ -167,7 +132,6 @@ function irParaHome(){
           v-if="resultados.length"
         >
           <ul>
-
             <li
               v-for="(item, index) in resultados"
               :key="item.id"
@@ -175,25 +139,18 @@ function irParaHome(){
               @click="abrirNavegacao(item)"
               class="result-item"
             >
-
               <span class="item-icon">
                 <img src="/img/lupa-solido.png" alt="Lupa" />
               </span>
-
               <span class="item-text">
                 {{ item.nome }}
               </span>
-
             </li>
-
           </ul>
         </div>
-
       </div>
 
-      <!-- ÍCONES -->
       <ul class="icones">
-
         <li>
           <a @click.prevent="abrirUsuario">
             <img
@@ -226,58 +183,160 @@ function irParaHome(){
             />
           </RouterLink>
         </li>
-
       </ul>
+  </div>
 
-  </header>
+  <div :class="{ scrolled: headerAtivo }" class="topo-mobile">
+  <div>
+    <div @click="menuAtivo = !menuAtivo">
+          <img
+            :src="menuAtivo
+              ? (headerAtivo
+                  ? '/img/x-solido.png'
+                  : '/img/x.png')
+              : (headerAtivo
+                  ? '/img/menu-aberto-solido.png'
+                  : '/img/menu-aberto.png')"
+            class="menu-mobile"
+          />
+      </div>
+
+      <div v-if="menuAtivo" class="aba-menu">
+        <ul class="icones-mobile">
+          <li>
+            <a @click.prevent="abrirUsuario">
+              <img src="/img/user-solido.png" alt="user-solido.png"> Usuário
+            </a>
+          </li>
+
+          <li>
+            <a href="/carrinho">
+              <img src="/img/bolsa-solido.png" alt="bolsa-solido.png"> Carrinho
+            </a>
+          </li>
+
+          <li>
+            <a href="/favoritos">
+              <img src="/img/coracao-solido.png" alt="coracao-solido.png"> Favoritos
+            </a>
+          </li>
+
+          <li>
+            <a href="/produtos">
+              <img src="/img/dress.png" alt="dress.png"> Produtos
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div @click="irParaHome" class="texto-mobile">
+      <p class="titulo-mobile">ATELIER <span class="sigla-mobile">A.Y.</span></p>
+    </div>
+
+    <div class="search-container-mobile">
+
+  <button
+    class="botao-lupa-mobile"
+    @click="showDropdown = !showDropdown"
+  >
+    <img
+      :src="headerAtivo
+        ? '/img/lupa-solido.png'
+        : '/img/lupa.png'"
+      alt="Pesquisar"
+      class="icon-lupa-mobile"
+    />
+  </button>
+
+  <div
+    v-if="showDropdown"
+    class="painel-pesquisa-mobile"
+  >
+
+    <div class="barra-pesquisa-mobile">
+      <img  class="lupa-barra-mobile" src="/img/lupa-solido.png" alt="lupa.png">
+
+      <input
+        type="text"
+        v-model="pesquisa"
+        placeholder="Buscar..."
+        @keydown="navegar"
+        class="search-input-mobile"
+        autofocus
+      />
+
+      <button
+        class="fechar-pesquisa-mobile"
+        @click="showDropdown = false"
+      >
+        <img src="/img/upload.png" alt="fechar">
+      </button>
+    </div>
+
+    <div
+      class="results-list-mobile"
+      v-if="resultados.length"
+    >
+      <ul>
+        <li
+          v-for="(item, index) in resultados"
+          :key="item.id"
+          :class="{ ativo: index === indexAtivo }"
+          @click="abrirNavegacao(item)"
+          class="result-item-mobile"
+        >
+          <span class="item-icon-mobile">
+            <img
+              src="/img/lupa-solido.png"
+              alt="Lupa"
+            />
+          </span>
+
+          <span class="item-text-mobile">
+            {{ item.nome }}
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
 </template>
 
 <style scoped>
-
-/* HEADER */
+.topo-mobile{
+  display: none;
+}
 
 .topo {
   position: fixed;
-
   top: 0;
   left: 0;
-
   width: 100%;
   height: 6vw;
-
   padding: 0 2vw;
   display: flex;
   align-items: center;
-
   z-index: 99;
-
   background: linear-gradient(
     to top,
     rgba(63, 44, 25, 0) 3%,
     rgba(72, 50, 29, 0.341) 28%,
     rgba(63, 44, 25, 0.654) 100%
   );
-
   transition:
     background 0.4s ease,
     backdrop-filter 0.4s ease,
     box-shadow 0.4s ease;
-
   justify-content: space-between;
 }
 
-/* HEADER QUANDO DESCE */
-
 .topo.scrolled {
   background: rgba(245, 230, 222, 0.95);
-
   backdrop-filter: blur(10px);
-
   box-shadow:
     0 0.2vw 1vw rgba(0, 0, 0, 0.08);
 }
-
-/* LOGO */
 
 .logo {
   display: flex;
@@ -310,8 +369,6 @@ function irParaHome(){
   align-self: center;
 }
 
-/* MENU */
-
 .menu {
   display: flex;
   gap: 2vw;
@@ -319,23 +376,13 @@ function irParaHome(){
 
 .menu li a {
   text-decoration: none;
-
   color: white;
-
   font-size: 0.9rem;
-
   transition: 0.3s;
 }
 
 .menu li a:hover {
   opacity: 0.7;
-}
-
-/* DROPDOWN */
-
-.globo img {
-  width: 1.8vw;
-  margin-left: 35vw;
 }
 
 .submenu {
@@ -376,8 +423,6 @@ function irParaHome(){
   font-weight: bold;
 }
 
-/* BUSCA */
-
 .search-container {
   position: relative;
   display: flex;
@@ -405,29 +450,20 @@ function irParaHome(){
   height: 1.5vw;
 }
 
-/* RESULTADOS */
-
 .results-list {
   position: absolute;
-
   top: 120%;
   left: 0;
-
   width: 100%;
-
   background: white;
-
   border-radius: 1vw;
-
   overflow: hidden;
-
   box-shadow:
     0 1vw 2vw rgba(0, 0, 0, 0.1);
 }
 
 .results-list ul {
   list-style: none;
-
 }
 
 .result-item {
@@ -462,8 +498,6 @@ function irParaHome(){
   width: 2vw;
 }
 
-/* QUANDO O HEADER FICA SÓLIDO */
-
 .topo.scrolled .titulo,
 .topo.scrolled .sigla,
 .topo.scrolled .menu li a {
@@ -481,31 +515,110 @@ function irParaHome(){
   color: rgba(49, 17, 17, 0.5);
 }
 
-/* RESPONSIVO */
+/*========================================
+                MOBILE
+=========================================*/
 
-@media (max-width: 768px) {
-
-  .topo {
-    height: 14vw;
-    padding: 0 5vw;
-  }
-
-  .menu {
+@media (max-width: 600px) {
+  .topo{
     display: none;
   }
 
-  .logo img {
-    width: 10vw;
+  .topo-mobile{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 10vw;
+    padding: 0 8vw;
+    display: flex;
+    align-items: center;
+    z-index: 99;
+    background: linear-gradient(
+      to top,
+      rgba(63, 44, 25, 0) 3%,
+      rgba(72, 50, 29, 0.341) 28%,
+      rgba(63, 44, 25, 0.654) 100%
+    );
+    transition:
+      background 0.4s ease,
+      backdrop-filter 0.4s ease,
+      box-shadow 0.4s ease;
   }
 
-  .search-container {
-    width: 30vw;
+  .topo-mobile.scrolled {
+    background: rgba(245, 230, 222, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow:
+      0 0.2vw 1vw rgba(0, 0, 0, 0.08);
   }
 
-  .icones li img {
-    width: 4vw;
+  .menu-mobile{
+    width: 5vw;
+    align-items: center;
   }
-}
 
-</style>
+  .aba-menu{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    padding: 6vw 8vw 0 8vw;
+    box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    animation: entrarMenu 0.3s ease;
+  }
+
+  @keyframes entrarMenu {
+    from{
+      transform: translateX(-100%);
+    }
+
+    to{
+      transform: translateX(0);
+    }
+  }
+
+  .icones-mobile img{
+    width: 7vw;
+  }
+
+  .icones-mobile li a {
+    display: flex;
+    align-items: center;
+    gap: 4vw;
+    color: #311111;
+    font-size: 4vw;
+    font-family: "Inria Serif", serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  .icones-mobile li {
+    margin-bottom: 7vw;
+  }
+
+  .texto-mobile {
+    text-align: center;
+    margin-left: 20vw;
+    font-family: "Inria Serif", serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  .titulo-mobile {
+    font-size: 4.5vw;
+    color: white;
+    margin: 0;
+    white-space: nowrap;
+    letter-spacing: 2px;
+  }
+
+  .sigla-mobile {
+    font-size: 3vw;
+    color: white;
+    margin-left: 1.5vw;
+  }
+
+  /* ========================================
+        PESQUISA MOBILE
