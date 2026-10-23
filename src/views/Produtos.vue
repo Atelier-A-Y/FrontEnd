@@ -19,8 +19,83 @@ const carregarProdutos = async () => {
   }
 }
 
+// Obtém as cores existentes nos produtos
+const cores = computed(() => {
+  const coresEncontradas = produtos.value
+    .map((produto) => produto.cor)
+    .filter((cor) => typeof cor === "string" && cor.trim() !== "");
+
+  return [...new Set(coresEncontradas)];
+});
+
+// Aplica os filtros selecionados
+const produtosFiltrados = computed(() => {
+  return produtos.value.filter((produto) => {
+    // Categoria: pode vir como ID ou como objeto
+    const categoriaProduto =
+      produto.categoria && typeof produto.categoria === "object"
+        ? produto.categoria.id
+        : produto.categoria;
+
+    const categoriaSelecionada = filtros.value.categoria;
+
+    const categoriaCorreta =
+      categoriaSelecionada === "" ||
+      String(categoriaProduto) === String(categoriaSelecionada);
+
+    // Cor: compara o nome da cor
+    const corCorreta =
+      filtros.value.cor === "" ||
+      String(produto.cor || "").toLowerCase() ===
+        String(filtros.value.cor).toLowerCase();
+
+    // Preço mínimo e máximo
+    const preco = Number(produto.preco);
+
+    const precoMinimoCorreto =
+      filtros.value.precoMinimo === "" ||
+      preco >= Number(filtros.value.precoMinimo);
+
+    const precoMaximoCorreto =
+      filtros.value.precoMaximo === "" ||
+      preco <= Number(filtros.value.precoMaximo);
+
+    return (
+      categoriaCorreta &&
+      corCorreta &&
+      precoMinimoCorreto &&
+      precoMaximoCorreto
+    );
+  });
+});
+
+// Recebe os filtros do componente
+function receberFiltros(novosFiltros) {
+  filtros.value = {
+    categoria: novosFiltros.categoria ?? "",
+    cor: novosFiltros.cor ?? "",
+    precoMinimo: novosFiltros.precoMinimo ?? "",
+    precoMaximo: novosFiltros.precoMaximo ?? "",
+  };
+}
+
+// Abre a página de detalhes do produto
 function abrirProdutos(id) {
-  router.push(`/info_prod/${id}`)
+  router.push(`/info_prod/${id}`);
+}
+
+// Formata o preço em reais
+function formatarPreco(preco) {
+  const valor = Number(preco);
+
+  if (!Number.isFinite(valor)) {
+    return "0,00";
+  }
+
+  return valor.toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 const favoritosMobile = ref<number[]>([])
@@ -202,12 +277,10 @@ onMounted(() => {
 }
 
 .produtos h1 {
+  margin-bottom: 25px;
   text-align: center;
-  color: #311111;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 3rem;
-  position: relative;
+  font-size: 2rem;
+  font-weight: 500;
 }
 
 .produtos h1::after {
@@ -221,7 +294,10 @@ onMounted(() => {
   left: 50%;
   bottom: -1vw;
 
-  transform: translateX(-50%);
+.contador {
+  margin: 15px 0;
+  color: #705858;
+  font-size: 0.95rem;
 }
 
 .container-produtos {
@@ -245,82 +321,69 @@ onMounted(() => {
   border: 0.1vw solid rgba(49, 17, 17, 0.15);
 
   overflow: hidden;
-
-  transition: all 0.3s ease;
-
-  box-shadow: 0 0.3vw 1vw rgba(0, 0, 0, 0.08);
+  background: #f6e9df;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .card-produto:hover {
-  transform: translateY(-0.4vw);
-
-  box-shadow: 0 1vw 2vw rgba(49, 17, 17, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 5px 15px rgb(53 20 20 / 12%);
 }
 
-.imagem-produto {
+.imagem-produto,
+.imagem-sem-foto {
   width: 100%;
-
-  height: 25vw;
-
+  height: 260px;
   object-fit: cover;
-
-  border-radius: 1rem;
-
-  margin-bottom: 1rem;
-
-  transition: transform 0.4s ease;
 }
 
-.card-produto:hover .imagem-produto {
-  transform: scale(1.05);
+.imagem-sem-foto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e7d5c8;
+  color: #705858;
 }
 
-.card-produto h2 {
-  color: #311111;
-
-  font-size: 1.3rem;
-
-  margin-bottom: 0.8rem;
-
-  font-weight: 600;
+.informacoes-produto {
+  padding: 15px;
 }
 
-.card-produto p {
-  color: #444444;
-
-  margin-bottom: 0.5rem;
-
-  line-height: 1.5;
-}
-
-.card-produto strong {
-  color: #311111;
+.informacoes-produto h2 {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
 .preco {
-  font-size: 1.4rem;
-
-  font-weight: bold;
-
-  color: #311111;
-
-  margin-top: 1rem;
-
-  padding-top: 1rem;
-
-  border-top: 0.1vw solid rgba(49, 17, 17, 0.15);
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
+.cor-produto {
+  margin: 0;
+  color: #705858;
+  font-size: 0.9rem;
+}
+
+.mensagem,
 .sem-produtos {
+  padding: 30px 10px;
   text-align: center;
+}
 
-  margin-top: 4rem;
-
-  color: #666;
+.erro {
+  color: #a32323;
 }
 
 .sem-produtos h2 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 500;
 }
 
@@ -433,6 +496,7 @@ onMounted(() => {
     object-fit: contain;
     display: block;
   }
+}
 
   .sem-produtos-mobile {
     margin-top: 2rem;

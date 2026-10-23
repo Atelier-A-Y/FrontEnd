@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import api from '../api/api'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
-
+import axios from 'axios'
 import { useAuthStore } from '../stores/auth'
 console.log('TOKEN SALVO:', localStorage.getItem('token'))
 

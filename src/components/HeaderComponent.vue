@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import {
-  ref,
-  computed,
-  onMounted,
-  onUnmounted
-} from "vue";
+import {ref, computed, onMounted, onUnmounted} from "vue";
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from "vue-router";
 
@@ -144,11 +139,9 @@ function irParaHome(){
               @click="abrirNavegacao(item)"
               class="result-item"
             >
-
               <span class="item-icon">
                 <img src="/img/lupa-solido.png" alt="Lupa" />
               </span>
-
               <span class="item-text">
                 {{ item.nome }}
               </span>
@@ -629,159 +622,3 @@ function irParaHome(){
 
   /* ========================================
         PESQUISA MOBILE
-======================================== */
-
-  .search-container-mobile {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 5vw;
-  }
-
-  /* ========================================
-          LUPA DO HEADER
-  ======================================== */
-
-  .botao-lupa-mobile {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 5vw;
-      height: 5vw;
-      margin: 0 0 0 40vw;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-  }
-  .icon-lupa-mobile {
-      display: block;
-      width: 4vw;
-      height: 4vw;
-  }
-
-  /* ========================================
-          PAINEL DE PESQUISA
-  ======================================== */
-
-  .painel-pesquisa-mobile {
-      position: fixed;
-      top: 10vw;
-      right: 0;
-      width: 100vw;
-      height: calc(20vh - 8vw);
-      background: white;
-      z-index: 98;
-      overflow-y: auto;
-  }
-
-  /* ========================================
-          BARRA DE PESQUISA
-  ======================================== */
-
-  .barra-pesquisa-mobile {
-      width: 100%;
-      height: 14vw;
-      padding: 0 5vw;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      background: #F5E9E0;
-  }
-
-  /* LUPA DENTRO DA BARRA */
-
-  .lupa-barra-mobile {
-      width: 4.5vw;
-      height: 4.5vw;
-      flex-shrink: 0;
-      margin-right: 3vw;
-  }
-
-  /* INPUT */
-
-  .search-input-mobile {
-      flex: 1;
-      min-width: 0;
-      height: 100%;
-      padding: 0;
-      border: none;
-      outline: none;
-      background: transparent;
-      font-size: 4vw;
-  }
-
-  .search-input-mobile::placeholder {
-      color: #777;
-  }
-
-
-  /* ========================================
-          BOTÃO X
-  ======================================== */
-
-  .fechar-pesquisa-mobile {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 8vw;
-      height: 8vw;
-      padding: 0;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      flex-shrink: 0;
-  }
-
-  .fechar-pesquisa-mobile img {
-      width: 5vw;
-      height: 5vw;
-  }
-
-
-  /* ========================================
-          RESULTADOS
-  ======================================== */
-
-  .results-list-mobile {
-      width: 100%;
-      background: white;
-  }
-
-  .results-list-mobile ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-  }
-
-  .result-item-mobile {
-      display: flex;
-      align-items: center;
-      gap: 3vw;
-      padding: 4vw 5vw;
-      cursor: pointer;
-      transition: background 0.2s ease;
-  }
-
-  .result-item-mobile:hover,
-  .result-item-mobile.ativo {
-      background: #f5e9e0;
-  }
-
-  .item-icon-mobile img {
-      width: 4vw;
-      height: 4vw;
-  }
-
-  .item-text-mobile {
-      color: #311111;
-      font-size: 4vw;
-      font-family: "Inria Serif", serif;
-  }
-
-  .topo-mobile.scrolled .titulo-mobile,
-  .topo-mobile.scrolled .sigla-mobile{
-    color: #311111;
-  }
-}
-</style>

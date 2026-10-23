@@ -8,15 +8,6 @@ import FavoritosComponent from '../components/FavoritosComponent.vue'
 
 const loading = ref(false)
 const menuAtivo = ref('cadastros')
-const modalSenha = ref(false)
-const senhaAtual = ref('')
-const novaSenha = ref('')
-const confirmarSenha = ref('')
-const mostrarSenhaAtual = ref(false)
-const mostrarNovaSenha = ref(false)
-const mostrarConfirmarSenha = ref(false)
-const router = useRouter()
-const authStore = useAuthStore()
 
 const form = ref({
   name: '',
@@ -297,6 +288,7 @@ onMounted(() => {
 
     </aside>
 
+    <!-- Conteúdo dinâmico de acordo com o menu selecionado -->
     <section
       class="content"
       v-if="menuAtivo === 'pedidos'"
@@ -307,78 +299,12 @@ onMounted(() => {
     </div>
     </section>
 
-   <section
-      class="content"
+    <CadastroSection
       v-if="menuAtivo === 'cadastros'"
-    >
-      <div class="title">
-        <img src="/img/user-solido.png" alt="user.png">
-        <h1>Cadastro</h1>
-      </div>
-
-      <div class="cards-grid">
-
-        <div class="form-card">
-
-          <h2>Dados Pessoais</h2>
-
-          <div class="form-grid">
-
-            <div class="field full">
-              <label>Nome Completo*</label>
-              <input
-              v-model="form.name"
-                type="text"
-                placeholder="Ex: Julia Gabriela da Silva"
-              >
-            </div>
-
-            <div class="field">
-              <label>CPF*</label>
-              <input
-              v-model="form.cpf"
-                type="text"
-                placeholder="Ex: 000.000.000-00"
-              >
-            </div>
-
-            <div class="field">
-              <label>Data de Nascimento</label>
-              <input
-                type="text"
-                placeholder="Ex: 09/07/1995"
-              >
-            </div>
-
-            <div class="field">
-              <label>Telefone Celular*</label>
-              <input
-              v-model="form.telefone"
-                type="text"
-                placeholder="Ex: (DD) + Número"
-              >
-            </div>
-
-            <div class="field">
-              <label>Email</label>
-              <input
-              v-model="form.email"
-                type="email"
-                placeholder="Ex: julia@gmail.com"
-              >
-            </div>
-
-            <button
-                class="save-btn"
-                @click="salvar"
-                :disabled="loading"
-              >
-                {{ loading ? 'Salvando...' : '✓ Salvar Alterações' }}
-            </button>
-          </div>
-        </div>
-        </div>
-    </section>
+      :form="form"
+      :loading="loading"
+      @salvar="salvar"
+    />
 
     <section
       class="content"
@@ -407,49 +333,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
 *{
   box-sizing:border-box;
-}
-
-img{
-  width: 1.5vw;
-  height: 1.5vw;
-}
-
-.senha-field {
-  position: relative;
-}
-
-.senha-field input {
-  width: 100%;
-  padding-right: 50px;
-}
-
-.senha-field button {
-  position: absolute;
-  right: 1vw;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  cursor: pointer;
-}
-
-.bnt-senha{
-  width:50%;
-  height:2.5vw;
-  transform: translateX(50%);
-  border:0.1vw solid #31111192;
-  border-radius:0.5vw;
-  background:#F5E9E0;
-  color:#311111;
-  cursor:pointer;
-}
-
-.bnt-senha:hover{
-  background-color: #311111;
-  color: #F5E9E0;
-  transition:.3s;
 }
 
 .perfil-container{
@@ -458,125 +343,6 @@ img{
   display:grid;
   grid-template-columns:20vw 1fr;
   gap:3vw;
-}
-
-.modal{
-  position: fixed;
-  inset: 0;
-
-  background: rgba(0,0,0,.5);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 999;
-}
-
-.modal-content{
-  background: white;
-  padding: 2vw;
-  border-radius: 1vw;
-  width: 30vw;
-  max-width: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: 1vw;
-}
-
-.modal-content h2{
-  color: #311111;
-  text-align: center;
-}
-
-.modal-content input{
-  height: 5vw;
-  padding: 0 5vw;
-  background:#F5E9E0;
-  border:0.1vw solid #31111152;
-  border-radius: 1vw;
-}
-
-.sidebar{
-  display:flex;
-  flex-direction:column;
-  gap:0.5vw;
-}
-
-.welcome-card h1{
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin: 0.3vw 0;
-  overflow-wrap: break-word;
-  word-break: break-word;
-}
-
-.welcome-card,
-.menu-card{
-  background:#F5E9E0;
-  border:0.1vw solid #31111152;
-  border-radius:0.5vw;
-}
-
-.welcome-card{
-  display:flex;
-  gap:2vw;
-  padding:1.1vw;
-}
-
-.welcome-card h3{
-  margin:0.5vw 0;
-  font-size:1.5vw;
-  overflow-wrap: break-word;
-  word-break: break-word;
-}
-
-.logout{
-  border:none;
-  background:none;
-  color:#960c19;
-  cursor:pointer;
-  padding:0;
-}
-
-.menu-card{
-  display:flex;
-  margin-top: 0.5vw;
-  gap:1vw;
-  padding:1.5vw;
-  cursor:pointer;
-  transition:.3s;
-  position:relative;
-}
-
-.menu-card:hover{
-  transform:translateX(0.5vw);
-}
-
-.menu-card h4{
-  margin:0 0 0.5vw;
-}
-
-.menu-card p{
-  margin:0;
-  font-size:0.9vw;
-}
-
-.menu-card.active{
-  background:#311111;
-  color:white;
-}
-
-.menu-card.active::after{
-  content:"";
-  position:absolute;
-  right:-1vw;
-  top:50%;
-  transform:translateY(-50%);
-
-  border-top:1vw solid transparent;
-  border-bottom:1vw solid transparent;
-  border-left:1vw solid #311111;
 }
 
 .content{

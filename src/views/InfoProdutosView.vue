@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import api from "../api/api";
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import api from '../api/api'
 
 const route = useRoute();
 const router = useRouter();
@@ -91,17 +91,17 @@ async function adicionarCarrinho() {
 }
 
 async function carregarProduto() {
-  const id = route.params.id;
+  const id = route.params.id
 
   const response = await api.get(
     `/roupas/${id}/`
   );
 
-  produto.value = response.data;
+  produto.value = response.data
 }
 
 function voltarProd() {
-  router.push("/produtos");
+  router.push('/produtos')
 }
 
 onMounted(async () => {
@@ -117,17 +117,11 @@ onMounted(async () => {
   <div v-if="produto" class="container">
     <button class="voltar" @click="voltarProd"><img src="/public/img/flecha.png" alt="flecha"></button>
     <div class="informacoes">
-
       <div class="img-prod">
-        <img
-          v-if="produto.foto"
-          :src="produto.foto.url"
-          :alt="produto.nome"
-        />
+        <img v-if="produto.foto" :src="produto.foto.url" :alt="produto.nome" />
       </div>
 
       <div class="infos">
-
         <h1>{{ produto.nome }}</h1>
 
         <h2>R$ {{ Number(produto.preco).toFixed(2).replace(".", ",") }}</h2>
@@ -218,7 +212,7 @@ onMounted(async () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  font-family: "Lexend Deca", sans-serif;
+  font-family: 'Lexend Deca', sans-serif;
 }
 
 .infos h1 {
@@ -237,12 +231,32 @@ onMounted(async () => {
 .detalhes {
   display: flex;
   flex-direction: column;
-  gap: .8rem;
+  gap: 0.8rem;
 }
 
 .detalhes p {
   font-size: 1.1rem;
   color: #444;
+}
+
+.cor-produto {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.amostra-cor {
+  width: 28px;
+  height: 28px;
+
+  border-radius: 20px;
+
+  border: 1px solid rgba(49, 17, 17, 0.3);
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 /* ---------------- BOTÕES ---------------- */
@@ -263,7 +277,7 @@ onMounted(async () => {
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .btn-carrinho:hover {
@@ -283,7 +297,7 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .btn-favorito:hover {
