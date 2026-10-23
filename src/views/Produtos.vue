@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed} from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/api'
 
 const router = useRouter()
-
+const filtros = ref();
 const produtos = ref<any[]>([])
 
 const carregarProdutos = async () => {

@@ -8,6 +8,15 @@ import FavoritosComponent from '../components/FavoritosComponent.vue'
 
 const loading = ref(false)
 const menuAtivo = ref('cadastros')
+const modalSenha = ref(false)
+const senhaAtual = ref('')
+const novaSenha = ref('')
+const confirmarSenha = ref('')
+const mostrarSenhaAtual = ref(false)
+const mostrarNovaSenha = ref(false)
+const mostrarConfirmarSenha = ref(false)
+const router = useRouter()
+const authStore = useAuthStore()
 
 const form = ref({
   name: '',
