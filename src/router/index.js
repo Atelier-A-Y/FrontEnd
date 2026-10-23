@@ -15,8 +15,7 @@ const routes = [
   },
   {
     path: '/info_prod/:id',
-    component: () => import('../views/InfoProdutosView.vue'),
-    props: true
+    component: () => import('../views/InfoProdutosView.vue')
   },
   {
     path: '/login',

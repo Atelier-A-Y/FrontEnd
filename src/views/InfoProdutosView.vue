@@ -3,48 +3,99 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '../api/api'
 
-const route = useRoute()
-const router = useRouter()
-const favorito = ref(false)
+const route = useRoute();
+const router = useRouter();
+const favorito = ref(false);
+const produto = ref<any>(null);
 
-const produto = ref<any>(null)
+async function alterarFav(id: number) {
+  try {
+    const resposta = await api.get("/favoritos/");
 
-function alterarFav() {
-  favorito.value = !favorito.value
+    const favoritos = resposta.data.results || resposta.data;
 
-  const favoritos = JSON.parse(localStorage.getItem('favoritos') || '[]')
+    console.log("FAVORITOS:", favoritos);
 
-  if (favorito.value) {
-    favoritos.push(produto.value.id)
-  } else {
-    const index = favoritos.indexOf(produto.value.id)
+    const favoritoExistente = favoritos.find(
+      (item: any) => item.roupa?.id === id
+    );
 
-    if (index > -1) {
-      favoritos.splice(index, 1)
+    console.log("FAVORITO EXISTENTE:", favoritoExistente);
+
+    if (favoritoExistente) {
+      await api.delete(`/favoritos/${favoritoExistente.id}/`);
+
+      favorito.value = false;
+
+      console.log("FAVORITO REMOVIDO!");
+
+    } else {
+      await api.post("/favoritos/", {
+        roupa: id
+      });
+
+      favorito.value = true;
+
+      console.log("FAVORITO ADICIONADO!");
+    }
+
+  } catch (erro: any) {
+    console.error("ERRO AO ALTERAR FAVORITO:", erro);
+
+    if (erro.response) {
+      console.log("STATUS:", erro.response.status);
+      console.log("DADOS:", erro.response.data);
     }
   }
+}
 
-  localStorage.setItem('favoritos', JSON.stringify(favoritos))
+async function verificarFavorito(id: number) {
+  try {
+    const resposta = await api.get("/favoritos/");
+
+    const favoritos = resposta.data.results || resposta.data;
+
+    favorito.value = favoritos.some(
+      (item: any) => item.roupa?.id === id
+    );
+
+    console.log("FAVORITO ESTÁ ATIVO?", favorito.value);
+
+  } catch (erro) {
+    console.error("Erro ao verificar favorito:", erro);
+  }
 }
 
 async function adicionarCarrinho() {
-  await api.post(
-    'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/carrinho/adicionar/',
-    {
-      roupa: produto.value.id,
-      quantidade: 1,
-    },
-  )
+  try {
+    await api.post(
+      "/carrinho/",
+      {
+        roupa: produto.value.id,
+        quantidade: 1,
+      }
+    );
 
-  router.push('/carrinho')
+    router.push("/carrinho");
+
+  } catch (error: any) {
+    console.error("Erro ao adicionar ao carrinho:", error);
+
+    if (error.response) {
+      console.log("Status:", error.response.status);
+      console.log("Resposta completa:", error.response.data);
+      console.log("Erro usuario:", error.response.data.usuario);
+      console.log("Mensagem:", error.response.data.usuario?.[0]);
+    }
+  }
 }
 
 async function carregarProduto() {
   const id = route.params.id
 
   const response = await api.get(
-    `https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/roupas/${id}/`,
-  )
+    `/roupas/${id}/`
+  );
 
   produto.value = response.data
 }
@@ -53,15 +104,18 @@ function voltarProd() {
   router.push('/produtos')
 }
 
-onMounted(carregarProduto)
+onMounted(async () => {
+  await carregarProduto();
+
+  if (produto.value) {
+    await verificarFavorito(produto.value.id);
+  }
+});
 </script>
 
 <template>
-  <button class="voltar" @click="voltarProd">
-    <img src="/public/img/flecha.png" alt="flecha" />
-  </button>
-
   <div v-if="produto" class="container">
+    <button class="voltar" @click="voltarProd"><img src="/public/img/flecha.png" alt="flecha"></button>
     <div class="informacoes">
       <div class="img-prod">
         <img v-if="produto.foto" :src="produto.foto.url" :alt="produto.nome" />
@@ -70,37 +124,29 @@ onMounted(carregarProduto)
       <div class="infos">
         <h1>{{ produto.nome }}</h1>
 
-        <h2>
-          R$
-          {{
-            Number(produto.preco).toLocaleString('pt-BR', {
-              minimumFractionDigits: 2,
-            })
-          }}
-        </h2>
+        <h2>R$ {{ Number(produto.preco).toFixed(2).replace(".", ",") }}</h2>
 
         <div class="detalhes">
-          <p>
-            <strong>Tamanho:</strong>
-            {{ produto.tamanho.nome }}
-          </p>
-
-         <div class="cor-produto">
-          <strong>Cor:</strong>
-
-          <span class="amostra-cor" :style="{ backgroundColor: produto.cor_hex }"></span>
-
-          <span>{{ produto.cor }}</span>
-          </div>
+          <p><strong>Tamanho:</strong> {{ produto.tamanho.nome }}</p>
+          <p><strong>Cor:</strong> {{ produto.cor }}</p>
         </div>
 
         <div class="acoes">
-          <button class="btn-carrinho" @click="adicionarCarrinho">Adicionar ao Carrinho</button>
+          <button class="btn-carrinho" @click="adicionarCarrinho">
+            Adicionar ao Carrinho
+          </button>
 
-          <button class="btn-favorito" @click="alterarFav">
+         <button
+            class="btn-favorito"
+            @click="alterarFav(produto.id)"
+          >
             <img
-              :src="favorito ? '/img/coracao-solido.png' : '/img/coracao-cheio.png'"
-              alt="Favoritos"
+              :src="
+                favorito
+                  ? '/img/coracao-cheio.png'
+                  : '/img/coracao-solido.png'
+              "
+              alt="Favorito"
             />
           </button>
         </div>
@@ -279,39 +325,126 @@ onMounted(carregarProduto)
 
 /* ---------------- RESPONSIVO ---------------- */
 
-@media (max-width: 900px) {
-  .container {
-    padding: 0 1.5rem 3rem;
+@media (max-width: 768px) {
+  .voltar {
+    width: 6vw;
+    height: 2vw;
+  }
+  /* ---------------- CONTAINER ---------------- */
+ 
+ .container {
+    width: 100%;
+    padding: 0 0 4rem 0;
+    box-sizing: border-box;
+    margin-top: -13vw;
   }
 
   .informacoes {
+    display: flex;
     flex-direction: column;
-    gap: 2rem;
+    align-items: stretch;
+    gap: 1.5rem;
+    width: 100%;
+    margin: 0;
   }
 
   .img-prod {
+    order: -1;
+    display: block;
+    width: 100%;
     max-width: 100%;
+    flex: none;
+    margin: 0;
   }
 
   .img-prod img {
+    display: block;
+    width: 100%;
     height: auto;
+    object-fit: cover;
+    aspect-ratio: 3/4;
+    border-radius: 0%;
   }
 
+  .infos {
+    order: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 0 5vw;
+  }
+  /* ---------------- INFOS ---------------- */
+
   .infos h1 {
-    font-size: 2rem;
+    color: #311111;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
   }
 
   .infos h2 {
-    font-size: 1.6rem;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    color: #7a2d2d;
   }
+
+  .detalhes {
+    gap: .8rem;
+  }
+
+  .detalhes p {
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  /* ---------------- BOTÕES ---------------- */
 
   .acoes {
-    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 3rem 0;
   }
 
-  .btn-comprar {
-    flex: 1;
-    min-width: 220px;
+  .btn-carrinho {
+    padding: 14px 10px;
+    background: #311111;
+    color: #f5e9e0;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: .3s;
+  }
+
+  .btn-carrinho:active {
+    background-color: #7a2d2d;
+  }
+
+  .btn-favorito {
+    width: 30px;
+    height: 30px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .3s;
+  }
+
+  /* ---------------- DESCRIÇÃO ---------------- */
+
+  .descricao {
+    margin-top: 1rem;
+  }
+
+  .descricao h3 {
+    color: #311111;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .descricao p {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.8;
+    text-align: justify;
   }
 }
 </style>

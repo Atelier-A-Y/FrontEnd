@@ -1,21 +1,46 @@
 <template>
 <main>
-<div class="bnt-grandes">
-  <router-link to="/casamento" class="madrinhas">
-    <img src="/img/modelo8.png" alt="madrinha">
-    <div class="titulo-madri">
-      <h1>MADRINHAS</h1>
-    </div>
-  </router-link>
+<section class="bnt-g-desktop">
+  <div class="bnt-grandes">
+    <router-link to="/casamento" class="madrinhas">
+      <img src="/img/modelo8.png" alt="madrinha">
+      <div class="titulo-madri">
+        <h1>MADRINHAS</h1>
+      </div>
+    </router-link>
 
-  <router-link to="/praia" class="praia">
-    <img src="/img/praiana.png" alt="praiana">
-  </router-link>
-</div>
+    <router-link to="/praia" class="praia">
+      <img src="/img/praiana.png" alt="praiana">
+    </router-link>
+  </div>
+</section>
+<section class="bnt-g-mobile">
+  <h1>CATEGORIAS</h1>
+  <div class="bnt-pequenos">
+    <div class="bnt-superiores">
+      <a href="/casamento"><img src="/img/bride.png" alt="bride"></a>
+      <a href="/formatura"><img src="/img/education.png" alt="education"></a>
+      <a href="/praia"><img src="/img/sunbed.png" alt="sunbed"></a>
+    </div>
+    <div class="bnt-inferiores">
+      <a href="/festa"><img src="/img/confetti.png" alt="confetti"></a>
+      <a href="/terno"><img src="/img/suit.png" alt="suit"></a>
+      <a href="/casual"><img src="/img/wear.png" alt="wear"></a>
+    </div>
+  </div>
+</section>
 </main>
 </template>
 
 <style scoped>
+.bnt-g-desktop{
+  display: flex;
+}
+
+.bnt-g-mobile{
+  display: none;
+}
+
 main{
   margin-top: -9vw;
   margin-bottom: 2vw;
@@ -92,5 +117,66 @@ main{
   background-color: #F9EBE7;
   padding: 1vw;
   border-radius: 1.4vw;
+}
+
+
+@media (max-width: 600px){
+  main{
+    margin-top: -103vw;
+  }
+
+  .bnt-g-desktop{
+    display: none;
+  }
+
+  .bnt-g-mobile{
+    display: block;
+    background-color: #F5E9E0;
+    padding-bottom: 8vw;
+  }
+
+  .bnt-g-mobile h1{
+    font-size: 4vw;
+    margin-left: 7vw;
+    margin-bottom: 3vw;
+    padding-top: 8vw;
+    color: #311111;
+    font-family: "Hahmlet", serif;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+  }
+
+  .bnt-pequenos {
+        display: flex;
+        flex-direction: column;
+        gap: 8vw;
+    }
+
+    .bnt-superiores,
+    .bnt-inferiores {
+        display: flex;
+        justify-content: center;
+        margin: 5vw 0 0 0;
+        padding: 0;
+        gap: 12vw;
+    }
+
+    .bnt-g-mobile a {
+        width: 18vw;
+        height: 18vw;
+        border-radius: 50%;
+        background-color: #eed2c2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .bnt-g-mobile img {
+        width: 10vw;
+        height: 10vw;
+        object-fit: contain;
+    }
 }
 </style>

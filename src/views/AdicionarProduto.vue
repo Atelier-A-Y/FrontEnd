@@ -1,10 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import ColorPicker from '../components/ColorPicker.vue'
-import axios from 'axios'
-
-const router = useRouter()
+import { ref } from "vue";
+import api from "../api/api";
+import { useRouter } from "vue-router";
 
 const API_URL = 'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br'
 
@@ -60,18 +57,28 @@ async function salvarProduto() {
       const formData = new FormData()
       formData.append('file', imagem.value)
 
-      const upload = await axios.post(`${API_URL}/api/media/images/`, formData)
+      const upload = await api.post(
+        '/media/images/',
+        {
+          method: 'POST',
+          body: formData
+        }
+      )
+
+      const dadosImagem = await upload.json()
 
       const dadosImagem = upload.data
       attachmentKey = dadosImagem.attachment_key
     }
 
-    console.log('COR HEX:', produto.value.cor)
-    console.log('NOME DA COR:', produto.value.corNome)
-
-    const precoNumerico = parseFloat(produto.value.preco) || 0
-
-    const resposta = await axios.post(`${API_URL}/api/roupas/`, {
+   const resposta = await api.post(
+  '/roupas/',
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
       nome: produto.value.nome,
       categoria: produto.value.categoria, // Envia o array com as IDs das categorias selecionadas
       tamanho: produto.value.tamanho,
@@ -103,6 +110,50 @@ onMounted(async () => {
 <template>
   <main>
     <h1>Adicionar Produto</h1>
+
+<section class="fundo-prod">
+  <form class="form-container" @submit.prevent="salvarProduto">
+
+    <div class="conteudo-formulario">
+
+      <div class="lado-imagem">
+
+        <div class="input-group">
+          <input
+            type="file"
+            accept="image/*"
+            @change="selecionarImagem"
+          />
+        </div>
+
+        <div v-if="previewImagem" class="preview-container">
+          <img
+            :src="previewImagem"
+            alt="Pré-visualização"
+            class="preview-imagem"
+          />
+        </div>
+      </div>
+
+      <div class="lado-campos">
+
+        <div class="input-group">
+          <input
+            type="text"
+            maxlength="100"
+            placeholder="Nome"
+            v-model="produto.nome"
+          />
+        </div>
+
+        <div class="input-group">
+          <input
+            type="text"
+            maxlength="100"
+            placeholder="Tamanho"
+            v-model="produto.tamanho"
+          />
+        </div>
 
     <section class="fundo-prod">
       <form class="form-container" @submit.prevent="salvarProduto">
@@ -174,8 +225,20 @@ onMounted(async () => {
 
           <button type="submit">Salvar</button>
         </div>
-      </form>
-    </section>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button type="reset">
+        Limpar
+      </button>
+
+      <button type="submit">
+        Salvar
+      </button>
+    </div>
+  </form>
+</section>
   </main>
 </template>
 
@@ -294,24 +357,5 @@ textarea {
 .buttons button:hover {
   background: #311111;
   color: #f5e9e0;
-}
-
-@media (max-width: 768px) {
-  .conteudo-formulario {
-    flex-direction: column;
-  }
-
-  .lado-imagem,
-  .lado-campos {
-    width: 100%;
-  }
-
-  .preview-container {
-    height: 300px;
-  }
-
-  .buttons {
-    justify-content: center;
-  }
 }
 </style>

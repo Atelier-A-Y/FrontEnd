@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import api from '../api/api'
+import axios from 'axios'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { useAuthStore } from '../stores/auth'
@@ -14,8 +16,8 @@ const mostrarSenha = ref(false)
 
 async function entrar() {
   try {
-    const response = await axios.post(
-      'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api/token/',
+    const response = await api.post(
+      '/token/',
       {
         email: email.value,
         password: senha.value
@@ -327,5 +329,70 @@ p {
 .cadastro-link a{
   color: #311111;
   text-decoration: none;
+}
+
+@media(max-width:768px){
+  .logo-login img {
+    width: 75px;
+    height: 75px;
+    margin: 0 0 15px;
+  }
+
+  .bg {
+    position: absolute;
+    object-fit: cover;
+    max-width: none;
+    height: auto;
+    opacity: 0.9;
+    z-index: 1;
+  }
+
+  .modelo2 {
+    width: 50vw;
+    top: 0vh;
+    right: 65vw;
+  }
+
+  .modelo3 {
+    width: 55vw;
+    bottom: 3vh;
+    left: 80vw;
+  }
+
+  .modelo5 {
+    width: 60vw;
+    bottom: -6vh;
+    left: 35vw;
+  }
+
+  .modelo8 {
+    width: 57vw;
+    top: -7vh;
+    left: 24vw;
+  }
+
+  .modelo10 {
+    width: 50vw;
+    top: -8vh;
+    left: 72vw;
+  }
+
+  .modelo11 {
+    width: 55vw;
+    bottom: -6vh;
+    right: 56vw;
+  }
+
+  .modelo12 {
+    width: 50vw;
+    bottom: 35vh;
+    right: -13vw;
+  }
+
+  .modelo13 {
+    width: 50vw;
+    top: 36vh;
+    right: 75vw;
+  }
 }
 </style>
