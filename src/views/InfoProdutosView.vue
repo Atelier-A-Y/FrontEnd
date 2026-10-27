@@ -362,7 +362,7 @@ onMounted(async () => {
     width: 100%;
     height: auto;
     object-fit: cover;
-    aspect-ratio: 3/4;
+    aspect-ratio: 4/5;
     border-radius: 0%;
   }
 

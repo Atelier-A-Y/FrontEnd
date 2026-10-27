@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getProfile, updateProfile, changePassword } from '../services/user'
+import { getProfile, updateProfile } from '../services/user'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-import CarrinhoComponent from '../components/CarrinhoComponent.vue'
-import FavoritosComponent from '../components/FavoritosComponent.vue'
+
 
 const loading = ref(false)
 const menuAtivo = ref('cadastros')
@@ -25,54 +24,11 @@ const form = ref({
   email: ''
 })
 
-function sair() {
-  const confirmar = confirm(
-    'Deseja realmente sair da sua conta?'
-  )
-
-  if (!confirmar) return
-
-  authStore.logout()
-  router.push('/login')
-}
-
-async function alterarSenha() {
-  if (!senhaAtual.value || !novaSenha.value || !confirmarSenha.value) {
-    alert('Preencha todos os campos.')
-    return
-  }
-
-  if (novaSenha.value !== confirmarSenha.value) {
-    alert('As senhas não coincidem.')
-    return
-  }
-
-  try {
-    await changePassword({
-      current_password: senhaAtual.value,
-      new_password: novaSenha.value
-    })
-
-    alert('Senha alterada com sucesso!')
-
-    senhaAtual.value = ''
-    novaSenha.value = ''
-    confirmarSenha.value = ''
-
-    modalSenha.value = false
-  } catch (error) {
-    console.error(error)
-    alert('Erro ao alterar senha.')
-  }
-}
-
 async function carregarUsuario() {
   try {
-    console.log('TOKEN USER:', localStorage.getItem('token'))
-
     const data = await getProfile()
 
-    console.log('USUARIO:', data)
+    alert(JSON.stringify(data))
 
     form.value = {
       name: data.name || '',
@@ -93,13 +49,10 @@ async function salvar() {
     await updateProfile({
       name: form.value.name,
       cpf: form.value.cpf,
-      telefone: form.value.telefone,
-      email: form.value.email
+      telefone: form.value.telefone
     })
 
     alert('Dados atualizados com sucesso!')
-
-    await carregarUsuario()
   }
   catch (error) {
     console.error(error)
@@ -346,12 +299,126 @@ onMounted(() => {
   box-sizing:border-box;
 }
 
+img{
+  width: 1.5vw;
+  height: 1.5vw;
+}
+
 .perfil-container{
   max-width:90vw;
-  margin:6vw auto;
+  margin:3vw auto;
   display:grid;
   grid-template-columns:20vw 1fr;
   gap:3vw;
+}
+
+.modal{
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.modal-content{
+  background: white;
+
+  padding: 2rem;
+
+  border-radius: 12px;
+
+  width: 400px;
+  max-width: 90%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-content input{
+  height: 15vw;
+  padding: 0 5vw;
+  border: 0.1vw solid #ccc;
+  border-radius: 2vw;
+}
+
+.sidebar{
+  display:flex;
+  flex-direction:column;
+  gap:2vw;
+}
+
+.welcome-card,
+.menu-card{
+  background:#F5E9E0;
+  border:0.1vw solid #31111152;
+  border-radius:0.5vw;
+}
+
+.welcome-card{
+  display:flex;
+  gap:2vw;
+  padding:1.1vw;
+}
+
+.welcome-card h3{
+  margin:0.5vw 0;
+  font-size:1.5vw;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.logout{
+  border:none;
+  background:none;
+  color:#960c19;
+  cursor:pointer;
+  padding:0;
+}
+
+.menu-card{
+  display:flex;
+  margin-top: 0.5vw;
+  gap:1vw;
+  padding:1.5vw;
+  cursor:pointer;
+  transition:.3s;
+  position:relative;
+}
+
+.menu-card:hover{
+  transform:translateX(0.5vw);
+}
+
+.menu-card h4{
+  margin:0 0 0.5vw;
+}
+
+.menu-card p{
+  margin:0;
+  font-size:0.9vw;
+}
+
+.menu-card.active{
+  background:#311111;
+  color:white;
+}
+
+.menu-card.active::after{
+  content:"";
+  position:absolute;
+  right:-1vw;
+  top:50%;
+  transform:translateY(-50%);
+
+  border-top:1vw solid transparent;
+  border-bottom:1vw solid transparent;
+  border-left:1vw solid #311111;
 }
 
 .content{
@@ -445,7 +512,7 @@ onMounted(() => {
   width:100%;
   height:2.5vw;
 
-  border:0.1vw solid #31111192;
+  border:0.1vw solid #311111;
   border-radius:0.5vw;
 
   background:#F5E9E0;

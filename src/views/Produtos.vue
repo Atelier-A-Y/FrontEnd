@@ -271,17 +271,18 @@ onMounted(() => {
 
 .produtos {
   padding: 1rem;
-  margin-top: 5vw;
   min-height: 100vh;
   display: block;
 }
 
 .produtos h1 {
-  margin-bottom: 25px;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 500;
-}
+    text-align: center;
+    color: #311111;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 4rem;
+    position: relative;
+  }
 
 .produtos h1::after {
   content: '';
@@ -289,10 +290,11 @@ onMounted(() => {
   height: 0.3vw;
   background: #311111;
   border-radius: 10px;
-
   position: absolute;
   left: 50%;
   bottom: -1vw;
+  transform: translateX(-50%);
+}
 
 .contador {
   margin: 15px 0;
@@ -496,7 +498,6 @@ onMounted(() => {
     object-fit: contain;
     display: block;
   }
-}
 
   .sem-produtos-mobile {
     margin-top: 2rem;
