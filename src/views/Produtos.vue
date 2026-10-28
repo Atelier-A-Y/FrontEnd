@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, computed} from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/api'
 
 const router = useRouter()
-const filtros = ref();
+const filtros = ref()
 const produtos = ref<any[]>([])
 
 const carregarProdutos = async () => {
@@ -23,79 +23,77 @@ const carregarProdutos = async () => {
 const cores = computed(() => {
   const coresEncontradas = produtos.value
     .map((produto) => produto.cor)
-    .filter((cor) => typeof cor === "string" && cor.trim() !== "");
+    .filter((cor) => typeof cor === 'string' && cor.trim() !== '')
 
-  return [...new Set(coresEncontradas)];
-});
+  return [...new Set(coresEncontradas)]
+})
 
 // Aplica os filtros selecionados
 const produtosFiltrados = computed(() => {
   return produtos.value.filter((produto) => {
     // Categoria: pode vir como ID ou como objeto
     const categoriaProduto =
-      produto.categoria && typeof produto.categoria === "object"
+      produto.categoria && typeof produto.categoria === 'object'
         ? produto.categoria.id
-        : produto.categoria;
+        : produto.categoria
 
-    const categoriaSelecionada = filtros.value.categoria;
+    const categoriaSelecionada = filtros.value.categoria
 
     const categoriaCorreta =
-      categoriaSelecionada === "" ||
-      String(categoriaProduto) === String(categoriaSelecionada);
+      categoriaSelecionada === '' || String(categoriaProduto) === String(categoriaSelecionada)
 
     // Cor: compara o nome da cor
     const corCorreta =
-      filtros.value.cor === "" ||
-      String(produto.cor || "").toLowerCase() ===
-        String(filtros.value.cor).toLowerCase();
+      filtros.value.cor === '' ||
+      String(produto.cor || '').toLowerCase() === String(filtros.value.cor).toLowerCase()
 
     // Preço mínimo e máximo
-    const preco = Number(produto.preco);
+    const preco = Number(produto.preco)
 
     const precoMinimoCorreto =
-      filtros.value.precoMinimo === "" ||
-      preco >= Number(filtros.value.precoMinimo);
+      filtros.value.precoMinimo === '' || preco >= Number(filtros.value.precoMinimo)
 
     const precoMaximoCorreto =
-      filtros.value.precoMaximo === "" ||
-      preco <= Number(filtros.value.precoMaximo);
+      filtros.value.precoMaximo === '' || preco <= Number(filtros.value.precoMaximo)
 
-    return (
-      categoriaCorreta &&
-      corCorreta &&
-      precoMinimoCorreto &&
-      precoMaximoCorreto
-    );
-  });
-});
+    return categoriaCorreta && corCorreta && precoMinimoCorreto && precoMaximoCorreto
+  })
+})
+
+type IFitros = {
+  categoria?: string
+  cor?: string
+  precoMinimo?: number
+  precoMaximo?: number
+}
 
 // Recebe os filtros do componente
-function receberFiltros(novosFiltros) {
+function receberFiltros(novosFiltros: IFitros) {
   filtros.value = {
-    categoria: novosFiltros.categoria ?? "",
-    cor: novosFiltros.cor ?? "",
-    precoMinimo: novosFiltros.precoMinimo ?? "",
-    precoMaximo: novosFiltros.precoMaximo ?? "",
-  };
+    categoria: novosFiltros.categoria ?? '',
+    cor: novosFiltros.cor ?? '',
+    precoMinimo: novosFiltros.precoMinimo ?? '',
+    precoMaximo: novosFiltros.precoMaximo ?? '',
+  }
 }
 
 // Abre a página de detalhes do produto
-function abrirProdutos(id) {
-  router.push(`/info_prod/${id}`);
+function abrirProdutos(id: string) {
+  router.push(`/info_prod/${id}`)
 }
 
 // Formata o preço em reais
-function formatarPreco(preco) {
-  const valor = Number(preco);
+function formatarPreco(preco: number) {
+  const valor = Number(preco)
 
   if (!Number.isFinite(valor)) {
-    return "0,00";
+    return '0,00'
   }
 
-  return valor.toLocaleString("pt-BR", {
+  return valor.toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  });
+  })
 }
 
 const favoritosMobile = ref<number[]>([])
@@ -276,13 +274,13 @@ onMounted(() => {
 }
 
 .produtos h1 {
-    text-align: center;
-    color: #311111;
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 4rem;
-    position: relative;
-  }
+  text-align: center;
+  color: #311111;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 4rem;
+  position: relative;
+}
 
 .produtos h1::after {
   content: '';
