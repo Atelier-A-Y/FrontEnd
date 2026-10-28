@@ -1,4 +1,3 @@
-
 <script setup>
 import { ref, computed } from "vue";
 
@@ -20,14 +19,14 @@ const props = defineProps({
 const emit = defineEmits(["filtrar"]);
 
 const painelAberto = ref(false);
-const categoriaSelecionada = ref("");
+const categoriasSelecionadas = ref([]);
 const corSelecionada = ref("");
 const precoMinimo = ref("");
 const precoMaximo = ref("");
 
 const quantidadeFiltros = computed(() => {
   return [
-    categoriaSelecionada.value,
+    categoriasSelecionadas.value,
     corSelecionada.value,
     precoMinimo.value,
     precoMaximo.value,
@@ -36,7 +35,8 @@ const quantidadeFiltros = computed(() => {
 
 function aplicarFiltros() {
   emit("filtrar", {
-    categoria: categoriaSelecionada.value,
+    // O backend filtra pelo nome da categoria.
+    categorias: categoriasSelecionadas.value,
     cor: corSelecionada.value,
     precoMinimo:
       precoMinimo.value === "" ? "" : Number(precoMinimo.value),
@@ -48,18 +48,25 @@ function aplicarFiltros() {
 }
 
 function limparFiltros() {
-  categoriaSelecionada.value = "";
+  categoriasSelecionadas.value = [];
   corSelecionada.value = "";
   precoMinimo.value = "";
   precoMaximo.value = "";
 
   aplicarFiltros();
 }
+
+function obterNomeCor(cor) {
+  return typeof cor === "object" ? cor.nome : cor;
+}
+
+function obterHexCor(cor) {
+  return typeof cor === "object" ? cor.hex : cor;
+}
 </script>
 
 <template>
   <div class="filtragem">
-    <!-- Botão para abrir a barra lateral -->
     <button
       type="button"
       class="botao-filtros"
@@ -74,7 +81,6 @@ function limparFiltros() {
       </span>
     </button>
 
-    <!-- Fundo escuro -->
     <Transition name="fundo">
       <div
         v-if="painelAberto"
@@ -83,7 +89,6 @@ function limparFiltros() {
       ></div>
     </Transition>
 
-    <!-- Barra lateral -->
     <Transition name="deslizar">
       <aside v-if="painelAberto" class="painel-filtros">
         <header class="cabecalho-filtros">
@@ -99,27 +104,25 @@ function limparFiltros() {
           </button>
         </header>
 
-        
-<!-- Categoria -->
-<section class="grupo-filtro">
-  <label for="categoria-filtro">Categoria</label>
+        <!-- Categoria -->
+        <section class="grupo-filtro">
+          <label for="categoria-filtro">Categoria</label>
 
-  <select
-    id="categoria-filtro"
-    v-model="categoriaSelecionada"
-  >
-    <option value="">Todas as categorias</option>
+          <select
+            id="categoria-filtro"
+            v-model="categoriaSelecionada"
+          >
+            <option value="">Todas as categorias</option>
 
-    <option
-      v-for="categoria in categorias"
-      :key="categoria.id"
-      :value="categoria.id"
-    >
-      {{ categoria.nome }}
-    </option>
-  </select>
-</section>
-
+            <option
+              v-for="categoria in categorias"
+              :key="categoria.id"
+              :value="categoria.nome"
+            >
+              {{ categoria.nome }}
+            </option>
+          </select>
+        </section>
 
         <!-- Preço -->
         <section class="grupo-filtro">
@@ -157,39 +160,31 @@ function limparFiltros() {
           <div v-if="cores.length" class="lista-cores">
             <button
               v-for="cor in cores"
-              :key="typeof cor === 'object' ? cor.nome : cor"
+              :key="obterNomeCor(cor)"
               type="button"
               class="opcao-cor"
               :class="{
                 selecionada:
-                  corSelecionada ===
-                  (typeof cor === 'object' ? cor.nome : cor),
+                  corSelecionada === obterNomeCor(cor),
               }"
               :aria-pressed="
-                corSelecionada ===
-                (typeof cor === 'object' ? cor.nome : cor)
+                corSelecionada === obterNomeCor(cor)
               "
               @click="
                 corSelecionada =
-                  corSelecionada ===
-                  (typeof cor === 'object' ? cor.nome : cor)
+                  corSelecionada === obterNomeCor(cor)
                     ? ''
-                    : (typeof cor === 'object' ? cor.nome : cor)
+                    : obterNomeCor(cor)
               "
             >
               <span
                 class="amostra-cor"
                 :style="{
-                  backgroundColor:
-                    typeof cor === 'object'
-                      ? cor.hex
-                      : cor,
+                  backgroundColor: obterHexCor(cor),
                 }"
               ></span>
 
-              <span>
-                {{ typeof cor === "object" ? cor.nome : cor }}
-              </span>
+              <span>{{ obterNomeCor(cor) }}</span>
             </button>
           </div>
 

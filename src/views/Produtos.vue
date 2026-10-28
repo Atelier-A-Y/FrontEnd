@@ -8,8 +8,9 @@ const route = useRoute()
 
 const produtos = ref([])
 const categorias = ref([])
+
 const filtros = ref({
-  categoria: '',
+  categorias: [],
   cor: '',
   precoMinimo: '',
   precoMaximo: '',
@@ -20,9 +21,10 @@ const pesquisa = computed(() => String(route.query.search || ''))
 const carregando = ref(true)
 const erro = ref('')
 
-const API_URL = 'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api'
+const API_URL =
+  'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api'
 
-// Carrega os produtos da API
+// Carrega os produtos usando os filtros aceitos pelo Django
 async function carregarProdutos() {
   carregando.value = true
   erro.value = ''
@@ -30,13 +32,26 @@ async function carregarProdutos() {
   try {
     const params = new URLSearchParams()
 
+    // Pesquisa pelo nome da roupa
     if (pesquisa.value.trim()) {
       params.set('search', pesquisa.value.trim())
     }
 
+    // Filtra por várias categorias selecionadas
+    if (filtros.value.categorias.length > 0) {
+      params.set('categorias', filtros.value.categorias.join(','))
+    }
+
+    // Filtra pela cor selecionada
+    if (filtros.value.cor !== '') {
+      params.set('cor', filtros.value.cor)
+    }
+
     const queryString = params.toString()
 
-    const url = queryString ? `${API_URL}/roupas/?${queryString}` : `${API_URL}/roupas/`
+    const url = queryString
+      ? `${API_URL}/roupas/?${queryString}`
+      : `${API_URL}/roupas/`
 
     const resposta = await fetch(url)
 
@@ -46,7 +61,9 @@ async function carregarProdutos() {
 
     const dados = await resposta.json()
 
-    produtos.value = Array.isArray(dados) ? dados : dados.results || []
+    produtos.value = Array.isArray(dados)
+      ? dados
+      : dados.results || []
   } catch (error) {
     console.error('Erro ao carregar produtos:', error)
     erro.value = 'Não foi possível carregar os produtos.'
@@ -56,11 +73,10 @@ async function carregarProdutos() {
   }
 }
 
+// Recarrega os produtos quando a pesquisa da URL mudar
 watch(
   () => route.query.search,
-  () => {
-    carregarProdutos()
-  },
+  () => carregarProdutos(),
 )
 
 // Carrega as categorias cadastradas no backend
@@ -74,13 +90,15 @@ async function carregarCategorias() {
 
     const dados = await resposta.json()
 
-    categorias.value = Array.isArray(dados) ? dados : dados.results || []
+    categorias.value = Array.isArray(dados)
+      ? dados
+      : dados.results || []
   } catch (error) {
     console.error('Erro ao carregar categorias:', error)
   }
 }
 
-// Obtém as cores existentes nos produtos
+// Obtém as cores dos produtos carregados
 const cores = computed(() => {
   const coresEncontradas = produtos.value
     .map((produto) => produto.cor)
@@ -89,46 +107,33 @@ const cores = computed(() => {
   return [...new Set(coresEncontradas)]
 })
 
-// Aplica os filtros selecionados
+// Aplica os limites de preço no frontend
 const produtosFiltrados = computed(() => {
   return produtos.value.filter((produto) => {
-    // Categoria: pode vir como ID ou como objeto
-    const categoriaProduto =
-      produto.categoria && typeof produto.categoria === 'object'
-        ? produto.categoria.id
-        : produto.categoria
-
-    const categoriaSelecionada = filtros.value.categoria
-
-    const categoriaCorreta =
-      categoriaSelecionada === '' || String(categoriaProduto) === String(categoriaSelecionada)
-
-    // Cor: compara o nome da cor
-    const corCorreta =
-      filtros.value.cor === '' ||
-      String(produto.cor || '').toLowerCase() === String(filtros.value.cor).toLowerCase()
-
-    // Preço mínimo e máximo
     const preco = Number(produto.preco)
 
     const precoMinimoCorreto =
-      filtros.value.precoMinimo === '' || preco >= Number(filtros.value.precoMinimo)
+      filtros.value.precoMinimo === '' ||
+      preco >= Number(filtros.value.precoMinimo)
 
     const precoMaximoCorreto =
-      filtros.value.precoMaximo === '' || preco <= Number(filtros.value.precoMaximo)
+      filtros.value.precoMaximo === '' ||
+      preco <= Number(filtros.value.precoMaximo)
 
-    return categoriaCorreta && corCorreta && precoMinimoCorreto && precoMaximoCorreto
+    return precoMinimoCorreto && precoMaximoCorreto
   })
 })
 
-// Recebe os filtros do componente
-function receberFiltros(novosFiltros) {
+// Recebe os filtros selecionados na barra lateral
+async function receberFiltros(novosFiltros) {
   filtros.value = {
-    categoria: novosFiltros.categoria ?? '',
+    categorias: novosFiltros.categorias ?? [],
     cor: novosFiltros.cor ?? '',
     precoMinimo: novosFiltros.precoMinimo ?? '',
     precoMaximo: novosFiltros.precoMaximo ?? '',
   }
+
+  await carregarProdutos()
 }
 
 // Abre a página de detalhes do produto
@@ -161,12 +166,12 @@ onMounted(() => {
     <h1>Produtos</h1>
 
     <div class="barra-acoes">
-      <FiltragemComponent
-        :categorias="categorias"
-        :cores="cores"
-        :total-produtos="produtosFiltrados.length"
-        @filtrar="receberFiltros"
-      />
+     <FiltragemComponent
+  :categorias="categorias"
+  :cores="cores"
+  :total-produtos="produtosFiltrados.length"
+  @filtrar="receberFiltros"
+/>
     </div>
 
     <p v-if="carregando" class="mensagem">Carregando produtos...</p>

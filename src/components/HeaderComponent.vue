@@ -120,36 +120,6 @@ import { useRouter } from "vue-router";
 
         </div>
 
-        <!-- GLOBO -->
-        <div
-          class="dropdown"
-          @click="showDropdown = !showDropdown"
-        >
-          <a href="#" class="globo">
-            <img
-                :src="headerAtivo
-                  ? '/img/globo-solido.png'
-                  : '/img/globo.png'"
-                alt="Globo"
-              />
-          </a>
-
-          <div v-if="showDropdown" class="submenu">
-
-            <ul class="cima">
-              <li><RouterLink to="/">África</RouterLink></li>
-              <li><RouterLink to="/">América</RouterLink></li>
-              <li><RouterLink to="/">Ásia</RouterLink></li>
-            </ul>
-
-            <ul class="baixo">
-              <li><RouterLink to="/">Europa</RouterLink></li>
-              <li><RouterLink to="/">Oceania</RouterLink></li>
-            </ul>
-
-          </div>
-        </div>
-
         <!-- BUSCA -->
         <div class="search-container">
 
@@ -338,51 +308,6 @@ import { useRouter } from "vue-router";
 
   .menu li a:hover {
     opacity: 0.7;
-  }
-
-  /* DROPDOWN */
-
-  .globo img {
-    width: 1.8vw;
-    margin-left: 35vw;
-  }
-
-  .submenu {
-    position: absolute;
-    top: 5vw;
-    left: 50vw;
-    background: white;
-    margin: 0;
-    padding: 8px 25px 8px 10px;
-    border-radius: 6px;
-    min-width: 180px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .cima {
-    display: flex;
-  }
-
-  .baixo {
-    display: flex;
-  }
-
-  .submenu li {
-    padding: 8px 25px;
-    margin-left: 1vw;
-  }
-
-  .submenu li a {
-    color: #311111;
-    font-weight: 500;
-    display: block;
-    text-decoration: none;
-  }
-
-  .submenu li a:hover {
-    background: #f1f1f1;
-    color: #311111;
-    font-weight: bold;
   }
 
   /* BUSCA */
