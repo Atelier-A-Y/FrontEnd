@@ -1,9 +1,10 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import FiltragemComponent from '../components/FiltragemComponent.vue'
 
 const router = useRouter()
+const route = useRoute()
 
 const produtos = ref([])
 const categorias = ref([])
@@ -14,10 +15,12 @@ const filtros = ref({
   precoMaximo: '',
 })
 
+const pesquisa = computed(() => String(route.query.search || ''))
+
 const carregando = ref(true)
 const erro = ref('')
 
-const API_URL = 'http://127.0.0.1:8000/api'
+const API_URL = 'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api'
 
 // Carrega os produtos da API
 async function carregarProdutos() {
@@ -25,7 +28,17 @@ async function carregarProdutos() {
   erro.value = ''
 
   try {
-    const resposta = await fetch(`${API_URL}/roupas/`)
+    const params = new URLSearchParams()
+
+    if (pesquisa.value.trim()) {
+      params.set('search', pesquisa.value.trim())
+    }
+
+    const queryString = params.toString()
+
+    const url = queryString ? `${API_URL}/roupas/?${queryString}` : `${API_URL}/roupas/`
+
+    const resposta = await fetch(url)
 
     if (!resposta.ok) {
       throw new Error(`Erro ao buscar produtos: ${resposta.status}`)
@@ -33,16 +46,22 @@ async function carregarProdutos() {
 
     const dados = await resposta.json()
 
-    // Aceita tanto paginação do Django REST Framework
-    // quanto uma lista simples.
     produtos.value = Array.isArray(dados) ? dados : dados.results || []
   } catch (error) {
     console.error('Erro ao carregar produtos:', error)
     erro.value = 'Não foi possível carregar os produtos.'
+    produtos.value = []
   } finally {
     carregando.value = false
   }
 }
+
+watch(
+  () => route.query.search,
+  () => {
+    carregarProdutos()
+  },
+)
 
 // Carrega as categorias cadastradas no backend
 async function carregarCategorias() {

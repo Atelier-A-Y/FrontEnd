@@ -90,6 +90,18 @@ import { useRouter } from "vue-router";
   function irParaHome(){
     router.push('/')
   }
+
+  function pesquisarProdutos() {
+  const termo = pesquisa.value.trim();
+
+  router.push({
+    path: '/produtos',
+    query: termo ? { search: termo } : {},
+  });
+
+  pesquisa.value = '';
+  indexAtivo.value = -1;
+  }
   </script>
 
   <template>
@@ -146,16 +158,18 @@ import { useRouter } from "vue-router";
             v-model="pesquisa"
             placeholder="Buscar..."
             @keydown="navegar"
+            @keyup.enter="pesquisarProdutos"
             class="search-input"
           />
-          <RouterLink to="/produtos"><img
+          <a href="#" @click.prevent="pesquisarProdutos">
+          <img
             :src="headerAtivo
               ? '/img/lupa-solido.png'
               : '/img/lupa.png'"
             alt="Pesquisar"
             class="icon-lupa"
           />
-          </RouterLink>
+        </a>
 
           <div
             class="results-list"
