@@ -19,23 +19,25 @@ const props = defineProps({
 const emit = defineEmits(["filtrar"]);
 
 const painelAberto = ref(false);
+
 const categoriasSelecionadas = ref([]);
 const corSelecionada = ref("");
 const precoMinimo = ref("");
 const precoMaximo = ref("");
 
+// Conta quantos filtros estão selecionados
 const quantidadeFiltros = computed(() => {
-  return [
-    categoriasSelecionadas.value,
-    corSelecionada.value,
-    precoMinimo.value,
-    precoMaximo.value,
-  ].filter((valor) => valor !== "").length;
+  return (
+    categoriasSelecionadas.value.length +
+    (corSelecionada.value !== "" ? 1 : 0) +
+    (precoMinimo.value !== "" ? 1 : 0) +
+    (precoMaximo.value !== "" ? 1 : 0)
+  );
 });
 
+// Envia os filtros para Produtos.vue
 function aplicarFiltros() {
   emit("filtrar", {
-    // O backend filtra pelo nome da categoria.
     categorias: categoriasSelecionadas.value,
     cor: corSelecionada.value,
     precoMinimo:
@@ -47,6 +49,7 @@ function aplicarFiltros() {
   painelAberto.value = false;
 }
 
+// Limpa todos os filtros
 function limparFiltros() {
   categoriasSelecionadas.value = [];
   corSelecionada.value = "";
@@ -56,10 +59,12 @@ function limparFiltros() {
   aplicarFiltros();
 }
 
+// Obtém o nome da cor
 function obterNomeCor(cor) {
   return typeof cor === "object" ? cor.nome : cor;
 }
 
+// Obtém o código hexadecimal da cor
 function obterHexCor(cor) {
   return typeof cor === "object" ? cor.hex : cor;
 }
@@ -67,6 +72,7 @@ function obterHexCor(cor) {
 
 <template>
   <div class="filtragem">
+    <!-- Botão para abrir os filtros -->
     <button
       type="button"
       class="botao-filtros"
@@ -81,6 +87,7 @@ function obterHexCor(cor) {
       </span>
     </button>
 
+    <!-- Fundo escuro -->
     <Transition name="fundo">
       <div
         v-if="painelAberto"
@@ -89,8 +96,10 @@ function obterHexCor(cor) {
       ></div>
     </Transition>
 
+    <!-- Painel lateral -->
     <Transition name="deslizar">
       <aside v-if="painelAberto" class="painel-filtros">
+
         <header class="cabecalho-filtros">
           <h2>Filtros</h2>
 
@@ -110,18 +119,21 @@ function obterHexCor(cor) {
 
           <select
             id="categoria-filtro"
-            v-model="categoriaSelecionada"
+            v-model="categoriasSelecionadas"
+            multiple
           >
-            <option value="">Todas as categorias</option>
-
             <option
               v-for="categoria in categorias"
               :key="categoria.id"
-              :value="categoria.nome"
+              :value="categoria.id"
             >
               {{ categoria.nome }}
             </option>
           </select>
+
+          <p class="dica">
+            Você pode selecionar mais de uma categoria.
+          </p>
         </section>
 
         <!-- Preço -->
@@ -129,6 +141,7 @@ function obterHexCor(cor) {
           <h3>Faixa de preço</h3>
 
           <label for="preco-minimo">Preço mínimo (R$)</label>
+
           <input
             id="preco-minimo"
             v-model="precoMinimo"
@@ -139,6 +152,7 @@ function obterHexCor(cor) {
           />
 
           <label for="preco-maximo">Preço máximo (R$)</label>
+
           <input
             id="preco-maximo"
             v-model="precoMaximo"
@@ -158,6 +172,7 @@ function obterHexCor(cor) {
           <h3>Cor</h3>
 
           <div v-if="cores.length" class="lista-cores">
+
             <button
               v-for="cor in cores"
               :key="obterNomeCor(cor)"
@@ -186,6 +201,7 @@ function obterHexCor(cor) {
 
               <span>{{ obterNomeCor(cor) }}</span>
             </button>
+
           </div>
 
           <p v-else class="dica">
@@ -195,6 +211,7 @@ function obterHexCor(cor) {
 
         <!-- Ações -->
         <footer class="acoes-filtros">
+
           <button
             type="button"
             class="botao-limpar"
@@ -208,9 +225,11 @@ function obterHexCor(cor) {
             class="botao-aplicar"
             @click="aplicarFiltros"
           >
-            Ver {{ totalProdutos }} produtos
+            Aplicar filtros
           </button>
+
         </footer>
+
       </aside>
     </Transition>
   </div>
@@ -333,6 +352,10 @@ button {
   border-radius: 0.5rem;
   background: white;
   color: #311111;
+}
+
+.grupo-filtro select[multiple] {
+  min-height: 120px;
 }
 
 .dica {
