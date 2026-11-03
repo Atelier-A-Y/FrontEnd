@@ -152,6 +152,15 @@ function irParaHome(){
 
       <ul class="icones">
         <li>
+          <a href="/produtos">
+            <img 
+            :src="headerAtivo
+              ? '/img/vestido-solido.png'
+              : '/img/vestido.png'" 
+              alt="Vestido">
+          </a>
+        </li>
+        <li>
           <a @click.prevent="abrirUsuario">
             <img
               :src="headerAtivo
@@ -223,7 +232,7 @@ function irParaHome(){
 
           <li>
             <a href="/produtos">
-              <img src="/img/dress.png" alt="dress.png"> Produtos
+              <img src="/img/vestido-solido.png" alt="vestido-solido.png"> Produtos
             </a>
           </li>
         </ul>

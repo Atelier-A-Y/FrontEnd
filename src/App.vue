@@ -42,7 +42,7 @@ onMounted(async () => {
     <div>
       <ul>
         <li>
-          <a href="/produtos"><img src="/img/dress.png" alt="vestido"></a>
+          <a href="/produtos"><img src="/img/vestido-solido.png" alt="vestido"></a>
         </li>
 
         <li>

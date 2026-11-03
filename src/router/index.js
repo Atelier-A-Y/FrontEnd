@@ -33,9 +33,21 @@ const routes = [
     path: '/carrinho',
     component: () => import('../views/CarrinhoView.vue')
   },
-   {
+  {
     path: '/favoritos',
     component: () => import('../views/Favoritos.vue')
+  },
+  {
+    path: '/casamento',
+    component: () => import('../views/CasamentoView.vue')
+  },
+  {
+    path: '/formatura',
+    component: () => import('../views/FormaturaView.vue')
+  },
+  {
+    path: '/praia',
+    component: () => import('../views/PraiaView.vue')
   },
 ]
 
