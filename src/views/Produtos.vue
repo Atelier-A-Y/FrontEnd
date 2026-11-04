@@ -8,6 +8,7 @@ const route = useRoute()
 
 const produtos = ref([])
 const categorias = ref([])
+const todasAsCoresFixas = ref([]) // Guarda todas as cores de forma fixa
 
 const filtros = ref({
   categorias: [],
@@ -24,7 +25,7 @@ const erro = ref('')
 const API_URL =
   'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api'
 
-// Carrega os produtos usando os filtros aceitos pelo Django
+// Carrega os produtos aplicando os filtros na API
 async function carregarProdutos() {
   carregando.value = true
   erro.value = ''
@@ -32,23 +33,19 @@ async function carregarProdutos() {
   try {
     const params = new URLSearchParams()
 
-    // Pesquisa pelo nome da roupa
     if (pesquisa.value.trim()) {
       params.set('search', pesquisa.value.trim())
     }
 
-    // Filtra por várias categorias selecionadas
-    if (filtros.value.categorias.length > 0) {
+    if (filtros.value.categorias && filtros.value.categorias.length > 0) {
       params.set('categorias', filtros.value.categorias.join(','))
     }
 
-    // Filtra pela cor selecionada
     if (filtros.value.cor !== '') {
       params.set('cor', filtros.value.cor)
     }
 
     const queryString = params.toString()
-
     const url = queryString
       ? `${API_URL}/roupas/?${queryString}`
       : `${API_URL}/roupas/`
@@ -64,6 +61,14 @@ async function carregarProdutos() {
     produtos.value = Array.isArray(dados)
       ? dados
       : dados.results || []
+
+    // Se ainda não temos a lista fixa de cores preenchida, pegamos da primeira carga geral
+    if (todasAsCoresFixas.value.length === 0 && produtos.value.length > 0) {
+      const coresEncontradas = produtos.value
+        .map((produto) => produto.cor)
+        .filter((cor) => typeof cor === 'string' && cor.trim() !== '')
+      todasAsCoresFixas.value = [...new Set(coresEncontradas)]
+    }
   } catch (error) {
     console.error('Erro ao carregar produtos:', error)
     erro.value = 'Não foi possível carregar os produtos.'
@@ -79,7 +84,7 @@ watch(
   () => carregarProdutos(),
 )
 
-// Carrega as categorias cadastradas no backend
+// Carrega as categorias cadastradas no backend (com a barra correta no final)
 async function carregarCategorias() {
   try {
     const resposta = await fetch(`${API_URL}/categorias/`)
@@ -98,12 +103,15 @@ async function carregarCategorias() {
   }
 }
 
-// Obtém as cores dos produtos carregados
-const cores = computed(() => {
+// Retorna sempre a lista completa de cores para o componente de filtro não encolher
+const coresDisponiveis = computed(() => {
+  if (todasAsCoresFixas.value.length > 0) {
+    return todasAsCoresFixas.value
+  }
+  // Fallback caso carregue filtrado de primeira
   const coresEncontradas = produtos.value
     .map((produto) => produto.cor)
     .filter((cor) => typeof cor === 'string' && cor.trim() !== '')
-
   return [...new Set(coresEncontradas)]
 })
 
@@ -166,12 +174,12 @@ onMounted(() => {
     <h1>Produtos</h1>
 
     <div class="barra-acoes">
-     <FiltragemComponent
-  :categorias="categorias"
-  :cores="cores"
-  :total-produtos="produtosFiltrados.length"
-  @filtrar="receberFiltros"
-/>
+    <FiltragemComponent
+      :categorias="categorias"
+      :cores="coresDisponiveis"
+      :total-produtos="produtosFiltrados.length"
+      @filtrar="receberFiltros"
+      />
     </div>
 
     <p v-if="carregando" class="mensagem">Carregando produtos...</p>

@@ -19,23 +19,21 @@ const props = defineProps({
 const emit = defineEmits(["filtrar"]);
 
 const painelAberto = ref(false);
-
 const categoriasSelecionadas = ref([]);
 const corSelecionada = ref("");
 const precoMinimo = ref("");
 const precoMaximo = ref("");
 
-// Conta quantos filtros estão selecionados
+// Conta quantos filtros estão ativos (considerando o array de categorias)
 const quantidadeFiltros = computed(() => {
-  return (
-    categoriasSelecionadas.value.length +
-    (corSelecionada.value !== "" ? 1 : 0) +
-    (precoMinimo.value !== "" ? 1 : 0) +
-    (precoMaximo.value !== "" ? 1 : 0)
-  );
+  return [
+    categoriasSelecionadas.value.length > 0 ? 1 : 0,
+    corSelecionada.value,
+    precoMinimo.value,
+    precoMaximo.value,
+  ].filter((valor) => valor !== "" && valor !== 0).length;
 });
 
-// Envia os filtros para Produtos.vue
 function aplicarFiltros() {
   emit("filtrar", {
     categorias: categoriasSelecionadas.value,
@@ -49,7 +47,6 @@ function aplicarFiltros() {
   painelAberto.value = false;
 }
 
-// Limpa todos os filtros
 function limparFiltros() {
   categoriasSelecionadas.value = [];
   corSelecionada.value = "";
@@ -58,21 +55,11 @@ function limparFiltros() {
 
   aplicarFiltros();
 }
-
-// Obtém o nome da cor
-function obterNomeCor(cor) {
-  return typeof cor === "object" ? cor.nome : cor;
-}
-
-// Obtém o código hexadecimal da cor
-function obterHexCor(cor) {
-  return typeof cor === "object" ? cor.hex : cor;
-}
 </script>
 
 <template>
   <div class="filtragem">
-    <!-- Botão para abrir os filtros -->
+    <!-- Botão para abrir a barra lateral -->
     <button
       type="button"
       class="botao-filtros"
@@ -96,10 +83,9 @@ function obterHexCor(cor) {
       ></div>
     </Transition>
 
-    <!-- Painel lateral -->
+    <!-- Barra lateral -->
     <Transition name="deslizar">
       <aside v-if="painelAberto" class="painel-filtros">
-
         <header class="cabecalho-filtros">
           <h2>Filtros</h2>
 
@@ -113,27 +99,26 @@ function obterHexCor(cor) {
           </button>
         </header>
 
-        <!-- Categoria -->
+        <!-- Categorias (Múltipla seleção por Checkboxes) -->
         <section class="grupo-filtro">
-          <label for="categoria-filtro">Categoria</label>
+          <h3>Categorias</h3>
 
-          <select
-            id="categoria-filtro"
-            v-model="categoriasSelecionadas"
-            multiple
-          >
-            <option
+          <div v-if="categorias.length" class="lista-categorias">
+            <label
               v-for="categoria in categorias"
               :key="categoria.id"
-              :value="categoria.id"
+              class="opcao-checkbox"
             >
-              {{ categoria.nome }}
-            </option>
-          </select>
+              <input
+                type="checkbox"
+                :value="categoria.id"
+                v-model="categoriasSelecionadas"
+              />
+              <span>{{ categoria.nome }}</span>
+            </label>
+          </div>
 
-          <p class="dica">
-            Você pode selecionar mais de uma categoria.
-          </p>
+          <p v-else class="dica">Nenhuma categoria disponível.</p>
         </section>
 
         <!-- Preço -->
@@ -141,7 +126,6 @@ function obterHexCor(cor) {
           <h3>Faixa de preço</h3>
 
           <label for="preco-minimo">Preço mínimo (R$)</label>
-
           <input
             id="preco-minimo"
             v-model="precoMinimo"
@@ -152,7 +136,6 @@ function obterHexCor(cor) {
           />
 
           <label for="preco-maximo">Preço máximo (R$)</label>
-
           <input
             id="preco-maximo"
             v-model="precoMaximo"
@@ -167,41 +150,37 @@ function obterHexCor(cor) {
           </p>
         </section>
 
-        <!-- Cor -->
+        <!-- Cor (Apenas com texto) -->
         <section class="grupo-filtro">
           <h3>Cor</h3>
 
           <div v-if="cores.length" class="lista-cores">
-
             <button
               v-for="cor in cores"
-              :key="obterNomeCor(cor)"
+              :key="typeof cor === 'object' ? cor.nome : cor"
               type="button"
               class="opcao-cor"
               :class="{
                 selecionada:
-                  corSelecionada === obterNomeCor(cor),
+                  corSelecionada ===
+                  (typeof cor === 'object' ? cor.nome : cor),
               }"
               :aria-pressed="
-                corSelecionada === obterNomeCor(cor)
+                corSelecionada ===
+                (typeof cor === 'object' ? cor.nome : cor)
               "
               @click="
                 corSelecionada =
-                  corSelecionada === obterNomeCor(cor)
+                  corSelecionada ===
+                  (typeof cor === 'object' ? cor.nome : cor)
                     ? ''
-                    : obterNomeCor(cor)
+                    : (typeof cor === 'object' ? cor.nome : cor)
               "
             >
-              <span
-                class="amostra-cor"
-                :style="{
-                  backgroundColor: obterHexCor(cor),
-                }"
-              ></span>
-
-              <span>{{ obterNomeCor(cor) }}</span>
+              <span>
+                {{ typeof cor === "object" ? cor.nome : cor }}
+              </span>
             </button>
-
           </div>
 
           <p v-else class="dica">
@@ -211,7 +190,6 @@ function obterHexCor(cor) {
 
         <!-- Ações -->
         <footer class="acoes-filtros">
-
           <button
             type="button"
             class="botao-limpar"
@@ -225,11 +203,9 @@ function obterHexCor(cor) {
             class="botao-aplicar"
             @click="aplicarFiltros"
           >
-            Aplicar filtros
+            Ver {{ totalProdutos }} produtos
           </button>
-
         </footer>
-
       </aside>
     </Transition>
   </div>
@@ -343,7 +319,28 @@ button {
   font-weight: 700;
 }
 
-.grupo-filtro select,
+.lista-categorias {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.opcao-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.96rem;
+  color: #311111;
+  cursor: pointer;
+}
+
+.opcao-checkbox input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: #311111;
+  cursor: pointer;
+}
+
 .grupo-filtro input {
   box-sizing: border-box;
   width: 100%;
@@ -352,10 +349,6 @@ button {
   border-radius: 0.5rem;
   background: white;
   color: #311111;
-}
-
-.grupo-filtro select[multiple] {
-  min-height: 120px;
 }
 
 .dica {
@@ -373,29 +366,20 @@ button {
 .opcao-cor {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  min-width: 0;
-  padding: 0.6rem;
+  justify-content: center;
+  padding: 0.5rem;
   border: 1px solid #e2d2c6;
-  border-radius: 0.5rem;
+  border-radius: 1.5rem;
   background: white;
   color: #311111;
-  text-align: left;
+  text-align: center;
   overflow-wrap: anywhere;
+  font-size: 0.96rem;
 }
 
 .opcao-cor.selecionada {
   border: 2px solid #795548;
   background: #f5e9e0;
-}
-
-.amostra-cor {
-  display: inline-block;
-  flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-  border: 1px solid #c9bdb4;
-  border-radius: 50%;
 }
 
 .acoes-filtros {
