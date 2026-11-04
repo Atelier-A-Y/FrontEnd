@@ -42,7 +42,7 @@
 }
 
 main{
-  margin-top: -9vw;
+  margin-top: -7vw;
   margin-bottom: 2vw;
 }
 
