@@ -66,7 +66,7 @@ img {
   top: 50%;
   left: 50%;
   width: 100vw;
-  height: 83vh;
+  height: 110vh;
   object-fit: cover;
   transform: translate(-50%, -63%);
   opacity: 0;

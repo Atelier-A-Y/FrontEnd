@@ -7,6 +7,9 @@ const slides = [
   },
   {
    img: '/img/noiva3.png',
+  },
+  {
+    img: '/img/noiva4.png',
   }
 ]
 
@@ -47,7 +50,7 @@ main{
 .carrossel-principal {
   position: relative;
   width: 100vw;
-  height: 90vh;
+  height: 80vh;
   margin: 0;
   padding: 0;
   overflow: hidden;
