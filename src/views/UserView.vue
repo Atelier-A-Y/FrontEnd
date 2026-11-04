@@ -5,15 +5,30 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import CarrinhoComponent from '../components/CarrinhoComponent.vue'
 import FavoritosComponent from '../components/FavoritosComponent.vue'
+import CadastroSection from '../components/CadastroSection.vue'
+
+const router = useRouter()
+const authStore = useAuthStore()
 
 const loading = ref(false)
 const menuAtivo = ref('cadastros')
+
+// Estados para controle da modal e dos campos de senha
+const modalSenha = ref(false)
+const senhaAtual = ref('')
+const novaSenha = ref('')
+const confirmarSenha = ref('')
+
+const mostrarSenhaAtual = ref(false)
+const mostrarNovaSenha = ref(false)
+const mostrarConfirmarSenha = ref(false)
 
 const form = ref({
   name: '',
   cpf: '',
   telefone: '',
-  email: ''
+  email: '',
+  data_nascimento: ''
 })
 
 function sair() {
@@ -69,7 +84,8 @@ async function carregarUsuario() {
       name: data.name || '',
       cpf: data.cpf || '',
       telefone: data.telefone || '',
-      email: data.email || ''
+      email: data.email || '',
+      data_nascimento: data.data_nascimento || ''
     }
   }
   catch (error) {
@@ -85,7 +101,8 @@ async function salvar() {
       name: form.value.name,
       cpf: form.value.cpf,
       telefone: form.value.telefone,
-      email: form.value.email
+      email: form.value.email,
+      data_nascimento: form.value.data_nascimento
     })
 
     alert('Dados atualizados com sucesso!')
@@ -114,7 +131,7 @@ onMounted(() => {
           <img src="/img/user-solido.png" alt="user.png">
         </div>
 
-        <div>
+        <div class="welcome-info">
           <p>Bem-vindo,</p>
           <h1>{{ form.name }}</h1>
 
@@ -210,82 +227,75 @@ onMounted(() => {
 
         </div>
 
-      <nav>
-
-            <div
-              class="menu-card"
-              :class="{ active: menuAtivo === 'pedidos' }"
-              @click="menuAtivo = 'pedidos'"
-            >
-              <img
+      <nav class="sidebar-nav">
+        <div
+          class="menu-card"
+          :class="{ active: menuAtivo === 'pedidos' }"
+          @click="menuAtivo = 'pedidos'"
+        >
+          <img
             :src="menuAtivo === 'pedidos'
               ? '/img/caminhao-branco.png'
               : '/img/caminhao.png'"
             alt="caminhao"
           />
-
           <div>
             <h4>Pedidos</h4>
             <p>Confira o andamento dos seus pedidos.</p>
           </div>
-            </div>
+        </div>
 
-          <div
-              class="menu-card"
-              :class="{ active: menuAtivo === 'cadastros' }"
-              @click="menuAtivo = 'cadastros'"
-            >
-           <img
+        <div
+          class="menu-card"
+          :class="{ active: menuAtivo === 'cadastros' }"
+          @click="menuAtivo = 'cadastros'"
+        >
+          <img
             :src="menuAtivo === 'cadastros'
               ? '/img/user.png'
               : '/img/user-solido.png'"
             alt="user"
           />
-
-            <div>
-              <h4>Cadastro</h4>
-              <p>Altere seus dados cadastrais, e-mail e senha.</p>
-            </div>
+          <div>
+            <h4>Cadastro</h4>
+            <p>Altere seus dados cadastrais, e-mail e senha.</p>
           </div>
+        </div>
 
-          <div
-              class="menu-card"
-              :class="{ active: menuAtivo === 'salvos' }"
-              @click="menuAtivo = 'salvos'"
-            >
-            <img
-                :src="menuAtivo === 'salvos'
-                  ? '/img/bolsa.png'
-                  : '/img/bolsa-solido.png'"
-                alt="Carrinho"
-              />
-
-              <div>
-                <h4>Carrinho</h4>
-                <p>Veja os produtos adicionados ao carrinho.</p>
-              </div>
+        <div
+          class="menu-card"
+          :class="{ active: menuAtivo === 'salvos' }"
+          @click="menuAtivo = 'salvos'"
+        >
+          <img
+            :src="menuAtivo === 'salvos'
+              ? '/img/bolsa.png'
+              : '/img/bolsa-solido.png'"
+            alt="Carrinho"
+          />
+          <div>
+            <h4>Carrinho</h4>
+            <p>Veja os produtos adicionados ao carrinho.</p>
           </div>
+        </div>
 
-          <div
-              class="menu-card"
-              :class="{ active: menuAtivo === 'favoritos' }"
-              @click="menuAtivo = 'favoritos'"
-            >
-            <img
+        <div
+          class="menu-card"
+          :class="{ active: menuAtivo === 'favoritos' }"
+          @click="menuAtivo = 'favoritos'"
+        >
+          <img
             :src="menuAtivo === 'favoritos'
               ? '/img/coracao.png'
               : '/img/coracao-solido.png'"
             alt="coracao"
           />
-
-            <div>
-              <h4>Favoritos</h4>
-              <p>Veja seus itens favoritos.</p>
-            </div>
+          <div>
+            <h4>Favoritos</h4>
+            <p>Veja seus itens favoritos.</p>
           </div>
-
+        </div>
       </nav>
-
     </aside>
 
     <!-- Conteúdo dinâmico de acordo com o menu selecionado -->
@@ -293,10 +303,10 @@ onMounted(() => {
       class="content"
       v-if="menuAtivo === 'pedidos'"
     >
-    <div class="title">
-    <img src="/img/carrinho.png" alt="carrinho.png">
-      <h1>Pedidos</h1>
-    </div>
+      <div class="title">
+        <img src="/img/carrinho.png" alt="carrinho.png">
+        <h1>Pedidos</h1>
+      </div>
     </section>
 
     <CadastroSection
@@ -311,11 +321,10 @@ onMounted(() => {
       v-if="menuAtivo === 'salvos'"
     >
       <div class="title">
-    <img src="/img/bolsa-solido.png" alt="bolsa.png">
-      <h1>Carrinho</h1>
-    </div>
-
-    <CarrinhoComponent />
+        <img src="/img/bolsa-solido.png" alt="bolsa.png">
+        <h1>Carrinho</h1>
+      </div>
+      <CarrinhoComponent />
     </section>
 
     <section
@@ -323,133 +332,213 @@ onMounted(() => {
       v-if="menuAtivo === 'favoritos'"
     >
       <div class="title">
-    <img src="/img/coracao-solido.png" alt="coracao-solido.png">
-      <h1>Favoritos</h1>
-    </div>
-
-    <FavoritosComponent />
+        <img src="/img/coracao-solido.png" alt="coracao-solido.png">
+        <h1>Favoritos</h1>
+      </div>
+      <FavoritosComponent />
     </section>
   </main>
 </template>
 
 <style scoped>
-*{
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-.perfil-container{
-  max-width:90vw;
-  margin:6vw auto;
-  display:grid;
-  grid-template-columns:20vw 1fr;
-  gap:3vw;
+/* ================= DESKTOP STYLES (AJUSTADOS) ================= */
+
+.perfil-container {
+  max-width: 85vw;
+  margin: 4vh auto;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.5rem;
+  align-items: start;
 }
 
-.content{
-  background:#F5E9E0;
-  border-radius:0.5vw;
-  padding:2vw;
-  padding-left: 5vw;
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.title{
-  display:flex;
-  align-items:center;
-  gap:1vw;
-  margin-bottom:2vw;
+.welcome-card {
+  background: #F5E9E0;
+  border: 1px solid rgba(49, 17, 17, 0.15);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
-.title img{
-  width: 2.2vw;
-  height: 2.2vw;
+.welcome-card .icon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #E7D5C8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
-.cards-grid{
-  display:grid;
-  grid-template-columns:1fr 1vw;
-  gap:3vw;
+.welcome-card .icon img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
 }
 
-.form-card{
-  border:0.1vw solid #31111152;
-  border-radius:1vw;
-  padding:2vw;
+.welcome-info {
+  width: 100%;
 }
 
-.form-card h2{
-  margin-top:0;
-  margin-bottom:2vw;
+.welcome-card p {
+  font-size: 0.95rem;
+  color: #705858;
+  margin: 0 0 0.3rem 0;
 }
 
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1vw;
-}
-
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:1vw;
-}
-
-.full{
-  grid-column:span 2;
-}
-
-.field input,
-.field select{
-  height:3.5vw;
-
-  border-radius:0.5vw;
-  padding:0 1vw;
-  font-size:1vw;
-}
-
-.save-btn{
-  grid-column:span 2;
-
-  height:4vw;
-  border:none;
-  border-radius:0.5vw;
-
-  background:#29b857;
-  color:white;
-
-  font-size:1.5vw;
-  cursor:pointer;
+.welcome-card h1 {
+  font-size: 1.35rem;
+  color: #311111;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .email-box {
   width: 100%;
+  margin-bottom: 1.2rem;
 }
 
 .email-box span {
-  margin-bottom: 0.5vw;
+  font-size: 0.9rem;
+  color: #705858;
   display: block;
   width: 100%;
   overflow-wrap: break-word;
-  word-break: break-word;
 }
 
-.change-password{
-  width:100%;
-  height:2.5vw;
-
-  border:0.1vw solid #31111192;
-  border-radius:0.5vw;
-
-  background:#F5E9E0;
-  color:#311111;
-
-  cursor:pointer;
+.change-password {
+  width: 100%;
+  height: 38px;
+  border: 1px solid rgba(49, 17, 17, 0.25);
+  border-radius: 8px;
+  background: transparent;
+  color: #311111;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0.8rem;
 }
 
-.change-password:hover{
+.change-password:hover {
   background-color: #311111;
   color: #F5E9E0;
-  transition:.3s;
 }
+
+.logout {
+  background: transparent;
+  border: none;
+  color: #a32323;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: opacity 0.2s;
+}
+
+.logout:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.menu-card {
+  background: #F5E9E0;
+  border: 1px solid rgba(49, 17, 17, 0.12);
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.menu-card.active {
+  background: #311111;
+  color: #F5E9E0;
+  border-color: #311111;
+}
+
+.menu-card.active h4,
+.menu-card.active p {
+  color: #F5E9E0;
+}
+
+.menu-card img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.menu-card h4 {
+  margin: 0 0 0.2rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #311111;
+}
+
+.menu-card p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #705858;
+  line-height: 1.3;
+}
+
+.content {
+  background: #F5E9E0;
+  border-radius: 12px;
+  padding: 2.5rem;
+  border: 1px solid rgba(49, 17, 17, 0.12);
+  min-height: 70vh;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.title img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.title h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #311111;
+}
+
+/* ================= MOBILE STYLES (INTOCADOS) ================= */
 
 @media (max-width: 768px) {
 

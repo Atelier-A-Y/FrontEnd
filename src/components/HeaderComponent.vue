@@ -620,5 +620,5 @@ function irParaHome(){
     margin-left: 1.5vw;
   }
 
-  /* ========================================
-        PESQUISA MOBILE
+}
+</style>
