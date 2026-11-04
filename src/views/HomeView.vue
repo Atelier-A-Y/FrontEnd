@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import BannerComponent from '../components/BannerComponent.vue';
-import BotoesMenoresComponent from '../components/BotoesMenoresComponent.vue';
-import CarrosselPrinciComponent from '../components/CarrosselPrinciComponent.vue';
-import CarrosselSecunComponent from '../components/CarrosselSecunComponent.vue';
-import HomeComponent from '../components/HomeComponent.vue';
+import BannerComponent from '../components/Home/BannerComponent.vue';
+import BotoesMenoresComponent from '../components/Home/BotoesMenoresComponent.vue';
+import CarrosselPrinciComponent from '../components/Home/CarrosselPrinciComponent.vue';
+import CarrosselSecunComponent from '../components/Home/CarrosselSecunComponent.vue';
+import HomeComponent from '../components/Home/HomeComponent.vue';
 </script>
 
 <template>

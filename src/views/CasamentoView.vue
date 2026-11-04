@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import CasamentoCarrossel from '../components/Casamento/Casamento-Carrossel.vue';
+
+</script>
+
 <template>
-    <h1>oi</h1>
+    <CasamentoCarrossel />
 </template>
