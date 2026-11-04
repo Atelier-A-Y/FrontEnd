@@ -1,445 +1,603 @@
+
 <script setup lang="ts">
 import {ref, computed, onMounted, onUnmounted} from "vue";
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from "vue-router";
 
-  const authStore = useAuthStore();
-  const router = useRouter();
-  const headerAtivo = ref(false);
 
-  function abrirUsuario() {
-    if (authStore.token) {
-      router.push('/user')
-    } else {
-      router.push('/login')
-    }
-  }
+ const authStore = useAuthStore();
+ const router = useRouter();
+ const headerAtivo = ref(false);
 
-  function handleScroll() {
-    headerAtivo.value = window.scrollY > 50;
-  }
 
-  onMounted(() => {
-    window.addEventListener("scroll", handleScroll);
-  });
+ function abrirUsuario() {
+   if (authStore.token) {
+     router.push('/user')
+   } else {
+     router.push('/login')
+   }
+ }
 
-  onUnmounted(() => {
-    window.removeEventListener("scroll", handleScroll);
-  });
 
-  const showDropdown = ref(false);
+ function handleScroll() {
+   headerAtivo.value = window.scrollY > 50;
+ }
 
-  const pesquisa = ref("");
-  const indexAtivo = ref(-1);
 
-  const navegacao = ref([
-    { id: "1", nome: "Casamento", rota: "/casamento" },
-    { id: "2", nome: "Formatura", rota: "/" },
-    { id: "3", nome: "Festa", rota: "/" },
-    { id: "4", nome: "Madrinha", rota: "/" },
-    { id: "5", nome: "Baile", rota: "/" },
-    { id: "6", nome: "Noiva", rota: "/" },
-  ]);
+ onMounted(() => {
+   window.addEventListener("scroll", handleScroll);
+ });
 
-  const resultados = computed(() => {
-    const termo = pesquisa.value.trim().toLowerCase();
 
-    if (!termo) return [];
+ onUnmounted(() => {
+   window.removeEventListener("scroll", handleScroll);
+ });
 
-    return navegacao.value.filter((o) =>
-      o.nome.toLowerCase().includes(termo)
-    );
-  });
 
-  function abrirNavegacao(item: any) {
-    if (!item) return;
+ const showDropdown = ref(false);
 
-    router.push(item.rota);
 
-    pesquisa.value = "";
-    indexAtivo.value = -1;
-  }
+ const pesquisa = ref("");
+ const indexAtivo = ref(-1);
 
-  function navegar(e: KeyboardEvent) {
-    if (!resultados.value.length) return;
 
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
+ const navegacao = ref([
+   { id: "1", nome: "Casamento", rota: "/casamento" },
+   { id: "2", nome: "Formatura", rota: "/" },
+   { id: "3", nome: "Festa", rota: "/" },
+   { id: "4", nome: "Madrinha", rota: "/" },
+   { id: "5", nome: "Baile", rota: "/" },
+   { id: "6", nome: "Noiva", rota: "/" },
+ ]);
 
-      indexAtivo.value =
-        (indexAtivo.value + 1) % resultados.value.length;
 
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
+ const resultados = computed(() => {
+   const termo = pesquisa.value.trim().toLowerCase();
 
-      indexAtivo.value =
-        (indexAtivo.value - 1 + resultados.value.length) %
-        resultados.value.length;
 
-    } else if (e.key === "Enter") {
-      e.preventDefault();
+   if (!termo) return [];
 
-      if (indexAtivo.value >= 0) {
-        abrirNavegacao(resultados.value[indexAtivo.value]);
-      } else {
-        abrirNavegacao(resultados.value[0]);
-      }
-    }
-  }
 
-  function irParaHome(){
-    router.push('/')
-  }
+   return navegacao.value.filter((o) =>
+     o.nome.toLowerCase().includes(termo)
+   );
+ });
 
-  function pesquisarProdutos() {
-  const termo = pesquisa.value.trim();
 
-  router.push({
-    path: '/produtos',
-    query: termo ? { search: termo } : {},
-  });
+ function abrirNavegacao(item: any) {
+   if (!item) return;
 
-  pesquisa.value = '';
-  indexAtivo.value = -1;
-  }
-  </script>
 
-  <template>
-    <header :class="{ scrolled: headerAtivo }" class="topo">
+   router.push(item.rota);
 
-        <div @click="irParaHome" class="logo">
-          <img :src="headerAtivo
-                  ? '/img/logo-solido.png'
-                  : '/img/logo.png'"
-                  alt="Logo Atelier" />
 
-          <div class="texto">
-            <p class="titulo">ATELIER</p>
-            <p class="sigla">A.Y.</p>
-          </div>
+   pesquisa.value = "";
+   indexAtivo.value = -1;
+ }
 
-        </div>
 
-        <!-- BUSCA -->
-        <div class="search-container">
+ function navegar(e: KeyboardEvent) {
+   if (!resultados.value.length) return;
 
-          <input
-            type="text"
-            v-model="pesquisa"
-            placeholder="Buscar..."
-            @keydown="navegar"
-            @keyup.enter="pesquisarProdutos"
-            class="search-input"
-          />
-          <a href="#" @click.prevent="pesquisarProdutos">
-          <img
-            :src="headerAtivo
-              ? '/img/lupa-solido.png'
-              : '/img/lupa.png'"
-            alt="Pesquisar"
-            class="icon-lupa"
-          />
-        </a>
 
-          <div
-            class="results-list"
-            v-if="resultados.length"
-          >
-            <ul>
+   if (e.key === "ArrowDown") {
+     e.preventDefault();
 
-              <li
-                v-for="(item, index) in resultados"
-                :key="item.id"
-                :class="{ ativo: index === indexAtivo }"
-                @click="abrirNavegacao(item)"
-                class="result-item"
-              >
 
-                <span class="item-icon">
-                  <img src="/img/lupa-solido.png" alt="Lupa" />
-                </span>
+     indexAtivo.value =
+       (indexAtivo.value + 1) % resultados.value.length;
 
-                <span class="item-text">
-                  {{ item.nome }}
-                </span>
 
-              </li>
+   } else if (e.key === "ArrowUp") {
+     e.preventDefault();
 
-            </ul>
-          </div>
 
-        </div>
+     indexAtivo.value =
+       (indexAtivo.value - 1 + resultados.value.length) %
+       resultados.value.length;
 
-        <!-- ÍCONES -->
-        <ul class="icones">
 
-          <li>
-            <a @click.prevent="abrirUsuario">
-              <img
-                :src="headerAtivo
-                  ? '/img/user-solido.png'
-                  : '/img/user.png'"
-                alt="User"
-              />
-            </a>
-          </li>
+   } else if (e.key === "Enter") {
+     e.preventDefault();
 
-          <li>
-            <a href="/carrinho">
-              <img
-                :src="headerAtivo
-                  ? '/img/bolsa-solido.png'
-                  : '/img/bolsa.png'"
-                alt="Sacola"
-              />
-            </a>
-          </li>
 
-          <li>
-            <RouterLink to="/favoritos">
-              <img
-                :src="headerAtivo
-                  ? '/img/coracao-solido.png'
-                  : '/img/coracao.png'"
-                alt="Favoritos"
-              />
-            </RouterLink>
-          </li>
+     if (indexAtivo.value >= 0) {
+       abrirNavegacao(resultados.value[indexAtivo.value]);
+     } else {
+       abrirNavegacao(resultados.value[0]);
+     }
+   }
+ }
 
-        </ul>
 
-    </header>
-  </template>
+ function irParaHome(){
+   router.push('/')
+ }
+
+
+ function pesquisarProdutos() {
+ const termo = pesquisa.value.trim();
+   
+
+ router.push({
+   path: '/produtos',
+   query: termo ? { search: termo } : {},
+ });
+
+ pesquisa.value = '';
+ indexAtivo.value = -1;
+ }
+ </script>
+
+ <template>
+   <header :class="{ scrolled: headerAtivo }" class="topo">
+
+       <div @click="irParaHome" class="logo">
+         <img :src="headerAtivo
+                 ? '/img/logo-solido.png'
+                 : '/img/logo.png'"
+                 alt="Logo Atelier" />
+
+         <div class="texto">
+           <p class="titulo">ATELIER</p>
+           <p class="sigla">A.Y.</p>
+         </div>
+
+       </div>
+
+       <!-- BUSCA -->
+       <div class="search-container">
+
+         <input
+           type="text"
+           v-model="pesquisa"
+           placeholder="Buscar..."
+           @keydown="navegar"
+           @keyup.enter="pesquisarProdutos"
+           class="search-input"
+         />
+         <a href="#" @click.prevent="pesquisarProdutos">
+         <img
+           :src="headerAtivo
+             ? '/img/lupa-solido.png'
+             : '/img/lupa.png'"
+           alt="Pesquisar"
+           class="icon-lupa"
+         />
+       </a>
+
+         <div
+           class="results-list"
+           v-if="resultados.length"
+         >
+           <ul>
+
+             <li
+               v-for="(item, index) in resultados"
+               :key="item.id"
+               :class="{ ativo: index === indexAtivo }"
+               @click="abrirNavegacao(item)"
+               class="result-item"
+             >
+
+               <span class="item-icon">
+                 <img src="/img/lupa-solido.png" alt="Lupa" />
+               </span>
+
+               <span class="item-text">
+                 {{ item.nome }}
+               </span>
+
+             </li>
+
+           </ul>
+         </div>
+
+       </div>
+
+       <!-- ÍCONES -->
+       <ul class="icones">
+
+         <li>
+           <a @click.prevent="abrirUsuario">
+             <img
+               :src="headerAtivo
+                 ? '/img/user-solido.png'
+                 : '/img/user.png'"
+               alt="User"
+             />
+           </a>
+         </li>
+
+         <li>
+           <a href="/carrinho">
+             <img
+               :src="headerAtivo
+                 ? '/img/bolsa-solido.png'
+                 : '/img/bolsa.png'"
+               alt="Sacola"
+             />
+           </a>
+         </li>
+
+         <li>
+           <RouterLink to="/favoritos">
+             <img
+               :src="headerAtivo
+                 ? '/img/coracao-solido.png'
+                 : '/img/coracao.png'"
+               alt="Favoritos"
+             />
+           </RouterLink>
+         </li>
+
+       </ul>
+
+   </header>
+ </template>
 
   <style scoped>
+    <style scoped>
+.topo-mobile{
+ display: none;
+}
 
-  /* HEADER */
 
-  .topo {
-    position: fixed;
+.topo {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 6vw;
+ padding: 0 2vw;
+ display: flex;
+ align-items: center;
+ z-index: 99;
+ background: linear-gradient(
+   to top,
+   rgba(63, 44, 25, 0) 3%,
+   rgba(72, 50, 29, 0.341) 28%,
+   rgba(63, 44, 25, 0.654) 100%
+ );
+ transition:
+   background 0.4s ease,
+   backdrop-filter 0.4s ease,
+   box-shadow 0.4s ease;
+ justify-content: space-between;
+}
 
-    top: 0;
-    left: 0;
 
-    width: 100%;
-    height: 6vw;
+.topo.scrolled {
+ background: rgba(245, 230, 222, 0.95);
+ backdrop-filter: blur(10px);
+ box-shadow:
+   0 0.2vw 1vw rgba(0, 0, 0, 0.08);
+}
 
-    padding: 0 2vw;
-    display: flex;
-    align-items: center;
 
-    z-index: 99;
+.logo {
+ display: flex;
+ align-items: center;
+ gap: 15px;
+ cursor: pointer;
+}
 
-    background: linear-gradient(
-      to top,
-      rgba(63, 44, 25, 0) 3%,
-      rgba(72, 50, 29, 0.341) 28%,
-      rgba(63, 44, 25, 0.654) 100%
-    );
 
-    transition:
-      background 0.4s ease,
-      backdrop-filter 0.4s ease,
-      box-shadow 0.4s ease;
+.logo img {
+ width: 60px;
+ height: 80px;
+}
 
-    justify-content: space-between;
-  }
 
-  /* HEADER QUANDO DESCE */
+.texto {
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+}
 
-  .topo.scrolled {
-    background: rgba(245, 230, 222, 0.95);
 
-    backdrop-filter: blur(10px);
+.titulo {
+ font-size: 12px;
+ color: white;
+ margin: 0;
+}
 
-    box-shadow:
-      0 0.2vw 1vw rgba(0, 0, 0, 0.08);
-  }
 
-  /* LOGO */
+.sigla {
+ font-size: 10px;
+ color: white;
+ margin: 0;
+ align-self: center;
+}
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    cursor: pointer;
-  }
 
-  .logo img {
-    width: 60px;
-    height: 80px;
-  }
+.menu {
+ display: flex;
+ gap: 2vw;
+}
 
-  .texto {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
 
-  .titulo {
-    font-size: 12px;
-    color: white;
-    margin: 0;
-  }
+.menu li a {
+ text-decoration: none;
+ color: white;
+ font-size: 0.9rem;
+ transition: 0.3s;
+}
 
-  .sigla {
-    font-size: 10px;
-    color: white;
-    margin: 0;
-    align-self: center;
-  }
 
-  /* MENU */
+.menu li a:hover {
+ opacity: 0.7;
+}
 
-  .menu {
-    display: flex;
-    gap: 2vw;
-  }
 
-  .menu li a {
-    text-decoration: none;
+.submenu {
+ position: absolute;
+ top: 5vw;
+ left: 50vw;
+ background: white;
+ margin: 0;
+ padding: 8px 25px 8px 10px;
+ border-radius: 6px;
+ min-width: 180px;
+ box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
 
-    color: white;
 
-    font-size: 0.9rem;
+.cima {
+ display: flex;
+}
 
-    transition: 0.3s;
-  }
 
-  .menu li a:hover {
-    opacity: 0.7;
-  }
+.baixo {
+ display: flex;
+}
 
-  /* BUSCA */
 
-  .search-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 320px;
-    max-width: 100%;
-  }
+.submenu li {
+ padding: 8px 25px;
+ margin-left: 1vw;
+}
 
-  .search-input {
-    width: 100%;
-    padding: 8px 35px 8px 0;
-    border: none;
-    border-bottom: 1px solid white;
-    background: transparent;
-    font-size: 16px;
-    color: white;
-  }
 
-  .search-input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-  }
+.submenu li a {
+ color: #311111;
+ font-weight: 500;
+ display: block;
+ text-decoration: none;
+}
 
-  .icon-lupa {
-    width: 1.5vw;
-    height: 1.5vw;
-  }
 
-  /* RESULTADOS */
+.submenu li a:hover {
+ background: #f1f1f1;
+ color: #311111;
+ font-weight: bold;
+}
 
-  .results-list {
-    position: absolute;
 
-    top: 120%;
-    left: 0;
+.search-container {
+ position: relative;
+ display: flex;
+ align-items: center;
+ width: 320px;
+ max-width: 100%;
+}
 
-    width: 100%;
 
-    background: white;
+.search-input {
+ width: 100%;
+ padding: 8px 35px 8px 0;
+ border: none;
+ border-bottom: 1px solid white;
+ background: transparent;
+ font-size: 16px;
+ color: white;
+}
 
-    border-radius: 1vw;
 
-    overflow: hidden;
+.search-input::placeholder {
+ color: rgba(255, 255, 255, 0.7);
+}
 
-    box-shadow:
-      0 1vw 2vw rgba(0, 0, 0, 0.1);
-  }
 
-  .results-list ul {
-    list-style: none;
+.icon-lupa {
+ width: 1.5vw;
+ height: 1.5vw;
+}
 
-  }
 
-  .result-item {
-    display: flex;
-    align-items: center;
-    gap: 1vw;
-    padding: 1vw;
-    cursor: pointer;
-    transition: 0.3s;
-  }
+.results-list {
+ position: absolute;
+ top: 120%;
+ left: 0;
+ width: 100%;
+ background: white;
+ border-radius: 1vw;
+ overflow: hidden;
+ box-shadow:
+   0 1vw 2vw rgba(0, 0, 0, 0.1);
+}
 
-  .result-item:hover,
-  .result-item.ativo {
-    background: #f5e9e0;
-  }
 
-  .item-icon img {
-    width: 1vw;
-  }
+.results-list ul {
+ list-style: none;
+}
 
-  /* ÍCONES */
 
-  .icones {
-    display: flex;
-    align-items: center;
-    gap: 2vw;
-    list-style: none;
-    cursor: pointer;
-  }
+.result-item {
+ display: flex;
+ align-items: center;
+ gap: 1vw;
+ padding: 1vw;
+ cursor: pointer;
+ transition: 0.3s;
+}
 
-  .icones li img {
-    width: 2vw;
-  }
 
-  /* QUANDO O HEADER FICA SÓLIDO */
+.result-item:hover,
+.result-item.ativo {
+ background: #f5e9e0;
+}
 
-  .topo.scrolled .titulo,
-  .topo.scrolled .sigla,
-  .topo.scrolled .menu li a {
-    color: #311111;
-  }
 
-  .topo.scrolled .search-input {
-    color: #311111;
+.item-icon img {
+ width: 1vw;
+}
 
-    border-bottom:
-      0.1vw solid #84453d;
-  }
 
-  .topo.scrolled .search-input::placeholder {
-    color: rgba(49, 17, 17, 0.5);
-  }
+/* ÍCONES */
 
-  /* RESPONSIVO */
 
-  @media (max-width: 768px) {
+.icones {
+ display: flex;
+ align-items: center;
+ gap: 2vw;
+ list-style: none;
+ cursor: pointer;
+}
 
-    .topo {
-      height: 14vw;
-      padding: 0 5vw;
-    }
 
-    .menu {
-      display: none;
-    }
+.icones li img {
+ width: 2vw;
+}
 
-    .logo img {
-      width: 10vw;
-      height: 10vw;
-    }
 
-    .search-container {
-      width: 30vw;
-    }
+.topo.scrolled .titulo,
+.topo.scrolled .sigla,
+.topo.scrolled .menu li a {
+ color: #311111;
+}
 
-    .icones li img {
-      width: 4vw;
-    }
-  }
 
-  </style>
+.topo.scrolled .search-input {
+ color: #311111;
+
+
+ border-bottom:
+   0.1vw solid #84453d;
+}
+
+
+.topo.scrolled .search-input::placeholder {
+ color: rgba(49, 17, 17, 0.5);
+}
+
+
+/*========================================
+               MOBILE
+=========================================*/
+
+
+@media (max-width: 600px) {
+ .topo{
+   display: none;
+ }
+
+
+ .topo-mobile{
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 10vw;
+   padding: 0 8vw;
+   display: flex;
+   align-items: center;
+   z-index: 99;
+   background: linear-gradient(
+     to top,
+     rgba(63, 44, 25, 0) 3%,
+     rgba(72, 50, 29, 0.341) 28%,
+     rgba(63, 44, 25, 0.654) 100%
+   );
+   transition:
+     background 0.4s ease,
+     backdrop-filter 0.4s ease,
+     box-shadow 0.4s ease;
+ }
+
+
+ .topo-mobile.scrolled {
+   background: rgba(245, 230, 222, 0.95);
+   backdrop-filter: blur(10px);
+   box-shadow:
+     0 0.2vw 1vw rgba(0, 0, 0, 0.08);
+ }
+
+
+ .menu-mobile{
+   width: 5vw;
+   align-items: center;
+ }
+
+
+ .aba-menu{
+   position: absolute;
+   top: 100%;
+   left: 0;
+   background-color: white;
+   padding: 6vw 8vw 0 8vw;
+   box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.15);
+   z-index: 100;
+   animation: entrarMenu 0.3s ease;
+ }
+
+
+ @keyframes entrarMenu {
+   from{
+     transform: translateX(-100%);
+   }
+
+
+   to{
+     transform: translateX(0);
+   }
+ }
+
+
+ .icones-mobile img{
+   width: 7vw;
+ }
+
+
+ .icones-mobile li a {
+   display: flex;
+   align-items: center;
+   gap: 4vw;
+   color: #311111;
+   font-size: 4vw;
+   font-family: "Inria Serif", serif;
+   font-weight: 300;
+   font-style: normal;
+ }
+
+
+ .icones-mobile li {
+   margin-bottom: 7vw;
+ }
+
+
+ .texto-mobile {
+   text-align: center;
+   margin-left: 20vw;
+   font-family: "Inria Serif", serif;
+   font-weight: 300;
+   font-style: normal;
+ }
+
+
+ .titulo-mobile {
+   font-size: 4.5vw;
+   color: white;
+   margin: 0;
+   white-space: nowrap;
+   letter-spacing: 2px;
+ }
+
+
+ .sigla-mobile {
+   font-size: 3vw;
+   color: white;
+   margin-left: 1.5vw;
+ }
+
+</style>

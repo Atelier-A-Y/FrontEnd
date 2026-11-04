@@ -30,6 +30,7 @@ async function carregarProdutos() {
   carregando.value = true
   erro.value = ''
 
+const carregarProdutos = async () => {
   try {
     const params = new URLSearchParams()
 
@@ -163,9 +164,97 @@ function formatarPreco(preco) {
   })
 }
 
+const favoritosMobile = ref<number[]>([])
+
+async function carregarFavoritosMobile() {
+  try {
+    const respostaMobile = await api.get('/favoritos/')
+    const listaMobile = respostaMobile.data.results || respostaMobile.data
+
+    favoritosMobile.value = listaMobile
+      .map((item: any) => {
+        if (typeof item.roupa === 'number') {
+          return item.roupa
+        }
+
+        if (item.roupa?.id) {
+          return item.roupa.id
+        }
+
+        return null
+      })
+      .filter((id: any) => id !== null)
+
+    console.log('IDs DOS FAVORITOS:', favoritosMobile.value)
+  } catch (erro: any) {
+    console.error('ERRO AO CARREGAR FAVORITOS:', erro)
+
+    if (erro.response) {
+      console.log('STATUS:', erro.response.status)
+      console.log('DADOS:', erro.response.data)
+    }
+  }
+}
+
+async function alterarFavMobile(id: number) {
+  console.log('ID DA ROUPA SELECIONADA:', id)
+
+  if (!id) {
+    console.error('Essa roupa não possui ID')
+    return
+  }
+
+  try {
+    const respostaMobile = await api.get('/favoritos/')
+    const listaMobile = respostaMobile.data.results || respostaMobile.data
+
+    console.log('FAVORITOS DO USUÁRIO:', listaMobile)
+
+    const favoritoExistenteMobile = listaMobile.find((item: any) => {
+      if (typeof item.roupa === 'number') {
+        return item.roupa === id
+      }
+      return item.roupa?.id === id
+    })
+
+    if (favoritoExistenteMobile) {
+      console.log('REMOVENDO FAVORITO:', favoritoExistenteMobile.id)
+
+      await api.delete(`/favoritos/${favoritoExistenteMobile.id}/`)
+
+      favoritosMobile.value = favoritosMobile.value.filter(
+        (favoritoMobileId) => favoritoMobileId !== id,
+      )
+      console.log('FAVORITO REMOVIDO')
+    } else {
+      console.log('ADICIONANDO ROUPA:', id)
+
+      await api.post('/favoritos/', {
+        roupa: id,
+      })
+
+      favoritosMobile.value.push(id)
+
+      console.log('FAVORITO ADICIONADO!')
+    }
+  } catch (erro: any) {
+    console.error('ERRO AO ALTERAR FAVORITO:', erro)
+
+    if (erro.response) {
+      console.log('STATUS:', erro.response.status)
+      console.log('DADOS:', erro.response.data)
+    }
+  }
+}
+
+function ehFavoritoMobile(id: number) {
+  return favoritosMobile.value.includes(id)
+}
+
 onMounted(() => {
   carregarProdutos()
   carregarCategorias()
+  carregarFavoritosMobile()
 })
 </script>
 
@@ -199,15 +288,44 @@ onMounted(() => {
           v-for="item in produtosFiltrados"
           :key="item.id"
           class="card-produto"
+          v-for="item in produtos"
+          :key="item.id"
+          @click="abrirProdutos(item.id)"
+        >
+          <img v-if="item.foto" :src="item.foto.url" :alt="item.nome" class="imagem-produto" />
+
+          <h2>{{ item.nome }}</h2>
+
+          <p>
+            <strong>Preço:</strong>
+
+            R$
+            {{ Number(item.preco).toFixed(2).replace('.', ',') }}
+          </p>
+        </div>
+      </section>
+
+      <section v-else class="sem-produtos">
+        <h2>Nenhum produto cadastrado.</h2>
+      </section>
+    </section>
+
+    <section class="produtos-mobile">
+      <h1>Produtos</h1>
+
+      <section class="container-produtos-mobile" v-if="produtos.length > 0">
+        <div
+          class="card-produto-mobile"
+          v-for="item in produtos"
+          :key="item.id"
           @click="abrirProdutos(item.id)"
         >
           <img
             v-if="item.foto"
             :src="typeof item.foto === 'object' ? item.foto.url : item.foto"
             :alt="item.nome"
-            class="imagem-produto"
+            class="imagem-produto-mobile"
           />
-
           <div v-else class="imagem-sem-foto">Sem imagem</div>
 
           <div class="informacoes-produto">
@@ -218,23 +336,26 @@ onMounted(() => {
             <p v-if="item.cor" class="cor-produto">Cor: {{ item.cor }}</p>
           </div>
         </article>
+      
       </section>
 
-      <section v-else class="sem-produtos">
-        <h2>Nenhum produto encontrado.</h2>
-        <p>Tente alterar ou limpar os filtros.</p>
+      <section v-else class="sem-produtos-mobile">
+        <h2>Nenhum produto cadastrado.</h2>
       </section>
-    </template>
+    </section>
   </main>
 </template>
 
 <style scoped>
+.produtos-mobile {
+  display: none;
+}
+
 .produtos {
-  width: 100%;
-  min-height: 60vh;
-  padding: 30px 5%;
-  box-sizing: border-box;
-  color: #351414;
+  padding: 1rem;
+  margin-top: 5vw;
+  min-height: 100vh;
+  display: block;
 }
 
 .produtos h1 {
@@ -244,12 +365,16 @@ onMounted(() => {
   font-weight: 500;
 }
 
-.barra-acoes {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 20px;
-}
+.produtos h1::after {
+  content: '';
+  width: 8vw;
+  height: 0.3vw;
+  background: #311111;
+  border-radius: 10px;
+
+  position: absolute;
+  left: 50%;
+  bottom: -1vw;
 
 .contador {
   margin: 15px 0;
@@ -259,12 +384,24 @@ onMounted(() => {
 
 .container-produtos {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 25px;
+
+  grid-template-columns: repeat(auto-fit, minmax(18vw, 1fr));
+
+  gap: 2rem;
+
+  max-width: 100vw;
+  margin: 0 auto;
 }
 
 .card-produto {
-  min-width: 0;
+  background-color: #f5e9e0;
+
+  border-radius: 1.2rem;
+
+  padding: 1.2rem;
+
+  border: 0.1vw solid rgba(49, 17, 17, 0.15);
+
   overflow: hidden;
   background: #f6e9df;
   border-radius: 8px;
@@ -332,36 +469,123 @@ onMounted(() => {
   font-weight: 500;
 }
 
-@media (max-width: 1000px) {
-  .container-produtos {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 700px) {
-  .container-produtos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 15px;
-  }
-
-  .imagem-produto,
-  .imagem-sem-foto {
-    height: 210px;
-  }
-
+@media (max-width: 768px) {
   .produtos {
-    padding: 25px 4%;
+    display: none;
+  }
+
+  .produtos-mobile {
+    padding: 1rem 0rem;
+    margin-top: 1vw;
+    display: block;
+  }
+
+  .produtos-mobile h1 {
+    text-align: center;
+    color: #311111;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .produtos-mobile h1::after {
+    content: '';
+    width: 18vw;
+    height: 0.3vw;
+    background: #311111;
+    border-radius: 10px;
+
+    position: absolute;
+    left: 50%;
+    bottom: -1vw;
+
+    transform: translateX(-50%);
+  }
+
+  .container-produtos-mobile {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 2rem 1.5rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .card-produto-mobile {
+    background-color: #f5e9e0;
+
+    border-radius: 0.5rem;
+
+    width: 100%;
+    padding: 0;
+
+    border: none;
+
+    overflow: hidden;
+
+    box-shadow: 0 0.3vw 1vw rgba(0, 0, 0, 0.08);
+  }
+
+  .imagem-produto-mobile {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+  .card-produto-mobile h2 {
+    color: #311111;
+
+    font-size: 1rem;
+
+    margin: 0 2.5vw 2.5vw 2.5vw;
+    font-weight: 600;
+  }
+
+  .card-produto-mobile p {
+    font-size: 0.7rem;
+    line-height: 1;
+    margin: 0 0.45rem 1.5rem;
+    color: #311111;
+  }
+
+  .favorito-card-mobile {
+    background: transparent;
+    border: none;
+
+    padding: 0;
+    margin: 0 0 1vw 2vw;
+
+    width: 9vw;
+    height: 9vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .favorito-card-mobile img {
+    width: 8vw;
+    height: 8vw;
+
+    object-fit: contain;
+    display: block;
   }
 }
 
-@media (max-width: 420px) {
-  .container-produtos {
-    grid-template-columns: 1fr;
+  .sem-produtos-mobile {
+    margin-top: 2rem;
   }
 
-  .imagem-produto,
-  .imagem-sem-foto {
-    height: 280px;
+  .sem-produtos-mobile h2 {
+    font-size: 1rem;
   }
 }
 </style>

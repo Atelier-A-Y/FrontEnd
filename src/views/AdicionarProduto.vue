@@ -1,15 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import ColorPicker from '../components/ColorPicker.vue'
-import axios from 'axios'
-
-const router = useRouter()
+import { ref } from "vue";
+import api from "../api/api";
+import { useRouter } from "vue-router";
 
 const API_URL = 'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br'
 
 const produto = ref({
-  categoria: '',
+  categoria: [], // Alterado para Array para suportar múltiplas seleções
   nome: '',
   tamanho: '',
   cor: '',
@@ -60,20 +57,30 @@ async function salvarProduto() {
       const formData = new FormData()
       formData.append('file', imagem.value)
 
-      const upload = await axios.post(`${API_URL}/api/media/images/`, formData)
-      
+      const upload = await api.post(
+        '/media/images/',
+        {
+          method: 'POST',
+          body: formData
+        }
+      )
+
+      const dadosImagem = await upload.json()
+
       const dadosImagem = upload.data
       attachmentKey = dadosImagem.attachment_key
     }
 
-    console.log('COR HEX:', produto.value.cor)
-    console.log('NOME DA COR:', produto.value.corNome)
-
-    const precoNumerico = parseFloat(produto.value.preco) || 0
-
-    const resposta = await axios.post(`${API_URL}/api/roupas/`, {
+   const resposta = await api.post(
+  '/roupas/',
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
       nome: produto.value.nome,
-      categoria: produto.value.categoria,
+      categoria: produto.value.categoria, // Envia o array com as IDs das categorias selecionadas
       tamanho: produto.value.tamanho,
       cor: produto.value.corNome,
       cor_hex: produto.value.cor,
@@ -104,6 +111,50 @@ onMounted(async () => {
   <main>
     <h1>Adicionar Produto</h1>
 
+<section class="fundo-prod">
+  <form class="form-container" @submit.prevent="salvarProduto">
+
+    <div class="conteudo-formulario">
+
+      <div class="lado-imagem">
+
+        <div class="input-group">
+          <input
+            type="file"
+            accept="image/*"
+            @change="selecionarImagem"
+          />
+        </div>
+
+        <div v-if="previewImagem" class="preview-container">
+          <img
+            :src="previewImagem"
+            alt="Pré-visualização"
+            class="preview-imagem"
+          />
+        </div>
+      </div>
+
+      <div class="lado-campos">
+
+        <div class="input-group">
+          <input
+            type="text"
+            maxlength="100"
+            placeholder="Nome"
+            v-model="produto.nome"
+          />
+        </div>
+
+        <div class="input-group">
+          <input
+            type="text"
+            maxlength="100"
+            placeholder="Tamanho"
+            v-model="produto.tamanho"
+          />
+        </div>
+
     <section class="fundo-prod">
       <form class="form-container" @submit.prevent="salvarProduto">
         <div class="conteudo-formulario">
@@ -123,11 +174,10 @@ onMounted(async () => {
             </div>
 
             <div class="input-group">
-              <label>Categoria:</label>
+              <label>Categorias (Segure Ctrl / Cmd para selecionar mais de uma):</label>
 
-              <select v-model="produto.categoria">
-                <option disabled value="">Selecione uma categoria</option>
-
+              <!-- Adicionado o atributo 'multiple' -->
+              <select v-model="produto.categoria" multiple class="select-multiplo">
                 <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
                   {{ categoria.nome }}
                 </option>
@@ -146,10 +196,18 @@ onMounted(async () => {
               </select>
             </div>
 
-            <div class="input-group"> 
-              <color-picker v-model:pureColor="produto.cor" @update:colorName="produto.corNome = $event" 
-              /> 
-               <input type="text" maxlength="7" placeholder="Hex" v-model="produto.cor" class="hex"/> 
+            <div class="input-group">
+              <color-picker
+                v-model:pureColor="produto.cor"
+                @update:colorName="produto.corNome = $event"
+              />
+              <input
+                type="text"
+                maxlength="7"
+                placeholder="Hex"
+                v-model="produto.cor"
+                class="hex"
+              />
             </div>
 
             <div class="input-group">
@@ -167,8 +225,20 @@ onMounted(async () => {
 
           <button type="submit">Salvar</button>
         </div>
-      </form>
-    </section>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button type="reset">
+        Limpar
+      </button>
+
+      <button type="submit">
+        Salvar
+      </button>
+    </div>
+  </form>
+</section>
   </main>
 </template>
 
@@ -237,6 +307,12 @@ select {
   outline: none;
 }
 
+/* Estilo ajustado para visualização do select múltiplo */
+.select-multiplo {
+  height: 120px;
+  padding: 0.5rem;
+}
+
 textarea {
   resize: none;
   height: 10rem;
@@ -281,24 +357,5 @@ textarea {
 .buttons button:hover {
   background: #311111;
   color: #f5e9e0;
-}
-
-@media (max-width: 768px) {
-  .conteudo-formulario {
-    flex-direction: column;
-  }
-
-  .lado-imagem,
-  .lado-campos {
-    width: 100%;
-  }
-
-  .preview-container {
-    height: 300px;
-  }
-
-  .buttons {
-    justify-content: center;
-  }
 }
 </style>
