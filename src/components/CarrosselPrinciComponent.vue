@@ -7,14 +7,6 @@ const slides = [
   },
   {
    img: '/img/formanda1.png',
-   marca1: 'ATELIER',
-   marca2: 'A.Y.',
-   texto: 'FORMATURA',
-   subtexto: '50% DE DESCONTO',
-   classeMarca1: 'marca1-formanda',
-   classeMarca2: 'marca2-formanda',
-   classeTexto: 'texto-formanda',
-   classeSubtexto: 'subtexto-formanda',
   }
 ]
 
