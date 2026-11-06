@@ -1,8 +1,8 @@
-```vue
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import api from "../api/api";
 import { useRouter } from "vue-router";
+
 
 const router = useRouter();
 

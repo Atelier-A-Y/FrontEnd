@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import api from '../api/api'
 import { useRouter, useRoute } from 'vue-router'
 import FiltragemComponent from '../components/FiltragemComponent.vue'
 
@@ -10,8 +11,7 @@ const route = useRoute()
 
 const produtos = ref([])
 const categorias = ref([])
-const todasAsCoresFixas = ref([]) // Guarda todas as cores de forma fixa
-
+const todasAsCoresFixas = ref([]) 
 
 const filtros = ref({
  categorias: [],
@@ -28,118 +28,86 @@ const carregando = ref(true)
 const erro = ref('')
 
 
-const API_URL =
- '/api'
-
-
-// Carrega os produtos aplicando os filtros na API
 async function carregarProdutos() {
- carregando.value = true
- erro.value = ''
+  carregando.value = true
+  erro.value = ''
 
+  try {
+    const params = new URLSearchParams()
 
- try {
-   const params = new URLSearchParams()
+    if (pesquisa.value.trim()) {
+      params.set('search', pesquisa.value.trim())
+    }
 
+    if (filtros.value.categorias && filtros.value.categorias.length > 0) {
+      params.set('categorias', filtros.value.categorias.join(','))
+    }
 
-   if (pesquisa.value.trim()) {
-     params.set('search', pesquisa.value.trim())
-   }
+    if (filtros.value.cor !== '') {
+      params.set('cor', filtros.value.cor)
+    }
 
+    const queryString = params.toString()
 
-   if (filtros.value.categorias && filtros.value.categorias.length > 0) {
-     params.set('categorias', filtros.value.categorias.join(','))
-   }
+    const url = queryString
+      ? `/roupas/?${queryString}`
+      : `/roupas/`
 
+    const resposta = await api.get(url)
+    const dados = resposta.data
 
-   if (filtros.value.cor !== '') {
-     params.set('cor', filtros.value.cor)
-   }
+    produtos.value = Array.isArray(dados)
+      ? dados
+      : dados.results || []
 
+    if (todasAsCoresFixas.value.length === 0 && produtos.value.length > 0) {
+      const coresEncontradas = produtos.value
+        .map(produto => produto.cor)
+        .filter(cor => typeof cor === 'string' && cor.trim() !== '')
 
-   const queryString = params.toString()
-   const url = queryString
-     ? `${API_URL}/roupas/?${queryString}`
-     : `${API_URL}/roupas/`
+      todasAsCoresFixas.value = [...new Set(coresEncontradas)]
+    }
 
-
-   const resposta = await fetch(url)
-
-
-   if (!resposta.ok) {
-     throw new Error(`Erro ao buscar produtos: ${resposta.status}`)
-   }
-
-
-   const dados = await resposta.json()
-
-
-   produtos.value = Array.isArray(dados)
-     ? dados
-     : dados.results || []
-
-
-   // Se ainda não temos a lista fixa de cores preenchida, pegamos da primeira carga geral
-   if (todasAsCoresFixas.value.length === 0 && produtos.value.length > 0) {
-     const coresEncontradas = produtos.value
-       .map((produto) => produto.cor)
-       .filter((cor) => typeof cor === 'string' && cor.trim() !== '')
-     todasAsCoresFixas.value = [...new Set(coresEncontradas)]
-   }
- } catch (error) {
-   console.error('Erro ao carregar produtos:', error)
-   erro.value = 'Não foi possível carregar os produtos.'
-   produtos.value = []
- } finally {
-   carregando.value = false
- }
+  } catch (error) {
+    console.error('Erro ao carregar produtos:', error)
+    erro.value = 'Não foi possível carregar os produtos.'
+    produtos.value = []
+  } finally {
+    carregando.value = false
+  }
 }
 
-
-// Recarrega os produtos quando a pesquisa da URL mudar
 watch(
  () => route.query.search,
  () => carregarProdutos(),
 )
 
-
-// Carrega as categorias cadastradas no backend (com a barra correta no final)
 async function carregarCategorias() {
- try {
-   const resposta = await fetch(`${API_URL}/categorias/`)
+  try {
+    const resposta = await api.get("/categorias/")
 
+    const dados = resposta.data
 
-   if (!resposta.ok) {
-     throw new Error(`Erro ao buscar categorias: ${resposta.status}`)
-   }
+    categorias.value = Array.isArray(dados)
+      ? dados
+      : dados.results || []
 
-
-   const dados = await resposta.json()
-
-
-   categorias.value = Array.isArray(dados)
-     ? dados
-     : dados.results || []
- } catch (error) {
-   console.error('Erro ao carregar categorias:', error)
- }
+  } catch (error) {
+    console.error('Erro ao carregar categorias:', error)
+  }
 }
 
-
-// Retorna sempre a lista completa de cores para o componente de filtro não encolher
 const coresDisponiveis = computed(() => {
  if (todasAsCoresFixas.value.length > 0) {
    return todasAsCoresFixas.value
  }
- // Fallback caso carregue filtrado de primeira
+
  const coresEncontradas = produtos.value
    .map((produto) => produto.cor)
    .filter((cor) => typeof cor === 'string' && cor.trim() !== '')
  return [...new Set(coresEncontradas)]
 })
 
-
-// Aplica os limites de preço no frontend
 const produtosFiltrados = computed(() => {
  return produtos.value.filter((produto) => {
    const preco = Number(produto.preco)
@@ -159,8 +127,6 @@ const produtosFiltrados = computed(() => {
  })
 })
 
-
-// Recebe os filtros selecionados na barra lateral
 async function receberFiltros(novosFiltros) {
  filtros.value = {
    categorias: novosFiltros.categorias ?? [],
@@ -173,14 +139,10 @@ async function receberFiltros(novosFiltros) {
  await carregarProdutos()
 }
 
-
-// Abre a página de detalhes do produto
 function abrirProdutos(id) {
  router.push(`/info_prod/${id}`)
 }
 
-
-// Formata o preço em reais
 function formatarPreco(preco) {
  const valor = Number(preco)
 

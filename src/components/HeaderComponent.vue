@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import {ref, computed, onMounted, onUnmounted} from "vue";
 import { useAuthStore } from '../stores/auth'
@@ -8,6 +7,7 @@ import { useRouter } from "vue-router";
  const authStore = useAuthStore();
  const router = useRouter();
  const headerAtivo = ref(false);
+ const menuAtivo = ref(false);
 
 
  function abrirUsuario() {
@@ -43,9 +43,9 @@ import { useRouter } from "vue-router";
 
  const navegacao = ref([
    { id: "1", nome: "Casamento", rota: "/casamento" },
-   { id: "2", nome: "Formatura", rota: "/" },
+   { id: "2", nome: "Formatura", rota: "/formatura" },
    { id: "3", nome: "Festa", rota: "/" },
-   { id: "4", nome: "Madrinha", rota: "/" },
+   { id: "4", nome: "Madrinha", rota: "/casamento" },
    { id: "5", nome: "Baile", rota: "/" },
  ]);
 

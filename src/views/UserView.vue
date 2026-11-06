@@ -6,10 +6,6 @@ import { getProfile, updateProfile, changePassword } from '../services/user'
 import CadastroSection from '../components/CadastroSection.vue'
 import CarrinhoComponent from '../components/CarrinhoComponent.vue'
 import FavoritosComponent from '../components/FavoritosComponent.vue'
-import CadastroSection from '../components/CadastroSection.vue'
-
-const router = useRouter()
-const authStore = useAuthStore()
 
 type Perfil = {
   name: string
@@ -37,7 +33,6 @@ const form = ref<Perfil>({
   cpf: '',
   telefone: '',
   email: '',
-  data_nascimento: ''
 })
 
 async function carregarUsuario() {
@@ -293,7 +288,7 @@ onMounted(carregarUsuario)
 }
 
 .perfil-container {
-  width: min(1200px, 92%);
+  width: min(1500px, 92%);
   margin: 6vw auto;
   display: grid;
   grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
