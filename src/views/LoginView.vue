@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import api from '../api/api'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 import { useAuthStore } from '../stores/auth'
+import axios from 'axios'
+
 console.log('TOKEN SALVO:', localStorage.getItem('token'))
 
 const router = useRouter()
@@ -26,16 +26,16 @@ async function entrar() {
 
     const token = response.data.access
 
-console.log('TOKEN RECEBIDO:', token)
+    console.log('TOKEN RECEBIDO:', token)
 
-authStore.setToken(token)
+    authStore.setToken(token)
 
-console.log(
-  'TOKEN APÓS SALVAR:',
-  localStorage.getItem('token')
-)
+    console.log(
+      'TOKEN APÓS SALVAR:',
+      localStorage.getItem('token')
+    )
 
-router.push('/')
+    router.push('/')
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       alert(error.response?.data?.error || 'Erro no login')
@@ -51,24 +51,24 @@ router.push('/')
   <form @submit.prevent="entrar">
     <div class="fundo">
 
-    <img src="/css/modelo2.png" class="bg modelo2">
-    <img src="/css/modelo3.png" class="bg modelo3">
-    <img src="/css/modelo5.png" class="bg modelo5">
-    <img src="/css/modelo8.png" class="bg modelo8">
-    <img src="/css/modelo10.png" class="bg modelo10">
-    <img src="/css/modelo11.png" class="bg modelo11">
-    <img src="/css/modelo12.png" class="bg modelo12">
-    <img src="/css/modelo13.png" class="bg modelo13">
+      <img src="/css/modelo2.png" class="bg modelo2">
+      <img src="/css/modelo3.png" class="bg modelo3">
+      <img src="/css/modelo5.png" class="bg modelo5">
+      <img src="/css/modelo8.png" class="bg modelo8">
+      <img src="/css/modelo10.png" class="bg modelo10">
+      <img src="/css/modelo11.png" class="bg modelo11">
+      <img src="/css/modelo12.png" class="bg modelo12">
+      <img src="/css/modelo13.png" class="bg modelo13">
 
-    <div class="overlay"></div>
+      <div class="overlay"></div>
 
       <div class="formulario">
 
         <div class="logo-login">
-        <img src="/css/logo-login.png" alt="logo.png">
-        <p class="nome1">ATELIER</p>
-        <p class="nome2">A.Y</p>
-      </div>
+          <img src="/css/logo-login.png" alt="logo.png">
+          <p class="nome1">ATELIER</p>
+          <p class="nome2">A.Y</p>
+        </div>
 
         <div class="campo">
           <input
@@ -81,64 +81,69 @@ router.push('/')
 
         <div class="campo">
           <input
-                  v-model="senha"
-                  :type="mostrarSenha ? 'text' : 'password'"
-                  placeholder="Digite sua senha..."
-                >
+            v-model="senha"
+            :type="mostrarSenha ? 'text' : 'password'"
+            placeholder="Digite sua senha..."
+          >
           <button
-                  class="olho"
-                  type="button"
-                  @click="mostrarSenha = !mostrarSenha"
-                >
-                  <img
-                    :src="mostrarSenha
-                      ? '/img/olho-fechado.png'
-                      : '/img/olho-aberto.png'"
-                    alt="Mostrar senha"
-                  >
-                </button>
+            class="olho"
+            type="button"
+            @click="mostrarSenha = !mostrarSenha"
+          >
+            <img
+              :src="mostrarSenha
+                ? '/img/olho-fechado.png'
+                : '/img/olho-aberto.png'"
+              alt="Mostrar senha"
+            >
+          </button>
         </div>
 
         <button class="entrar" type="submit">Entrar</button>
 
         <div class="cadastro-link">
-        <p>Não possui uma conta? Clique <router-link to="/cadastrar">Aqui!</router-link></p>
+          <p>Não possui uma conta? Clique <router-link to="/cadastrar">Aqui!</router-link></p>
         </div>
       </div>
-      </div>
+    </div>
   </form>
 </template>
 
 <style scoped>
+/* ================= ESTILOS COMPUTADOR (AJUSTADOS) ================= */
+
 .logo-login {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 1vw;
+  padding-bottom: 0.5rem;
 }
 
 .logo-login img {
-  width: 90px;
-  height: 90px;
-  margin: 0 0 15px;
+  width: 80px;
+  height: 80px;
+  margin: 0 0 10px;
+  object-fit: contain;
 }
 
-.nome1{
+.nome1 {
   color: rgb(110, 29, 19);
-  font-size: 15px;
+  font-size: 16px;
+  font-family: "Bodoni Moda", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.nome2 {
+  color: rgb(110, 29, 19);
+  font-size: 13px;
   font-family: "Bodoni Moda", serif;
   font-optical-sizing: auto;
   font-weight: 400;
-  font-style: normal;
-}
-
-.nome2{
-  color: rgb(110, 29, 19);
-  font-size: 12px;
-  font-family: "Bodoni Moda", serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
+  letter-spacing: 1px;
+  margin: 0;
 }
 
 .fundo {
@@ -226,17 +231,17 @@ router.push('/')
   transform: translate(-50%, -50%);
   background-color: #F5E6DE;
   width: 90%;
-  padding: 40px 30px;
-  max-width: 380px;
+  padding: 35px 30px;
+  max-width: 400px;
   border-radius: 20px;
   z-index: 3;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
   opacity: 0;
   animation: entrada 0.3s ease forwards;
   animation-delay: 0.3s;
-  box-shadow: 0 4px 2px 0 #1e1e1e7c;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .campo {
@@ -244,12 +249,28 @@ router.push('/')
   display: flex;
   flex-direction: column;
   gap: 5px;
-  padding: 5px;
+  padding: 0;
+}
+
+input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(49, 17, 17, 0.15);
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  border-color: rgb(110, 29, 19);
+  box-shadow: 0 0 0 2px rgba(110, 29, 19, 0.15);
 }
 
 .olho {
   position: absolute;
-  right: 15px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   width: 22px;
@@ -258,29 +279,34 @@ router.push('/')
   background: transparent;
   cursor: pointer;
   padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .olho img {
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 
 .entrar {
-  background-color: #F5E6DE;
-  color: #311111;
+  background-color: #311111;
+  color: #F5E6DE;
+  border: 1px solid #311111;
   border-radius: 8px;
-  width: auto;
-  align-self: center;
-  padding: 10px 25px;
-  font-weight: 500;
-  transition: 0.2s;
+  width: 100%;
+  padding: 12px 25px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.2s ease;
   cursor: pointer;
+  margin-top: 5px;
 }
 
 .entrar:hover {
-  background-color: #311111;
-  color: #F5E6DE;
-  border-color: #F5E6DE;
+  background-color: #F5E6DE;
+  color: #311111;
 }
 
 @keyframes entrada {
@@ -291,45 +317,28 @@ router.push('/')
   }
 }
 
-.campo {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 5px;
-}
-
-input {
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  background: #fff;
-}
-
-input:focus {
-  box-shadow: 0 0 0 2px rgba(110, 29, 19, 0.15);
-}
-
-p {
-  font-size: 13px;
-  margin-top: -10px;
-  margin-bottom: 10px;
-}
-
-.cadastro-link{
+.cadastro-link {
   text-align: center;
+  margin-top: 5px;
 }
 
-.cadastro-link p{
+.cadastro-link p {
   color: #595858;
   font-size: 13px;
-  padding: 10px 0 0 0;
+  margin: 0;
 }
 
-.cadastro-link a{
+.cadastro-link a {
   color: #311111;
+  font-weight: 600;
   text-decoration: none;
 }
+
+.cadastro-link a:hover {
+  text-decoration: underline;
+}
+
+/* ================= ESTILOS MOBILE (INTOCADOS) ================= */
 
 @media(max-width:768px){
   .logo-login img {

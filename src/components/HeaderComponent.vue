@@ -237,7 +237,6 @@ import { useRouter } from "vue-router";
  </template>
 
   <style scoped>
-    <style scoped>
 .topo-mobile{
  display: none;
 }
@@ -599,5 +598,5 @@ import { useRouter } from "vue-router";
    color: white;
    margin-left: 1.5vw;
  }
-
+}
 </style>
