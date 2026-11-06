@@ -1,67 +1,81 @@
+
 <script setup lang="ts">
 import {ref, computed, onMounted, onUnmounted} from "vue";
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from "vue-router";
 
-const authStore = useAuthStore();
-const router = useRouter();
-const headerAtivo = ref(false);
-const menuAtivo = ref(false);
 
-function abrirUsuario() {
-  if (authStore.token) {
-    router.push('/user')
-  } else {
-    router.push('/login')
-  }
-}
+ const authStore = useAuthStore();
+ const router = useRouter();
+ const headerAtivo = ref(false);
 
-function handleScroll() {
-  headerAtivo.value = window.scrollY > 50;
-}
 
-onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
-});
+ function abrirUsuario() {
+   if (authStore.token) {
+     router.push('/user')
+   } else {
+     router.push('/login')
+   }
+ }
 
-onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
-});
 
-const showDropdown = ref(false);
+ function handleScroll() {
+   headerAtivo.value = window.scrollY > 50;
+ }
 
-const pesquisa = ref("");
-const indexAtivo = ref(-1);
 
-const navegacao = ref([
-  { id: "1", nome: "Casamento", rota: "/casamento" },
-  { id: "2", nome: "Formatura", rota: "/" },
-  { id: "3", nome: "Festa", rota: "/" },
-  { id: "4", nome: "Madrinha", rota: "/" },
-  { id: "5", nome: "Baile", rota: "/" },
-  { id: "6", nome: "Noiva", rota: "/" },
-]);
+ onMounted(() => {
+   window.addEventListener("scroll", handleScroll);
+ });
 
-const resultados = computed(() => {
-  const termo = pesquisa.value.trim().toLowerCase();
 
-  if (!termo) return [];
+ onUnmounted(() => {
+   window.removeEventListener("scroll", handleScroll);
+ });
 
-  return navegacao.value.filter((o) =>
-    o.nome.toLowerCase().includes(termo)
-  );
-});
 
-function abrirNavegacao(item: any) {
-  if (!item) return;
+ const showDropdown = ref(false);
 
-  router.push(item.rota);
 
-  pesquisa.value = "";
-  indexAtivo.value = -1;
-}
+ const pesquisa = ref("");
+ const indexAtivo = ref(-1);
 
-function navegar(e: KeyboardEvent) {
+
+ const navegacao = ref([
+   { id: "1", nome: "Casamento", rota: "/casamento" },
+   { id: "2", nome: "Formatura", rota: "/" },
+   { id: "3", nome: "Festa", rota: "/" },
+   { id: "4", nome: "Madrinha", rota: "/" },
+   { id: "5", nome: "Baile", rota: "/" },
+ ]);
+
+
+ const resultados = computed(() => {
+   const termo = pesquisa.value.trim().toLowerCase();
+
+
+   if (!termo) return [];
+
+
+   return navegacao.value.filter((o) =>
+     o.nome.toLowerCase().includes(termo)
+   );
+ });
+
+
+ function abrirNavegacao(item: any) {
+   if (!item) return;
+
+
+   router.push(item.rota);
+
+
+   pesquisa.value = "";
+   indexAtivo.value = -1;
+ }
+
+
+ function navegar(e: KeyboardEvent) {
   if (!resultados.value.length) return;
 
   if (e.key === "ArrowDown") {
@@ -88,9 +102,23 @@ function navegar(e: KeyboardEvent) {
   }
 }
 
-function irParaHome(){
-  router.push('/')
-}
+ function irParaHome(){
+   router.push('/')
+ }
+  
+ function pesquisarProdutos() {
+ const termo = pesquisa.value.trim();
+   
+
+ router.push({
+   path: '/produtos',
+   query: termo ? { search: termo } : {},
+ });
+
+ pesquisa.value = '';
+ indexAtivo.value = -1;
+ }
+ 
 </script>
 
 <template>
@@ -111,44 +139,52 @@ function irParaHome(){
 
       <div class="search-container">
 
-        <input
-          type="text"
-          v-model="pesquisa"
-          placeholder="Buscar..."
-          @keydown="navegar"
-          class="search-input"
-        />
-        <RouterLink to="/produtos"><img
-          :src="headerAtivo
-            ? '/img/lupa-solido.png'
-            : '/img/lupa.png'"
-          alt="Pesquisar"
-          class="icon-lupa"
-        />
-        </RouterLink>
+         <input
+           type="text"
+           v-model="pesquisa"
+           placeholder="Buscar..."
+           @keydown="navegar"
+           @keyup.enter="pesquisarProdutos"
+           class="search-input"
+         />
+         <a href="#" @click.prevent="pesquisarProdutos">
+         <img
+           :src="headerAtivo
+             ? '/img/lupa-solido.png'
+             : '/img/lupa.png'"
+           alt="Pesquisar"
+           class="icon-lupa"
+         />
+       </a>
 
-        <div
-          class="results-list"
-          v-if="resultados.length"
-        >
-          <ul>
-            <li
-              v-for="(item, index) in resultados"
-              :key="item.id"
-              :class="{ ativo: index === indexAtivo }"
-              @click="abrirNavegacao(item)"
-              class="result-item"
-            >
-              <span class="item-icon">
-                <img src="/img/lupa-solido.png" alt="Lupa" />
-              </span>
-              <span class="item-text">
-                {{ item.nome }}
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
+         <div
+           class="results-list"
+           v-if="resultados.length"
+         >
+           <ul>
+
+             <li
+               v-for="(item, index) in resultados"
+               :key="item.id"
+               :class="{ ativo: index === indexAtivo }"
+               @click="abrirNavegacao(item)"
+               class="result-item"
+             >
+
+               <span class="item-icon">
+                 <img src="/img/lupa-solido.png" alt="Lupa" />
+               </span>
+
+               <span class="item-text">
+                 {{ item.nome }}
+               </span>
+
+             </li>
+
+           </ul>
+         </div>
+
+       </div>
 
       <ul class="icones">
         <li>
@@ -314,219 +350,253 @@ function irParaHome(){
 
 <style scoped>
 .topo-mobile{
-  display: none;
+ display: none;
 }
+
 
 .topo {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 6vw;
-  padding: 0 2vw;
-  display: flex;
-  align-items: center;
-  z-index: 99;
-  background: linear-gradient(
-    to top,
-    rgba(63, 44, 25, 0) 3%,
-    rgba(72, 50, 29, 0.341) 28%,
-    rgba(63, 44, 25, 0.654) 100%
-  );
-  transition:
-    background 0.4s ease,
-    backdrop-filter 0.4s ease,
-    box-shadow 0.4s ease;
-  justify-content: space-between;
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 6vw;
+ padding: 0 2vw;
+ display: flex;
+ align-items: center;
+ z-index: 99;
+ background: linear-gradient(
+   to top,
+   rgba(63, 44, 25, 0) 3%,
+   rgba(72, 50, 29, 0.341) 28%,
+   rgba(63, 44, 25, 0.654) 100%
+ );
+ transition:
+   background 0.4s ease,
+   backdrop-filter 0.4s ease,
+   box-shadow 0.4s ease;
+ justify-content: space-between;
 }
+
 
 .topo.scrolled {
-  background: rgba(245, 230, 222, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow:
-    0 0.2vw 1vw rgba(0, 0, 0, 0.08);
+ background: rgba(245, 230, 222, 0.95);
+ backdrop-filter: blur(10px);
+ box-shadow:
+   0 0.2vw 1vw rgba(0, 0, 0, 0.08);
 }
+
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  cursor: pointer;
+ display: flex;
+ align-items: center;
+ gap: 15px;
+ cursor: pointer;
 }
+
 
 .logo img {
-  width: 60px;
-  height: 80px;
+ width: 60px;
+ height: 80px;
 }
+
 
 .texto {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
 }
+
 
 .titulo {
-  font-size: 12px;
-  color: white;
-  margin: 0;
+ font-size: 12px;
+ color: white;
+ margin: 0;
 }
+
 
 .sigla {
-  font-size: 10px;
-  color: white;
-  margin: 0;
-  align-self: center;
+ font-size: 10px;
+ color: white;
+ margin: 0;
+ align-self: center;
 }
+
 
 .menu {
-  display: flex;
-  gap: 2vw;
+ display: flex;
+ gap: 2vw;
 }
+
 
 .menu li a {
-  text-decoration: none;
-  color: white;
-  font-size: 0.9rem;
-  transition: 0.3s;
+ text-decoration: none;
+ color: white;
+ font-size: 0.9rem;
+ transition: 0.3s;
 }
+
 
 .menu li a:hover {
-  opacity: 0.7;
+ opacity: 0.7;
 }
+
 
 .submenu {
-  position: absolute;
-  top: 5vw;
-  left: 50vw;
-  background: white;
-  margin: 0;
-  padding: 8px 25px 8px 10px;
-  border-radius: 6px;
-  min-width: 180px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+ position: absolute;
+ top: 5vw;
+ left: 50vw;
+ background: white;
+ margin: 0;
+ padding: 8px 25px 8px 10px;
+ border-radius: 6px;
+ min-width: 180px;
+ box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 
 .cima {
-  display: flex;
+ display: flex;
 }
+
 
 .baixo {
-  display: flex;
+ display: flex;
 }
+
 
 .submenu li {
-  padding: 8px 25px;
-  margin-left: 1vw;
+ padding: 8px 25px;
+ margin-left: 1vw;
 }
+
 
 .submenu li a {
-  color: #311111;
-  font-weight: 500;
-  display: block;
-  text-decoration: none;
+ color: #311111;
+ font-weight: 500;
+ display: block;
+ text-decoration: none;
 }
+
 
 .submenu li a:hover {
-  background: #f1f1f1;
-  color: #311111;
-  font-weight: bold;
+ background: #f1f1f1;
+ color: #311111;
+ font-weight: bold;
 }
+
 
 .search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 320px;
-  max-width: 100%;
+ position: relative;
+ display: flex;
+ align-items: center;
+ width: 320px;
+ max-width: 100%;
 }
+
 
 .search-input {
-  width: 100%;
-  padding: 8px 35px 8px 0;
-  border: none;
-  border-bottom: 1px solid white;
-  background: transparent;
-  font-size: 16px;
-  color: white;
+ width: 100%;
+ padding: 8px 35px 8px 0;
+ border: none;
+ border-bottom: 1px solid white;
+ background: transparent;
+ font-size: 16px;
+ color: white;
 }
+
 
 .search-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+ color: rgba(255, 255, 255, 0.7);
 }
+
 
 .icon-lupa {
-  width: 1.5vw;
-  height: 1.5vw;
+ width: 1.5vw;
+ height: 1.5vw;
 }
+
 
 .results-list {
-  position: absolute;
-  top: 120%;
-  left: 0;
-  width: 100%;
-  background: white;
-  border-radius: 1vw;
-  overflow: hidden;
-  box-shadow:
-    0 1vw 2vw rgba(0, 0, 0, 0.1);
+ position: absolute;
+ top: 120%;
+ left: 0;
+ width: 100%;
+ background: white;
+ border-radius: 1vw;
+ overflow: hidden;
+ box-shadow:
+   0 1vw 2vw rgba(0, 0, 0, 0.1);
 }
+
 
 .results-list ul {
-  list-style: none;
+ list-style: none;
 }
 
+
 .result-item {
-  display: flex;
-  align-items: center;
-  gap: 1vw;
-  padding: 1vw;
-  cursor: pointer;
-  transition: 0.3s;
+ display: flex;
+ align-items: center;
+ gap: 1vw;
+ padding: 1vw;
+ cursor: pointer;
+ transition: 0.3s;
 }
+
 
 .result-item:hover,
 .result-item.ativo {
-  background: #f5e9e0;
+ background: #f5e9e0;
 }
 
+
 .item-icon img {
-  width: 1vw;
+ width: 1vw;
 }
+
 
 /* ÍCONES */
 
+
 .icones {
-  display: flex;
-  align-items: center;
-  gap: 2vw;
-  list-style: none;
-  cursor: pointer;
+ display: flex;
+ align-items: center;
+ gap: 2vw;
+ list-style: none;
+ cursor: pointer;
 }
 
+
 .icones li img {
-  width: 2vw;
+ width: 2vw;
 }
+
 
 .topo.scrolled .titulo,
 .topo.scrolled .sigla,
 .topo.scrolled .menu li a {
-  color: #311111;
+ color: #311111;
 }
+
 
 .topo.scrolled .search-input {
-  color: #311111;
+ color: #311111;
 
-  border-bottom:
-    0.1vw solid #84453d;
+
+ border-bottom:
+   0.1vw solid #84453d;
 }
+
 
 .topo.scrolled .search-input::placeholder {
-  color: rgba(49, 17, 17, 0.5);
+ color: rgba(49, 17, 17, 0.5);
 }
 
+
 /*========================================
-                MOBILE
+               MOBILE
 =========================================*/
+
 
 @media (max-width: 600px) {
   .topo{

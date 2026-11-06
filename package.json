@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "axios": "^1.16.1",
+    "colorpicker": "^2.0.0",
     "pinia": "^3.0.4",
     "vue": "^3.5.29",
     "vue-color": "^3.3.3",
