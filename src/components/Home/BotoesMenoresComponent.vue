@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="bnt-pequenos">
-      <router-link to="/terno" class="card">
+      <router-link to="/produtos" class="card">
         <img src="/img/modelo15.png" alt="terno">
 
         <div class="overlay">
@@ -9,7 +9,7 @@
         </div>
       </router-link>
 
-      <router-link to="/casual" class="card-reverso">
+      <router-link to="/produtos" class="card-reverso">
         <img src="/img/modelo16.png" alt="curto">
 
         <div class="overlay-reverso">

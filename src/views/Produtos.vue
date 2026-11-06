@@ -29,7 +29,7 @@ const erro = ref('')
 
 
 const API_URL =
- 'https://backend-atelier-a-y.class.fabricadesoftware.ifc.edu.br/api'
+ '/api'
 
 
 // Carrega os produtos aplicando os filtros na API

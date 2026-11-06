@@ -126,27 +126,10 @@ onMounted(carregarFavoritos)
 </template>
 
 <style scoped>
-/* ================================
-   CONTAINER PRINCIPAL
-================================ */
-
 .container-produtos {
   max-width: 1250px;
   margin: 0 auto;
 }
-
-.container-produtos > h1 {
-  color: #311111;
-  font-size: 2.5rem;
-  font-weight: 600;
-  margin-bottom: 2.5rem;
-  border-bottom: 1px solid #d8c6bd;
-  padding-bottom: 1rem;
-}
-
-/* ================================
-   CARD DO PRODUTO
-================================ */
 
 .card-produto {
   display: grid;
@@ -169,10 +152,6 @@ onMounted(carregarFavoritos)
   box-shadow: 0 8px 20px rgba(49, 17, 17, 0.08);
 }
 
-/* ================================
-   IMAGEM
-================================ */
-
 .imagem-produto {
   width: 150px;
   height: 190px;
@@ -182,10 +161,6 @@ onMounted(carregarFavoritos)
 
   display: block;
 }
-
-/* ================================
-   INFORMAÇÕES
-================================ */
 
 .infos{
   text-align: left;
@@ -207,17 +182,12 @@ onMounted(carregarFavoritos)
 .sem-produtos {
   background-color: #f5e9e0;
   border: #311111 solid 0.8px;
-  border-radius: 1rem;
+  border-radius: 1.7rem;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 120px 30px;
-  margin: 4vw 9vw 4vw 9vw;
-}
-
-.icone img{
-  width: 15vw;
-  height: 15vw;
+  margin: 4vw 13vw 5vw 13vw;
 }
 
 ul{
@@ -228,9 +198,9 @@ ul{
   justify-content: center;
   color: #311111;
   font-weight: bold;
+  padding: 0;
   margin-bottom: 0.7rem;
   padding-top: 1vw;
-  font-size: 1rem;
 }
 
 .texto{
