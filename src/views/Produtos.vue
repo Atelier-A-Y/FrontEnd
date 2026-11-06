@@ -281,6 +281,7 @@ onMounted(() => {
  padding: 30px 5%;
  box-sizing: border-box;
  color: #351414;
+ margin: 9rem 5rem 2rem 0;
 }
 
 
