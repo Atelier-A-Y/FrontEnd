@@ -18,14 +18,14 @@
   <h1>CATEGORIAS</h1>
   <div class="bnt-pequenos">
     <div class="bnt-superiores">
-      <a href="/casamento"><img src="/img/bride.png" alt="bride"></a>
-      <a href="/formatura"><img src="/img/education.png" alt="education"></a>
-      <a href="/praia"><img src="/img/sunbed.png" alt="sunbed"></a>
+      <router-link to="/casamento"><img src="/img/bride.png" alt="bride"></router-link>
+      <router-link to="/formatura"><img src="/img/education.png" alt="education"></router-link>
+      <router-link to="/praia"><img src="/img/sunbed.png" alt="sunbed"></router-link>
     </div>
     <div class="bnt-inferiores">
-      <a href="/festa"><img src="/img/confetti.png" alt="confetti"></a>
-      <a href="/terno"><img src="/img/suit.png" alt="suit"></a>
-      <a href="/casual"><img src="/img/wear.png" alt="wear"></a>
+      <a href="/"><img src="/img/confetti.png" alt="confetti"></a>
+      <a href="/"><img src="/img/suit.png" alt="suit"></a>
+      <a href="/"><img src="/img/wear.png" alt="wear"></a>
     </div>
   </div>
 </section>

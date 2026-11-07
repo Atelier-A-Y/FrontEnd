@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onUnmounted, onMounted } from 'vue'
 
 const slides = [
   {
-   img: '/img/noiva1.png',
+   desktop: '/img/noiva1.png',
+   mobile: '/img/noiva1.png',
   },
   {
-   img: '/img/formanda1.png',
+   desktop: '/img/formanda1.png',
+   mobile: '/img/formanda1.png',
   }
 ]
 
 const index = ref(0)
+const isMobile = ref(window.innerWidth <= 768)
+
+function verificarTela() {
+  isMobile.value = window.innerWidth <= 768
+}
 
 function nextSlide() {
   index.value = (index.value + 1) % slides.length
@@ -20,18 +27,28 @@ function prevSlide() {
   index.value = (index.value - 1 + slides.length) % slides.length
 }
 
-setInterval(nextSlide, 4000)
+let interval: ReturnType<typeof setInterval>
+
+onMounted(() => {
+  window.addEventListener('resize', verificarTela)
+  interval = setInterval(nextSlide, 4000)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', verificarTela)
+  clearInterval(interval)
+})
 </script>
 
 <template>
   <main>
     <div class="carrossel-principal">
   <img
-    v-for="(slide, i) in slides"
-    :key="i"
-    :src="slide.img"
-    :class="{ active: i === index }"
-  />
+        v-for="(slide, i) in slides"
+        :key="i"
+        :src="isMobile ? slide.mobile : slide.desktop"
+        :class="{ active: i === index }"
+      />
   <button @click="prevSlide">❮</button>
   <button @click="nextSlide">❯</button>
 </div>

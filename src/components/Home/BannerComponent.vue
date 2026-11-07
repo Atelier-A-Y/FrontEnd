@@ -29,32 +29,37 @@ async function carregarRoupasMobile() {
 }
 
 async function carregarFavoritosMobile() {
+  const token = localStorage.getItem('token')
+
+  if (!token) {
+    favoritosMobile.value = []
+    return
+  }
+
   try {
-    const respostaMobile = await api.get("/favoritos/")
+    const respostaMobile = await api.get('/favoritos/')
     const listaMobile = respostaMobile.data.results || respostaMobile.data
 
     favoritosMobile.value = listaMobile
       .map((item: any) => {
-        if (typeof item.roupa === "number"){
+        if (typeof item.roupa === 'number') {
           return item.roupa
         }
 
-        if(item.roupa?.id){
+        if (item.roupa?.id) {
           return item.roupa.id
         }
 
         return null
       })
-      .filter((id: any) => id !== null)
-
-    console.log("IDs DOS FAVORITOS:", favoritosMobile.value)
+      .filter((id: number | null): id is number => id !== null)
 
   } catch (erro: any) {
-    console.error("ERRO AO CARREGAR FAVORITOS:", erro)
+    console.error('ERRO AO CARREGAR FAVORITOS:', erro)
 
-    if(erro.response){
-      console.log("STATUS:", erro.response.status)
-      console.log("DADOS:", erro.response.data)
+    if (erro.response) {
+      console.log('STATUS:', erro.response.status)
+      console.log('DADOS:', erro.response.data)
     }
   }
 }
@@ -177,14 +182,16 @@ function moveHover(e: MouseEvent) {
   mouseY.value = e.clientY
 }
 
-function getImagem(slide: any) {
-  return (
-    slide.foto ||
-    slide.imagem ||
-    slide.foto_url ||
-    slide.image ||
-    ''
-  )
+function getImagem(slide: any): string {
+  if (!slide.foto) {
+    return '/img/sem-imagem.png'
+  }
+
+  if (typeof slide.foto === 'string') {
+    return slide.foto
+  }
+
+  return slide.foto.url || '/img/sem-imagem.png'
 }
 
 onMounted(async () => {
@@ -249,12 +256,16 @@ onMounted(async () => {
           >
             <div class="imagem-card">
               <img
-                :src="getImagem(slide)"
-                :alt="slide.nome"
-                @mouseenter="showHover(slide)"
-                @mouseleave="hideHover"
-                @mousemove="moveHover"
-              >
+              :src="getImagem(slide)"
+              :alt="slide.nome"
+              @error="(evento) => console.error(
+                'ERRO AO CARREGAR IMAGEM:',
+                evento.target.currentSrc
+              )"
+              @mouseenter="showHover(slide)"
+              @mouseleave="hideHover"
+              @mousemove="moveHover"
+            >
             </div>
             <div class="info-card">
               <div class="dados-card">

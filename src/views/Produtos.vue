@@ -11,7 +11,7 @@ const route = useRoute()
 
 const produtos = ref([])
 const categorias = ref([])
-const todasAsCoresFixas = ref([]) 
+const todasAsCoresFixas = ref([])
 
 const filtros = ref({
  categorias: [],
@@ -158,16 +158,105 @@ function formatarPreco(preco) {
  })
 }
 
+const favoritosMobile = ref([])
+
+async function carregarFavoritosMobile() {
+  try {
+    const respostaMobile = await api.get('/favoritos/')
+    const listaMobile = respostaMobile.data.results || respostaMobile.data
+
+    favoritosMobile.value = listaMobile
+      .map((item) => {
+        if (typeof item.roupa === 'number') {
+          return item.roupa
+        }
+
+        if (item.roupa?.id) {
+          return item.roupa.id
+        }
+
+        return null
+      })
+      .filter((id) => id !== null)
+
+    console.log('IDs DOS FAVORITOS:', favoritosMobile.value)
+  } catch (erro) {
+    console.error('ERRO AO CARREGAR FAVORITOS:', erro)
+
+    if (erro.response) {
+      console.log('STATUS:', erro.response.status)
+      console.log('DADOS:', erro.response.data)
+    }
+  }
+}
+
+async function alterarFavMobile(id) {
+  console.log('ID DA ROUPA SELECIONADA:', id)
+
+  if (!id) {
+    console.error('Essa roupa não possui ID')
+    return
+  }
+
+  try {
+    const respostaMobile = await api.get('/favoritos/')
+    const listaMobile = respostaMobile.data.results || respostaMobile.data
+
+    console.log('FAVORITOS DO USUÁRIO:', listaMobile)
+
+    const favoritoExistenteMobile = listaMobile.find((item) => {
+      if (typeof item.roupa === 'number') {
+        return item.roupa === id
+      }
+      return item.roupa?.id === id
+    })
+
+    if (favoritoExistenteMobile) {
+      console.log('REMOVENDO FAVORITO:', favoritoExistenteMobile.id)
+
+      await api.delete(`/favoritos/${favoritoExistenteMobile.id}/`)
+
+      favoritosMobile.value = favoritosMobile.value.filter(
+        (favoritoMobileId) => favoritoMobileId !== id,
+      )
+
+      console.log('FAVORITO REMOVIDO')
+    } else {
+      console.log('ADICIONANDO ROUPA:', id)
+
+      await api.post('/favoritos/', {
+        roupa: id,
+      })
+
+      favoritosMobile.value.push(id)
+
+      console.log('FAVORITO ADICIONADO!')
+    }
+  } catch (erro) {
+    console.error('ERRO AO ALTERAR FAVORITO:', erro)
+
+    if (erro.response) {
+      console.log('STATUS:', erro.response.status)
+      console.log('DADOS:', erro.response.data)
+    }
+  }
+}
+
+function ehFavoritoMobile(id) {
+  return favoritosMobile.value.includes(id)
+}
 
 onMounted(() => {
- carregarProdutos()
- carregarCategorias()
+  carregarProdutos()
+  carregarFavoritosMobile()
+  carregarCategorias()
 })
 </script>
 
 
 <template>
- <main class="produtos">
+ <main>
+ <section class="produtos">
    <h1>Produtos</h1>
 
 
@@ -231,19 +320,109 @@ onMounted(() => {
        <h2>Nenhum produto encontrado.</h2>
        <p>Tente alterar ou limpar os filtros.</p>
      </section>
-   </template>
+     </template>
+    </section>
+
+<section class="produtos-mobile">
+  <h1>Produtos</h1>
+
+  <FiltragemComponent
+    :categorias="categorias"
+    :cores="coresDisponiveis"
+    :total-produtos="produtosFiltrados.length"
+    @filtrar="receberFiltros"
+  />
+
+  <p v-if="carregando" class="mensagem-mobile">
+    Carregando produtos...
+  </p>
+
+  <p v-else-if="erro" class="mensagem-mobile erro-mobile">
+    {{ erro }}
+  </p>
+
+  <template v-else>
+    <p class="contador-mobile">
+      {{ produtosFiltrados.length }}
+      {{ produtosFiltrados.length === 1
+        ? 'produto encontrado'
+        : 'produtos encontrados'
+      }}
+    </p>
+
+    <section
+      v-if="produtosFiltrados.length > 0"
+      class="container-produtos-mobile"
+    >
+      <div
+        class="card-produto-mobile"
+        v-for="item in produtosFiltrados"
+        :key="item.id"
+        @click="abrirProdutos(item.id)"
+      >
+        <img
+          v-if="item.foto"
+          :src="typeof item.foto === 'object' ? item.foto.url : item.foto"
+          :alt="item.nome"
+          class="imagem-produto-mobile"
+        />
+
+        <div v-else class="imagem-sem-foto-mobile">
+          Sem imagem
+        </div>
+
+        <div class="informacoes-produto-mobile">
+          <h2>{{ item.nome }}</h2>
+
+          <p>
+            <strong>Preço:</strong>
+            R$ {{ formatarPreco(item.preco) }}
+          </p>
+
+          <p v-if="item.cor">
+            <strong>Cor:</strong> {{ item.cor }}
+          </p>
+        </div>
+
+        <button
+          class="favorito-card-mobile"
+          @click.stop="alterarFavMobile(item.id)"
+        >
+          <img
+            :src="
+              ehFavoritoMobile(item.id)
+                ? '/img/coracao-cheio.png'
+                : '/img/coracao-solido.png'
+            "
+            alt="Favoritar"
+          />
+        </button>
+      </div>
+    </section>
+
+    <section v-else class="sem-produtos-mobile">
+      <h2>Nenhum produto encontrado.</h2>
+      <p>Tente alterar ou limpar os filtros.</p>
+    </section>
+  </template>
+</section>
  </main>
 </template>
 
 
 <style scoped>
+.produtos-mobile{
+  display: none;
+}
+
 .produtos {
  width: 100%;
  min-height: 60vh;
  padding: 30px 5%;
  box-sizing: border-box;
  color: #351414;
- margin: 9rem 5rem 2rem 0;
+ margin: 0rem 2rem 2rem 0;
+ display: block;
 }
 
 
@@ -357,41 +536,177 @@ onMounted(() => {
 }
 
 
-@media (max-width: 1000px) {
- .container-produtos {
-   grid-template-columns: repeat(3, minmax(0, 1fr));
- }
+@media (max-width: 768px) {
+  .produtos {
+    display: none;
+  }
+
+  .produtos-mobile {
+    padding: 1rem 0rem;
+    margin-top: 1vw;
+    display: block;
+  }
+
+  .produtos-mobile h1 {
+    text-align: center;
+    color: #311111;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .produtos-mobile h1::after {
+    content: '';
+    width: 18vw;
+    height: 0.3vw;
+    background: #311111;
+    border-radius: 10px;
+
+    position: absolute;
+    left: 50%;
+    bottom: -1vw;
+
+    transform: translateX(-50%);
+  }
+
+  .container-produtos-mobile {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 2rem 1.5rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .card-produto-mobile {
+    background-color: #f5e9e0;
+
+    border-radius: 0.5rem;
+
+    width: 100%;
+    padding: 0;
+
+    border: none;
+
+    overflow: hidden;
+
+    box-shadow: 0 0.3vw 1vw rgba(0, 0, 0, 0.08);
+  }
+
+  .imagem-produto-mobile {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+  .card-produto-mobile h2 {
+    color: #311111;
+
+    font-size: 1rem;
+
+    margin: 0 2.5vw 2.5vw 2.5vw;
+    font-weight: 600;
+  }
+
+  .card-produto-mobile p {
+    font-size: 0.7rem;
+    line-height: 1;
+    margin: 0 0.45rem 1.5rem;
+    color: #311111;
+  }
+
+  .favorito-card-mobile {
+    background: transparent;
+    border: none;
+
+    padding: 0;
+    margin: 0 0 1vw 2vw;
+
+    width: 9vw;
+    height: 9vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .favorito-card-mobile img {
+    width: 8vw;
+    height: 8vw;
+
+    object-fit: contain;
+    display: block;
+  }
+
+
+  .sem-produtos-mobile {
+    margin-top: 2rem;
+  }
+
+  .sem-produtos-mobile h2 {
+    font-size: 1rem;
+  }
+
+  .mensagem-mobile,
+  .contador-mobile {
+  padding: 0 1rem;
+  color: #705858;
+  font-size: 0.85rem;
 }
 
-
-@media (max-width: 700px) {
- .container-produtos {
-   grid-template-columns: repeat(2, minmax(0, 1fr));
-   gap: 15px;
- }
-
-
- .imagem-produto,
- .imagem-sem-foto {
-   height: 210px;
- }
-
-
- .produtos {
-   padding: 25px 4%;
- }
+.mensagem-mobile {
+  text-align: center;
+  margin: 1.5rem 0;
 }
 
+.erro-mobile {
+  color: #a32323;
+}
 
-@media (max-width: 420px) {
- .container-produtos {
-   grid-template-columns: 1fr;
- }
+.contador-mobile {
+  margin: 1rem 0;
+}
 
+.informacoes-produto-mobile {
+  padding: 0.6rem;
+}
 
- .imagem-produto,
- .imagem-sem-foto {
-   height: 280px;
- }
+.informacoes-produto-mobile h2 {
+  color: #311111;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+  overflow-wrap: anywhere;
+}
+
+.informacoes-produto-mobile p {
+  font-size: 0.75rem;
+  margin: 0 0 0.5rem;
+  color: #311111;
+}
+
+.imagem-sem-foto-mobile {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e7d5c8;
+  color: #705858;
+}
+
+.sem-produtos-mobile {
+  text-align: center;
+  margin-top: 2rem;
+  color: #311111;
+}
 }
 </style>
