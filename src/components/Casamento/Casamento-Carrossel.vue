@@ -1,24 +1,50 @@
 ```vue
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import api from '../../api/api'
 
 const slides = [
   {
     desktop: '/img/noiva2.png',
-    mobile: '/img/noiva2_mobile.png',
+    mobile: '/img/noiva2_mobile.jpeg',
   },
   {
     desktop: '/img/noiva3.png',
-    mobile: '/img/noiva3.png',
+    mobile: '/img/noiva3_mobile.jpeg',
   },
   {
     desktop: '/img/noiva4.png',
-    mobile: '/img/noiva4_mobile.png',
+    mobile: '/img/noiva4_mobile.jpeg',
   }
 ]
 
 const index = ref(0)
 const isMobile = ref(window.innerWidth <= 768)
+const vestidos = ref<any[]>([])
+
+async function buscarVestidos() {
+  try {
+    const resposta = await api.get(
+      '/roupas/',
+      {
+        params: {
+    'categoria__nome__iexact': 'casamento'
+  }
+      }
+    )
+
+    console.log('STATUS:', resposta.status)
+    console.log('DADOS RECEBIDOS:', resposta.data)
+
+    vestidos.value = resposta.data.results || resposta.data
+
+    console.log('QUANTIDADE:', vestidos.value.length)
+    console.log('PRIMEIRO VESTIDO:', vestidos.value[0])
+
+  } catch (erro) {
+    console.error('ERRO:', erro)
+  }
+}
 
 function verificarTela() {
   isMobile.value = window.innerWidth <= 768
@@ -43,6 +69,8 @@ onUnmounted(() => {
   window.removeEventListener('resize', verificarTela)
   clearInterval(interval)
 })
+
+onMounted(buscarVestidos)
 </script>
 
 <template>
@@ -60,6 +88,36 @@ onUnmounted(() => {
       <button @click="nextSlide">❯</button>
 
     </div>
+  <section class="produtos">
+
+    <h1>Vestidos de Casamento</h1>
+
+    <div class="lista-vestidos">
+
+      <div
+        v-for="vestido in vestidos"
+        :key="vestido.id"
+        class="card-vestido"
+      >
+
+        <img
+          :src="vestido.foto?.url"
+          :alt="vestido.nome"
+        />
+
+        <h3>{{ vestido.nome }}</h3>
+
+        <p>{{ vestido.descricao }}</p>
+
+        <span>
+          R$ {{ vestido.preco }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
   </main>
 </template>
 
@@ -119,48 +177,45 @@ button:last-of-type {
   .carrossel-principal {
     position: relative;
     width: 100%;
-    height: 80vh;
+    height: 65vw;
     margin: 0;
     padding: 0;
     overflow: hidden;
-  }
+    background: transparent;
+}
 
-  img {
+.carrossel-principal img {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: translate(-50%, -50%);
+    object-position: center;
+    transform: none;
     opacity: 0;
     transition: opacity 0.5s ease;
     z-index: 0;
-  }
+}
 
-  img.active {
+.carrossel-principal img.active {
     opacity: 1;
-  }
+}
 
-  button {
+.carrossel-principal button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
     z-index: 2;
-  }
+}
 
-  button:first-of-type {
+.carrossel-principal button:first-of-type {
     left: 10px;
-  }
+}
 
-  button:last-of-type {
+.carrossel-principal button:last-of-type {
     right: 10px;
-  }
+}
 }
 </style>
 

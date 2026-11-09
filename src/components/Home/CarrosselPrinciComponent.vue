@@ -4,11 +4,11 @@ import { ref, onUnmounted, onMounted } from 'vue'
 const slides = [
   {
    desktop: '/img/noiva1.png',
-   mobile: '/img/noiva1.png',
+   mobile: '/img/noiva1_mobile.jpeg',
   },
   {
    desktop: '/img/formanda1.png',
-   mobile: '/img/formanda1.png',
+   mobile: '/img/formanda1_mobile.jpeg',
   }
 ]
 
@@ -128,79 +128,48 @@ button:last-of-type { right: 10px; }
   object-fit: cover;
 }
 
-@media (max-width: 600px){
+@media (max-width: 768px) {
 .carrossel-principal {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  max-width: 100%;
-  margin: 0 auto;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 65vw;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: transparent;
 }
 
-.carrossel-principal::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100vw;
-  height: 40vh;
-  transform: translate(-50%, -125%);
-  background: rgba(117, 67, 36, 0.317);
-  z-index: 1;
+.carrossel-principal img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 0;
 }
 
-img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100vw;
-  height: 40vh;
-  object-fit: cover;
-  transform: translate(-50%, -125%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: 0;
+.carrossel-principal img.active {
+    opacity: 1;
 }
 
-img.active {
-  opacity: 1;
+.carrossel-principal button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
 }
 
-button {
-  position: absolute;
-  top: 20%;
-  transform: translateY(-50%);
-  background: none;
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 2;
+.carrossel-principal button:first-of-type {
+    left: 10px;
 }
 
-button:first-of-type { left: 10px; }
-button:last-of-type { right: 10px; }
-
-.slide {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.slide.active {
-  opacity: 1;
-}
-
-.slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.carrossel-principal button:last-of-type {
+    right: 10px;
 }
 }
 </style>

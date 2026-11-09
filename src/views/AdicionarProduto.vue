@@ -1,12 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import api from "../api/api";
-import { useRouter } from "vue-router";
 
-
-const router = useRouter();
-
-// Dados do produto
 const produto = ref({
   categoria: [],
   continente: "",
@@ -18,17 +13,14 @@ const produto = ref({
   descricao: "",
 });
 
-// Imagem
 const imagem = ref(null);
 const previewImagem = ref(null);
 
-// Opções carregadas do backend
 const categorias = ref([]);
 const tamanhos = ref([]);
 
 let urlImagemAnterior = null;
 
-// Selecionar imagem e criar pré-visualização
 function selecionarImagem(event) {
   const arquivo = event.target.files?.[0];
 
@@ -43,7 +35,6 @@ function selecionarImagem(event) {
   previewImagem.value = urlImagemAnterior;
 }
 
-// Carregar categorias
 async function carregarCategorias() {
   try {
     const resposta = await api.get("/categorias/");
@@ -55,7 +46,6 @@ async function carregarCategorias() {
   }
 }
 
-// Carregar tamanhos
 async function carregarTamanhos() {
   try {
     const resposta = await api.get("/tamanhos/");
@@ -67,7 +57,6 @@ async function carregarTamanhos() {
   }
 }
 
-// Limpar o formulário
 function limparFormulario() {
   produto.value = {
     categoria: [],
@@ -95,7 +84,6 @@ function limparFormulario() {
   }
 }
 
-// Cadastrar produto
 async function salvarProduto() {
   try {
     if (!produto.value.nome.trim()) {
@@ -124,7 +112,6 @@ async function salvarProduto() {
       return;
     }
 
-    // Enviar a imagem, se houver
     let attachmentKey = null;
 
     if (imagem.value) {
@@ -140,7 +127,6 @@ async function salvarProduto() {
       }
     }
 
-    // Enviar os dados do produto
     const dadosProduto = {
       nome: produto.value.nome.trim(),
       categoria: produto.value.categoria,
