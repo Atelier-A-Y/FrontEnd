@@ -8,6 +8,7 @@ import { useRouter } from "vue-router";
  const authStore = useAuthStore();
  const router = useRouter();
  const headerAtivo = ref(false);
+ const menuAtivo = ref(false);
 
 
  function abrirUsuario() {
