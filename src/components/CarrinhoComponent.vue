@@ -1,14 +1,14 @@
+
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import api from "../api/api";
 
 const carrinho = ref<any[]>([]);
+const mensagemSucesso = ref("");
 
 async function carregarCarrinho() {
   try {
-    const resposta = await api.get(
-      "/carrinho/"
-    );
+    const resposta = await api.get("/carrinho/");
 
     console.log("CARRINHO RECEBIDO:", resposta.data);
 
@@ -22,15 +22,15 @@ async function carregarCarrinho() {
 }
 
 async function tirarCarrinho(id: number) {
-  try{
-    await api.delete(`/carrinho/${id}/`)
+  try {
+    await api.delete(`/carrinho/${id}/`);
 
     carrinho.value = carrinho.value.filter(
-    item => item.id !== id
-  )
-  }
-  catch (erro){
-    console.error("Erro ao remover do carrinho:", erro)
+      item => item.id !== id
+    );
+
+  } catch (erro) {
+    console.error("Erro ao remover do carrinho:", erro);
   }
 }
 
@@ -41,6 +41,7 @@ async function incrementar(item: any) {
     await api.patch(`/carrinho/${item.id}/`, {
       quantidade: item.quantidade
     });
+
   } catch (erro) {
     console.error("Erro ao aumentar quantidade:", erro);
     item.quantidade--;
@@ -55,6 +56,7 @@ async function decrementar(item: any) {
       await api.patch(`/carrinho/${item.id}/`, {
         quantidade: item.quantidade
       });
+
     } catch (erro) {
       console.error("Erro ao diminuir quantidade:", erro);
       item.quantidade++;
@@ -62,19 +64,64 @@ async function decrementar(item: any) {
   }
 }
 
-function totalCompra(){
+function totalCompra() {
   return carrinho.value.reduce((total, item) => {
-    const preco = Number(item.roupa_detalhes?.preco || 0)
-    const quantidade = Number(item.quantidade || 0)
+    const preco = Number(item.roupa_detalhes?.preco || 0);
+    const quantidade = Number(item.quantidade || 0);
 
-    return total + preco * quantidade
-  }, 0)
+    return total + preco * quantidade;
+  }, 0);
 }
+
+// FINALIZAR COMPRA
+async function finalizarCompra() {
+  if (carrinho.value.length === 0) return;
+
+  try {
+    await Promise.all(
+      carrinho.value.map(item =>
+        api.delete(`/carrinho/${item.id}/`)
+      )
+    );
+
+    // Limpa o carrinho
+    carrinho.value = [];
+
+    // Exibe o alerta
+    mensagemSucesso.value = "Compra finalizada com sucesso!";
+
+  } catch (erro) {
+    console.error("Erro ao finalizar compra:", erro);
+
+    alert("Não foi possível finalizar a compra. Tente novamente.");
+  }
+}
+
 onMounted(carregarCarrinho);
 </script>
 
 <template>
   <main class="produtos">
+
+    <!-- ALERTA DE COMPRA FINALIZADA -->
+    <div v-if="mensagemSucesso" class="alerta-overlay">
+      <div class="alerta-sucesso">
+
+        <div class="icone-sucesso">
+          <span>✓</span>
+        </div>
+
+        <h2>Compra finalizada!</h2>
+
+        <p>{{ mensagemSucesso }}</p>
+
+        <button @click="mensagemSucesso = ''">
+          Entendi
+        </button>
+
+      </div>
+    </div>
+
     <section
       v-if="carrinho.length > 0"
       class="container-produtos"
@@ -93,58 +140,76 @@ onMounted(carregarCarrinho);
           class="imagem-produto"
         >
 
-      <div class="infos">
-      <h2>
-          {{ item.roupa_detalhes?.nome }}
-        </h2>
+        <div class="infos">
+          <h2>
+            {{ item.roupa_detalhes?.nome }}
+          </h2>
 
-        <p>
-          R$
-          {{ Number(item.roupa_detalhes?.preco || 0)
-            .toFixed(2)
-            .replace(".", ",") }}
-        </p>
-      </div>
+          <p>
+            R$
+            {{ Number(item.roupa_detalhes?.preco || 0)
+              .toFixed(2)
+              .replace(".", ",") }}
+          </p>
+        </div>
 
-      <div>
-      <div class="quantidade">
-        <button @click="decrementar(item)"><img src="/img/menos.png" alt="menos.png"></button>
-        <p>
-          {{ item.quantidade }}
-        </p>
-        <button @click="incrementar(item)"><img src="/img/mais.png" alt="mais.png"></button>
-       </div>
+        <div>
+          <div class="quantidade">
 
-        <button
-      class="remover-carrinho"
-      @click="tirarCarrinho(item.id)"
-    >
-      <img src="/img/delete.png" alt="delete.png">
-    </button>
-    </div>
+            <button @click="decrementar(item)">
+              <img src="/img/menos.png" alt="Diminuir">
+            </button>
+
+            <p>
+              {{ item.quantidade }}
+            </p>
+
+            <button @click="incrementar(item)">
+              <img src="/img/mais.png" alt="Aumentar">
+            </button>
+
+          </div>
+
+          <button
+            class="remover-carrinho"
+            @click="tirarCarrinho(item.id)"
+          >
+            <img src="/img/delete.png" alt="Remover produto">
+          </button>
+
+        </div>
+
       </div>
 
       <div class="total">
-      <span>Total da compra</span>
 
-      <strong>
-        R$
-        {{ totalCompra().toFixed(2).replace(".", ",") }}
-      </strong>
+        <span>Total da compra</span>
 
-      <button class="botao-finalizar">
-      Finalizar compra
-    </button>
-    </div>
+        <strong>
+          R$
+          {{ totalCompra().toFixed(2).replace(".", ",") }}
+        </strong>
+
+        <button
+          class="botao-finalizar"
+          @click="finalizarCompra"
+        >
+          Finalizar compra
+        </button>
+
+      </div>
+
     </section>
 
     <section
       v-else
       class="sem-produtos"
     >
+
       <ul>
+
         <li class="icone">
-          <img src="/img/carrinho.png">
+          <img src="/img/carrinho.png" alt="Carrinho vazio">
         </li>
 
         <li class="titulo">
@@ -165,8 +230,11 @@ onMounted(carregarCarrinho);
             </router-link>
           </button>
         </li>
+
       </ul>
+
     </section>
+
   </main>
 </template>
 
@@ -175,6 +243,113 @@ onMounted(carregarCarrinho);
   max-width: 1250px;
   margin: 0 auto;
 }
+
+/* ============================= */
+/*       ALERTA DE SUCESSO       */
+/* ============================= */
+
+.alerta-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.55);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.alerta-sucesso {
+  background-color: #fffaf6;
+  border-radius: 18px;
+
+  width: 100%;
+  max-width: 420px;
+
+  padding: 35px 25px;
+  text-align: center;
+
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+
+  animation: aparecer 0.3s ease;
+}
+
+.icone-sucesso {
+  width: 75px;
+  height: 75px;
+
+  background-color: #e1f3df;
+  color: #277c00;
+
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 0 auto 20px;
+
+  font-size: 45px;
+  font-weight: bold;
+}
+
+.alerta-sucesso h2 {
+  color: #311111;
+  font-size: 25px;
+  margin-bottom: 12px;
+}
+
+.alerta-sucesso p {
+  color: #5f5757;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+.alerta-sucesso button {
+  background-color: #311111;
+  color: #f5e9e0;
+
+  border: none;
+  border-radius: 7px;
+
+  padding: 12px 35px;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.alerta-sucesso button:hover {
+  background-color: #5a1f1f;
+  transform: scale(1.04);
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================= */
+/*        CARD DOS PRODUTOS      */
+/* ============================= */
 
 .card-produto {
   display: grid;
@@ -207,39 +382,45 @@ onMounted(carregarCarrinho);
   display: block;
 }
 
-.infos{
+.infos {
   text-align: left;
 }
 
-.infos h2{
+.infos h2 {
   color: #311111;
   font-size: 1.45rem;
   font-weight: 600;
   margin-bottom: 1vw;
 }
 
-.infos p{
+.infos p {
   font-size: 1.1vw;
   color: #277c00;
   font-weight: 600;
 }
 
+/* ============================= */
+/*          CARRINHO VAZIO       */
+/* ============================= */
+
 .sem-produtos {
   background-color: #f5e9e0;
   border: #311111 solid 0.8px;
   border-radius: 1.7rem;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   padding: 120px 30px;
   margin: 4vw 13vw 5vw 13vw;
 }
 
-ul{
+ul {
   list-style-type: none;
 }
 
-.titulo{
+.titulo {
   justify-content: center;
   color: #311111;
   font-weight: bold;
@@ -248,23 +429,41 @@ ul{
   padding-top: 1vw;
 }
 
-.remover-carrinho img{
+.icone {
+  display: flex;
+  justify-content: center;
+}
+
+li {
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================= */
+/*            BOTÕES             */
+/* ============================= */
+
+.remover-carrinho img {
   width: 1.5vw;
   height: 1.5vw;
   margin-left: 2vw;
 }
 
-.botao{
+.botao {
   background-color: #311111;
   border: none;
   border-radius: 3px;
+
   width: 160px;
   height: 35px;
+
   cursor: pointer;
   display: block;
+
   margin: 20px auto 0;
   justify-content: center;
   margin-bottom: 0.8rem;
+
   color: #f5e9e0;
   transition: 0.3s ease;
 }
@@ -278,39 +477,37 @@ ul{
   background-color: #7a2d2d;
 }
 
-li {
-  display: flex;
-  justify-content: center;
-}
-
-.icone{
-  display: flex;
-  justify-content: center;
-}
-
-img{
+img {
   width: 11vw;
   height: 11vw;
 }
 
-.quantidade{
+/* ============================= */
+/*          QUANTIDADE            */
+/* ============================= */
+
+.quantidade {
   display: flex;
   margin-bottom: 1vw;
 }
 
-.quantidade p{
+.quantidade p {
   margin: 0 1vw 0 1vw;
   margin-top: 0.4vw;
   color: rgb(95, 87, 87);
 }
 
-.quantidade img{
+.quantidade img {
   width: 1.5vw;
   height: 1.5vw;
 }
 
+/* ============================= */
+/*             TOTAL             */
+/* ============================= */
+
 .total {
-max-width: 1250px;
+  max-width: 1250px;
   margin: 2rem auto 4rem;
   padding: 1.5rem 2rem;
 
@@ -318,9 +515,6 @@ max-width: 1250px;
   border: 1px solid #dfcec4;
   border-radius: 12px;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -357,24 +551,22 @@ max-width: 1250px;
   transform: scale(1.03);
 }
 
-
 /* ============================= */
 /*        CARRINHO MOBILE        */
 /* ============================= */
 
 @media (max-width: 768px) {
+
   .produtos {
     padding: 20px 14px 35px;
     box-sizing: border-box;
   }
 
-  /* Lista de produtos */
   .container-produtos {
     margin: 0 auto;
     box-sizing: border-box;
   }
 
-  /* Card individual */
   .card-produto {
     display: grid;
     grid-template-columns: 95px minmax(0, 1fr);
@@ -399,7 +591,6 @@ max-width: 1250px;
     box-shadow: none;
   }
 
-  /* Imagem do produto */
   .imagem-produto {
     width: 95px;
     height: 125px;
@@ -411,7 +602,6 @@ max-width: 1250px;
     display: block;
   }
 
-  /* Informações do produto */
   .infos {
     min-width: 0;
     text-align: left;
@@ -438,10 +628,9 @@ max-width: 1250px;
     font-weight: 600;
   }
 
-  /* Área dos controles:
-     ocupa a segunda coluna, abaixo das informações */
   .card-produto > div:last-child {
     grid-column: 2;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -452,7 +641,6 @@ max-width: 1250px;
     align-self: end;
   }
 
-  /* Quantidade */
   .quantidade {
     display: flex;
     align-items: center;
@@ -493,7 +681,6 @@ max-width: 1250px;
     object-fit: contain;
   }
 
-  /* Remover produto */
   .remover-carrinho {
     display: flex;
     justify-content: center;
@@ -515,7 +702,8 @@ max-width: 1250px;
     object-fit: contain;
   }
 
-  /* Total da compra */
+  /* TOTAL DA COMPRA */
+
   .total {
     width: 100%;
     max-width: 100%;
@@ -571,7 +759,8 @@ max-width: 1250px;
     transform: none;
   }
 
-  /* Carrinho vazio */
+  /* CARRINHO VAZIO */
+
   .sem-produtos {
     width: 100%;
     box-sizing: border-box;
@@ -633,5 +822,21 @@ max-width: 1250px;
     text-decoration: none;
     font-size: 14px;
   }
+
+  /* ALERTA NO MOBILE */
+
+  .alerta-sucesso {
+    max-width: 100%;
+    padding: 30px 20px;
+  }
+
+  .alerta-sucesso h2 {
+    font-size: 22px;
+  }
+
+  .alerta-sucesso p {
+    font-size: 15px;
+  }
+
 }
 </style>
