@@ -101,7 +101,7 @@ async function carregarProduto() {
 }
 
 function voltarProd() {
-  router.push('/produtos')
+  router.back()
 }
 
 onMounted(async () => {

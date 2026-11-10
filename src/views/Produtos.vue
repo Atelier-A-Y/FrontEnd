@@ -27,7 +27,6 @@ const pesquisa = computed(() => String(route.query.search || ''))
 const carregando = ref(true)
 const erro = ref('')
 
-
 async function carregarProdutos() {
   carregando.value = true
   erro.value = ''
