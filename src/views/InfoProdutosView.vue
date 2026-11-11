@@ -101,7 +101,7 @@ async function carregarProduto() {
 }
 
 function voltarProd() {
-  router.back()
+  router.push('/produtos')
 }
 
 onMounted(async () => {
@@ -128,7 +128,13 @@ onMounted(async () => {
 
         <div class="detalhes">
           <p><strong>Tamanho:</strong> {{ produto.tamanho.nome }}</p>
-          <p><strong>Cor:</strong> {{ produto.cor }}</p>
+          <div class="cor-produto">
+            <p>
+              <strong>Cor:</strong>
+              <span class="nome-cor">{{ produto.cor }}</span>
+            </p>
+            <span class="amostra-cor" :style="{ backgroundColor: produto.cor_hex }"></span>
+          </div>
         </div>
 
         <div class="acoes">
@@ -241,9 +247,9 @@ onMounted(async () => {
 
 .cor-produto {
   display: flex;
-  align-items: center;
-  gap: 0.8rem;
-
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
   font-size: 1.1rem;
   color: #444;
 }
@@ -251,14 +257,14 @@ onMounted(async () => {
 .amostra-cor {
   width: 28px;
   height: 28px;
-
   border-radius: 20px;
-
   border: 1px solid rgba(49, 17, 17, 0.3);
-
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
+.nome-cor{
+  padding: 0 0 0 4px;
+}
 /* ---------------- BOTÕES ---------------- */
 
 .acoes {

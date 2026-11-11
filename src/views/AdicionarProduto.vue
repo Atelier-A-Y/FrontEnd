@@ -1,14 +1,16 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import api from "../api/api";
+import ColorPicker from "../components/ColorPicker.vue";
 
 const produto = ref({
   categoria: [],
   continente: "",
   nome: "",
   tamanho: "",
-  cor: "#311111",
+  corHex: "#311111",
   corNome: "",
+  corNomeAutomatico: "",
   preco: "",
   descricao: "",
 });
@@ -63,8 +65,9 @@ function limparFormulario() {
     continente: "",
     nome: "",
     tamanho: "",
-    cor: "#311111",
+    corHex: "#311111",
     corNome: "",
+    corNomeAutomatico: "",
     preco: "",
     descricao: "",
   };
@@ -131,8 +134,8 @@ async function salvarProduto() {
       nome: produto.value.nome.trim(),
       categoria: produto.value.categoria,
       tamanho: produto.value.tamanho,
-      cor: produto.value.corNome || produto.value.cor,
-      cor_hex: produto.value.cor,
+      cor: produto.value.corNome.trim() || produto.value.corNomeAutomatico,
+      cor_hex: produto.value.corHex,
       preco: precoNumerico.toFixed(2),
       descricao: produto.value.descricao.trim(),
       foto_attachment_key: attachmentKey,
@@ -288,19 +291,38 @@ onUnmounted(() => {
               <label>Cor do produto</label>
 
               <div class="grupo-cor">
-                <color-picker
-                  v-model:pureColor="produto.cor"
-                  @update:colorName="produto.corNome = $event"
+                <!-- Quadrinho pequeno de seleção de cor -->
+                <input
+                  type="color"
+                  v-model="produto.corHex"
+                  class="input-cor-pequeno"
                 />
 
+                <!-- Campo para o código Hex -->
                 <input
                   type="text"
                   maxlength="7"
                   placeholder="#311111"
-                  v-model="produto.cor"
+                  v-model="produto.corHex"
                   class="campo-hex"
                 />
+
+                <!-- Campo opcional para nome específico -->
+                <input
+                  type="text"
+                  maxlength="50"
+                  placeholder="Nome específico (opcional)"
+                  v-model="produto.corNome"
+                  class="campo-nome-cor"
+                />
               </div>
+
+              <!-- Componente ColorPicker oculto apenas para calcular o nome automático com base no hex -->
+              <ColorPicker
+                v-model:pureColor="produto.corHex"
+                @update:colorName="produto.corNomeAutomatico = $event"
+                style="display: none;"
+              />
             </div>
 
             <div class="input-group">
@@ -435,6 +457,15 @@ input[type="file"] {
   font-size: 0.8rem;
 }
 
+/* Estilo para o quadrinho pequeno da cor */
+.input-cor-pequeno {
+  width: 50px;
+  height: 50px;
+  padding: 0px;
+  cursor: pointer;
+  border-radius: 9vw;
+}
+
 .select-multiplo {
   height: 120px;
   padding: 0.5rem;
@@ -455,10 +486,15 @@ textarea {
 .grupo-cor {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .campo-hex {
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.campo-nome-cor {
   flex: 1;
   min-width: 0;
 }
@@ -568,8 +604,12 @@ textarea {
   }
 
   .grupo-cor {
-    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .campo-hex,
+  .campo-nome-cor {
+    width: 100%;
   }
 }
 </style>
-
