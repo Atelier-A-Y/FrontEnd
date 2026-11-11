@@ -1,3 +1,4 @@
+
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -6,6 +7,7 @@ import { getProfile, updateProfile, changePassword } from '../services/user'
 import CadastroSection from '../components/CadastroSection.vue'
 import CarrinhoComponent from '../components/CarrinhoComponent.vue'
 import FavoritosComponent from '../components/FavoritosComponent.vue'
+import api from '../api/api'
 
 type Perfil = {
   name: string
@@ -28,6 +30,10 @@ const mostrarSenhaAtual = ref(false)
 const mostrarNovaSenha = ref(false)
 const mostrarConfirmarSenha = ref(false)
 
+const pedidos = ref<any[]>([])
+const carregandoPedidos = ref(false)
+const usuarioId = ref<number | null>(null)
+
 const form = ref<Perfil>({
   name: '',
   cpf: '',
@@ -38,8 +44,12 @@ const form = ref<Perfil>({
 async function carregarUsuario() {
   try {
     const resposta: any = await getProfile()
-    // Aceita tanto serviços que retornam response.data quanto os que já retornam os dados.
-    const usuario = resposta?.data?.user ?? resposta?.data ?? resposta?.user ?? resposta
+
+    const usuario =
+      resposta?.data?.user ??
+      resposta?.data ??
+      resposta?.user ??
+      resposta
 
     if (usuario && typeof usuario === 'object') {
       form.value = {
@@ -48,14 +58,55 @@ async function carregarUsuario() {
         telefone: usuario.telefone ?? usuario.phone ?? '',
         email: usuario.email ?? ''
       }
+
+      usuarioId.value = usuario.id ? Number(usuario.id) : null
     }
   } catch (error) {
     console.error('Erro ao carregar os dados do usuário:', error)
   }
 }
 
+async function carregarPedidos() {
+  carregandoPedidos.value = true
+
+  try {
+    if (!usuarioId.value) {
+      await carregarUsuario()
+    }
+
+    if (!usuarioId.value) {
+      pedidos.value = []
+      return
+    }
+
+    const resposta = await api.get('/compras/')
+
+    const lista = Array.isArray(resposta.data)
+      ? resposta.data
+      : resposta.data.results ?? []
+
+    pedidos.value = lista.filter(
+      (compra: any) =>
+        Number(compra.user) === Number(usuarioId.value)
+    )
+
+  } catch (error) {
+    console.error('Erro ao carregar pedidos:', error)
+    pedidos.value = []
+    alert('Não foi possível carregar seus pedidos.')
+  } finally {
+    carregandoPedidos.value = false
+  }
+}
+
+async function abrirPedidos() {
+  menuAtivo.value = 'pedidos'
+  await carregarPedidos()
+}
+
 async function salvar() {
   loading.value = true
+
   try {
     await updateProfile({
       name: form.value.name,
@@ -63,11 +114,14 @@ async function salvar() {
       telefone: form.value.telefone,
       email: form.value.email
     })
+
     alert('Dados atualizados com sucesso!')
     await carregarUsuario()
+
   } catch (error) {
     console.error('Erro ao atualizar os dados:', error)
     alert('Não foi possível atualizar seus dados. Confira as informações e tente novamente.')
+
   } finally {
     loading.value = false
   }
@@ -75,6 +129,7 @@ async function salvar() {
 
 function sair() {
   if (!confirm('Deseja realmente sair da sua conta?')) return
+
   authStore.logout()
   router.push('/login')
 }
@@ -97,17 +152,21 @@ async function alterarSenha() {
     })
 
     alert('Senha alterada com sucesso!')
+
     senhaAtual.value = ''
     novaSenha.value = ''
     confirmarSenha.value = ''
     modalSenha.value = false
+
   } catch (error) {
     console.error('Erro ao alterar senha:', error)
     alert('Erro ao alterar senha. Confira se a senha atual está correta.')
   }
 }
 
-onMounted(carregarUsuario)
+onMounted(async () => {
+  await carregarUsuario()
+})
 </script>
 
 <template>
@@ -141,7 +200,7 @@ onMounted(carregarUsuario)
           class="menu-card"
           :class="{ active: menuAtivo === 'pedidos' }"
           type="button"
-          @click="menuAtivo = 'pedidos'"
+          @click="abrirPedidos"
         >
           <img
             :src="menuAtivo === 'pedidos' ? '/img/caminhao-branco.png' : '/img/caminhao.png'"
@@ -203,14 +262,41 @@ onMounted(carregarUsuario)
       </nav>
     </aside>
 
+    <!-- PEDIDOS -->
     <section v-if="menuAtivo === 'pedidos'" class="content">
       <div class="title">
         <img src="/img/caminhao.png" alt="">
         <h2>Pedidos</h2>
       </div>
-      <p class="empty-message">Seus pedidos aparecerão aqui.</p>
+
+      <p v-if="carregandoPedidos" class="empty-message">
+        Carregando seus pedidos...
+      </p>
+
+      <p v-else-if="pedidos.length === 0" class="empty-message">
+        Você ainda não possui pedidos.
+      </p>
+
+      <div v-else class="pedidos-lista">
+        <div
+          v-for="pedido in pedidos"
+          :key="pedido.id"
+          class="pedido-card"
+        >
+          <div class="pedido-icon">
+            <img src="/img/caminhao.png" alt="">
+          </div>
+
+          <div class="pedido-info">
+            <h3>Pedidos a caminho</h3>
+            <p>Pedido #{{ pedido.id }}</p>
+            <span>Seu pedido foi registrado com sucesso!</span>
+          </div>
+        </div>
+      </div>
     </section>
 
+    <!-- CADASTRO -->
     <section v-else-if="menuAtivo === 'cadastros'" class="content">
       <CadastroSection
         :form="form"
@@ -219,22 +305,27 @@ onMounted(carregarUsuario)
       />
     </section>
 
+    <!-- CARRINHO -->
     <section v-else-if="menuAtivo === 'salvos'" class="content">
       <div class="title">
         <img src="/img/bolsa-solido.png" alt="">
         <h2>Carrinho</h2>
       </div>
+
       <CarrinhoComponent />
     </section>
 
+    <!-- FAVORITOS -->
     <section v-else-if="menuAtivo === 'favoritos'" class="content">
       <div class="title">
         <img src="/img/coracao-solido.png" alt="">
         <h2>Favoritos</h2>
       </div>
+
       <FavoritosComponent />
     </section>
 
+    <!-- MODAL DE SENHA -->
     <div v-if="modalSenha" class="modal" @click.self="modalSenha = false">
       <form class="modal-content" @submit.prevent="alterarSenha">
         <h2>Alterar senha</h2>
@@ -246,8 +337,16 @@ onMounted(carregarUsuario)
             placeholder="Senha atual"
             autocomplete="current-password"
           >
-          <button type="button" :aria-label="mostrarSenhaAtual ? 'Ocultar senha atual' : 'Mostrar senha atual'" @click="mostrarSenhaAtual = !mostrarSenhaAtual">
-            <img :src="mostrarSenhaAtual ? '/img/olho-fechado.png' : '/img/olho-aberto.png'" alt="">
+
+          <button
+            type="button"
+            :aria-label="mostrarSenhaAtual ? 'Ocultar senha atual' : 'Mostrar senha atual'"
+            @click="mostrarSenhaAtual = !mostrarSenhaAtual"
+          >
+            <img
+              :src="mostrarSenhaAtual ? '/img/olho-fechado.png' : '/img/olho-aberto.png'"
+              alt=""
+            >
           </button>
         </label>
 
@@ -258,8 +357,16 @@ onMounted(carregarUsuario)
             placeholder="Nova senha"
             autocomplete="new-password"
           >
-          <button type="button" :aria-label="mostrarNovaSenha ? 'Ocultar nova senha' : 'Mostrar nova senha'" @click="mostrarNovaSenha = !mostrarNovaSenha">
-            <img :src="mostrarNovaSenha ? '/img/olho-fechado.png' : '/img/olho-aberto.png'" alt="">
+
+          <button
+            type="button"
+            :aria-label="mostrarNovaSenha ? 'Ocultar nova senha' : 'Mostrar nova senha'"
+            @click="mostrarNovaSenha = !mostrarNovaSenha"
+          >
+            <img
+              :src="mostrarNovaSenha ? '/img/olho-fechado.png' : '/img/olho-aberto.png'"
+              alt=""
+            >
           </button>
         </label>
 
@@ -270,13 +377,26 @@ onMounted(carregarUsuario)
             placeholder="Confirmar nova senha"
             autocomplete="new-password"
           >
-          <button type="button" :aria-label="mostrarConfirmarSenha ? 'Ocultar confirmação' : 'Mostrar confirmação'" @click="mostrarConfirmarSenha = !mostrarConfirmarSenha">
-            <img :src="mostrarConfirmarSenha ? '/img/olho-fechado.png' : '/img/olho-aberto.png'" alt="">
+
+          <button
+            type="button"
+            :aria-label="mostrarConfirmarSenha ? 'Ocultar confirmação' : 'Mostrar confirmação'"
+            @click="mostrarConfirmarSenha = !mostrarConfirmarSenha"
+          >
+            <img
+              :src="mostrarConfirmarSenha ? '/img/olho-fechado.png' : '/img/olho-aberto.png'"
+              alt=""
+            >
           </button>
         </label>
 
-        <button class="bnt-senha primary" type="submit">Salvar</button>
-        <button class="bnt-senha" type="button" @click="modalSenha = false">Cancelar</button>
+        <button class="bnt-senha primary" type="submit">
+          Salvar
+        </button>
+
+        <button class="bnt-senha" type="button" @click="modalSenha = false">
+          Cancelar
+        </button>
       </form>
     </div>
   </main>
@@ -480,6 +600,53 @@ onMounted(carregarUsuario)
   line-height: 1.6;
 }
 
+/* PEDIDOS */
+.pedidos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pedido-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #cbb4a7;
+  border-radius: 12px;
+  background: #FFFAF6;
+}
+
+.pedido-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #E8D5CA;
+}
+
+.pedido-icon img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.pedido-info h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.pedido-info p {
+  margin: 0 0 5px;
+}
+
+.pedido-info span {
+  color: #765d53;
+  font-size: 13px;
+}
+
 .content :deep(.cards-grid) {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -642,7 +809,7 @@ onMounted(carregarUsuario)
   color: #311111;
 }
 
-/* ================= MOBILE STYLES (INTOCADOS) ================= */
+/* ================= MOBILE STYLES ================= */
 
 @media (max-width: 768px) {
   .perfil-container {
@@ -1019,7 +1186,6 @@ onMounted(carregarUsuario)
     object-fit: contain;
   }
 
-  /* O template atual usa strong e small */
   .menu-card span {
     min-width: 0;
     display: flex;
@@ -1092,7 +1258,7 @@ onMounted(carregarUsuario)
     object-fit: contain;
   }
 
-  /* FORMULÁRIO DENTRO DO COMPONENTE FILHO */
+  /* FORMULÁRIO */
   .content :deep(.cards-grid) {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -1197,6 +1363,20 @@ onMounted(carregarUsuario)
     transform: none;
     border-radius: 8px;
     font-size: 14px;
+  }
+
+  /* PEDIDOS NO CELULAR */
+  .pedido-card {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .pedido-info h3 {
+    font-size: 16px;
+  }
+
+  .pedido-info span {
+    font-size: 12px;
   }
 }
 </style>

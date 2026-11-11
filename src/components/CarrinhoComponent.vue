@@ -74,20 +74,25 @@ function totalCompra() {
 }
 
 // FINALIZAR COMPRA
+
 async function finalizarCompra() {
   if (carrinho.value.length === 0) return;
 
   try {
+    // 1. Registra a compra no backend
+    await api.post("/compras/", {});
+
+    // 2. Exclui os produtos do carrinho
     await Promise.all(
       carrinho.value.map(item =>
         api.delete(`/carrinho/${item.id}/`)
       )
     );
 
-    // Limpa o carrinho
+    // 3. Atualiza o carrinho
     carrinho.value = [];
 
-    // Exibe o alerta
+    // 4. Exibe a mensagem de sucesso
     mensagemSucesso.value = "Compra finalizada com sucesso!";
 
   } catch (erro) {
@@ -96,6 +101,7 @@ async function finalizarCompra() {
     alert("Não foi possível finalizar a compra. Tente novamente.");
   }
 }
+
 
 onMounted(carregarCarrinho);
 </script>
