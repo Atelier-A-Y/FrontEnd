@@ -126,7 +126,7 @@ function limparFiltros() {
            >
              <input
                type="checkbox"
-               :value="categoria.id"
+               :value="categoria.nome"
                v-model="categoriasSelecionadas"
              />
              <span>{{ categoria.nome }}</span>
