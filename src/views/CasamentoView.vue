@@ -135,7 +135,7 @@ main {
 .carrossel-principal {
   position: relative;
   width: 100%;
-  height: 90vh;
+  height: 95vh;
   overflow: hidden;
 }
 

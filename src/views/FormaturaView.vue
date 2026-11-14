@@ -5,16 +5,16 @@ import { useRouter } from 'vue-router'
 
 const slides = [
   {
-    desktop: '/img/noiva2.png',
-    mobile: '/img/noiva2_mobile.jpeg',
+    desktop: '/img/formanda2.png',
+    mobile: '/img/formanda2_mobile.jpeg',
   },
   {
-    desktop: '/img/noiva3.png',
-    mobile: '/img/noiva3_mobile.jpeg',
+    desktop: '/img/formanda3.png',
+    mobile: '/img/formanda3_mobile.jpeg',
   },
   {
-    desktop: '/img/noiva4.png',
-    mobile: '/img/noiva4_mobile.jpeg',
+    desktop: '/img/formanda4.png',
+    mobile: '/img/formanda4_mobile.jpeg',
   }
 ]
 
@@ -135,7 +135,7 @@ main {
 .carrossel-principal {
   position: relative;
   width: 100%;
-  height: 90vh;
+  height: 95vh;
   overflow: hidden;
 }
 
