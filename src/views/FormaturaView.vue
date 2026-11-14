@@ -23,7 +23,7 @@ const isMobile = ref(window.innerWidth <= 768)
 const vestidos = ref<any[]>([])
 const router = useRouter();
 
-function abrirProdutos(id){
+function abrirProdutos(id: number){
   router.push(`/info_prod/${id}`)
 }
 

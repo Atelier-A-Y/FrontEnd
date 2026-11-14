@@ -260,7 +260,7 @@ onMounted(async () => {
               :alt="slide.nome"
               @error="(evento) => console.error(
                 'ERRO AO CARREGAR IMAGEM:',
-                evento.target.currentSrc
+                (evento.target as HTMLImageElement).currentSrc
               )"
               @mouseenter="showHover(slide)"
               @mouseleave="hideHover"
