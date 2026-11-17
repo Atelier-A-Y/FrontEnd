@@ -44,10 +44,16 @@ import { useRouter } from "vue-router";
  const navegacao = ref([
    { id: "1", nome: "Casamento", rota: "/casamento" },
    { id: "2", nome: "Formatura", rota: "/formatura" },
-   { id: "3", nome: "Festa", rota: "/" },
+   { id: "3", nome: "Festa", rota: "/produtos" },
    { id: "4", nome: "Madrinha", rota: "/casamento" },
-   { id: "5", nome: "Baile", rota: "/" },
+   { id: "5", nome: "Baile", rota: "/produtos" },
    { id: "6", nome: "Praia", rota: "/praia"},
+   { id: "7", nome: "Gala", rota: "/produtos"},
+   { id: "8", nome: "Ternos", rota: "/produtos"},
+   { id: "9", nome: "Debutante", rota: "/produtos"},
+   { id: "10", nome: "Curto", rota: "/produtos"},
+   { id: "11", nome: "Longo", rota: "/produtos"},
+   { id: "12", nome: "Víntage", rota: "/produtos"},
  ]);
 
 

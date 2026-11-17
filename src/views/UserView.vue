@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -9,14 +8,10 @@ import CarrinhoComponent from '../components/CarrinhoComponent.vue'
 import FavoritosComponent from '../components/FavoritosComponent.vue'
 import api from '../api/api'
 
-type Perfil = {
-  name: string
-  cpf: string
-  telefone: string
-  email: string
-}
-
-const router = useRouter()
+const fotoPerfil = ref<string | null>(null)
+const arquivoFoto = ref<File | null>(null)
+const enviandoFoto = ref<boolean>(false)
+  const router = useRouter()
 const authStore = useAuthStore()
 
 const loading = ref(false)
@@ -33,6 +28,16 @@ const mostrarConfirmarSenha = ref(false)
 const pedidos = ref<any[]>([])
 const carregandoPedidos = ref(false)
 const usuarioId = ref<number | null>(null)
+const modalFotoAberto = ref(false)
+
+function abrirModalFoto() {
+  modalFotoAberto.value = true
+}
+
+function fecharModalFoto() {
+  modalFotoAberto.value = false
+  arquivoFoto.value = null
+}
 
 const form = ref<Perfil>({
   name: '',
@@ -40,6 +45,64 @@ const form = ref<Perfil>({
   telefone: '',
   email: '',
 })
+
+function selecionarFoto(event: Event): void {
+  const input = event.target as HTMLInputElement
+  const arquivo = input.files?.[0]
+
+  if (!arquivo) return
+
+  if (!['image/jpeg', 'image/png'].includes(arquivo.type)) {
+    alert('Selecione uma imagem JPG ou PNG.')
+    input.value = ''
+    return
+  }
+
+  arquivoFoto.value = arquivo
+  fotoPerfil.value = URL.createObjectURL(arquivo)
+}
+
+async function enviarFoto(): Promise<void> {
+  if (!arquivoFoto.value) return
+
+  try {
+    enviandoFoto.value = true
+
+    const formData = new FormData()
+    formData.append('file', arquivoFoto.value)
+    formData.append('description', 'Foto de perfil')
+
+    const respostaUpload = await api.post(
+      '/media/images/',
+      formData
+    )
+
+    const attachmentKey: string = respostaUpload.data.attachment_key
+
+    const respostaPerfil = await api.patch(
+      '/usuarios/foto-perfil/',
+      { attachment_key: attachmentKey }
+    )
+
+    fotoPerfil.value = respostaPerfil.data.foto_perfil
+    arquivoFoto.value = null
+
+    alert('Foto de perfil atualizada!')
+
+  } catch (erro: unknown) {
+    console.error('Erro ao atualizar foto:', erro)
+    alert('Não foi possível atualizar a foto.')
+  } finally {
+    enviandoFoto.value = false
+  }
+}
+
+type Perfil = {
+  name: string
+  cpf: string
+  telefone: string
+  email: string
+}
 
 async function carregarUsuario() {
   try {
@@ -58,6 +121,8 @@ async function carregarUsuario() {
         telefone: usuario.telefone ?? usuario.phone ?? '',
         email: usuario.email ?? ''
       }
+
+      fotoPerfil.value = usuario.foto_perfil ?? null
 
       usuarioId.value = usuario.id ? Number(usuario.id) : null
     }
@@ -173,8 +238,11 @@ onMounted(async () => {
   <main class="perfil-container">
     <aside class="sidebar">
       <div class="welcome-card">
-        <div class="icon">
-          <img src="/img/user-solido.png" alt="Ícone do usuário">
+        <div class="icon" @click="abrirModalFoto">
+          <img
+            :src="fotoPerfil || '/img/user-solido.png'"
+            alt="Foto de perfil"
+          >
         </div>
 
         <div class="welcome-info">
@@ -184,6 +252,54 @@ onMounted(async () => {
           <div class="email-box">
             <span>{{ form.email }}</span>
           </div>
+
+          <Teleport to="body">
+  <div
+    v-if="modalFotoAberto"
+    class="modal-foto-overlay"
+    @click.self="fecharModalFoto"
+  >
+    <div class="modal-foto-conteudo">
+
+      <button
+        class="modal-foto-fechar"
+        @click="fecharModalFoto"
+        type="button"
+      >
+        &times;
+      </button>
+
+      <h2>Alterar foto de perfil</h2>
+
+      <div class="modal-foto-preview">
+        <img
+          :src="fotoPerfil || '/img/user-solido.png'"
+          alt="Prévia da foto"
+        >
+      </div>
+
+      <label class="modal-foto-escolher">
+        Escolher imagem
+        <input
+          type="file"
+          accept="image/png, image/jpeg"
+          @change="selecionarFoto"
+          hidden
+        >
+      </label>
+
+      <button
+        class="modal-foto-salvar"
+        type="button"
+        @click="enviarFoto"
+        :disabled="!arquivoFoto || enviandoFoto"
+      >
+        {{ enviandoFoto ? 'Salvando...' : 'Salvar foto' }}
+      </button>
+
+    </div>
+  </div>
+</Teleport>
 
           <button class="change-password" type="button" @click="modalSenha = true">
             Alterar senha
@@ -443,17 +559,18 @@ onMounted(async () => {
 .welcome-card .icon {
   width: 54px;
   height: 54px;
-  flex: 0 0 54px;
-  display: grid;
-  place-items: center;
+  min-width: 54px;
   border-radius: 50%;
-  background: #E8D5CA;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .welcome-card .icon img {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .welcome-info {
@@ -470,6 +587,45 @@ onMounted(async () => {
   margin: 0 0 8px;
   font-size: clamp(19px, 1.6vw, 25px);
   overflow-wrap: anywhere;
+}
+
+
+.modal-foto-overlay {
+  position: fixed !important;
+  inset: 0;
+  z-index: 99999;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.modal-foto-conteudo {
+  position: relative;
+  margin: auto;
+
+  width: 90%;
+  max-width: 430px;
+  box-sizing: border-box;
+  padding: 35px 30px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+
+  background: #F5E9E0;
+  border-radius: 15px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+}
+
+.welcome-card .icon {
+  cursor: pointer;
 }
 
 .email-box {
