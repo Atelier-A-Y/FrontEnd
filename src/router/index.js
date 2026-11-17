@@ -50,7 +50,7 @@ const routes = [
     component: () => import('../views/PraiaView.vue')
   },
   {
-    path: '/detalhesPedidos',
+    path: '/pedido/:id',
     component: () => import('../views/DetalhesPedidosView.vue')
   },
 ]

@@ -26,6 +26,10 @@ async function carregarDetalhes() {
   }
 }
 
+function voltarProd() {
+  router.back()
+}
+
 onMounted(() => {
   carregarDetalhes()
 })
@@ -33,17 +37,17 @@ onMounted(() => {
 
 <template>
   <main class="pedido-detalhe-container">
-    <button class="voltar-btn" @click="router.back()">← Voltar para pedidos</button>
+    <button class="voltar" @click="voltarProd"><img src="/public/img/flecha.png" alt="flecha"></button>
 
     <div v-if="carregando" class="loading">Carregando detalhes...</div>
 
     <div v-else-if="pedido" class="detalhe-card">
       <div class="header-status">
         <h2>Pedido #{{ pedido.id }}</h2>
-        <span class="badge-status">{{ pedido.status || 'Pedido a caminho' }}</span>
+        <span class="status">{{ pedido.status || 'Pedido a caminho' }}</span>
       </div>
 
-      <div class="info-grid">
+      <div class="info">
         <div class="info-item">
           <strong>Endereço de Entrega:</strong>
           <p>{{ pedido.endereco || 'Endereço não informado' }}</p>
@@ -81,14 +85,16 @@ onMounted(() => {
   color: #311111;
 }
 
-.voltar-btn {
-  background: transparent;
-  border: 0;
-  color: #765d53;
-  font-size: 15px;
+.voltar {
+  width: 3vw;
+  height: 2vw;
+  margin: 6vw 0 2vw -6vw;
   cursor: pointer;
-  margin-bottom: 20px;
-  font-weight: 500;
+  transition: 0.3s;
+}
+
+.voltar:hover {
+  transform: translateX(-10px);
 }
 
 .detalhe-card {
@@ -114,7 +120,7 @@ onMounted(() => {
   font-size: 26px;
 }
 
-.badge-status {
+.status {
   background: #B18A7E;
   color: #fff;
   padding: 6px 14px;
@@ -123,7 +129,7 @@ onMounted(() => {
   font-weight: 600;
 }
 
-.info-grid {
+.info {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
@@ -172,8 +178,8 @@ onMounted(() => {
 }
 
 .roupa-card-detalhe img, .sem-foto {
-  width: 60px;
-  height: 72px;
+  width: 90px;
+  height: 92px;
   object-fit: cover;
   border-radius: 6px;
   background: #fff;
