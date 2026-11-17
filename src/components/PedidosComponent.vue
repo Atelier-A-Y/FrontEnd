@@ -45,7 +45,7 @@ function formatarPreco(preco: number) {
           <div class="pedido-info">
             <div class="titulo">
               <h3>Pedido #{{ pedido.id }}</h3>
-              <span class="status">{{ pedido.status || 'Pedido a caminho' }}</span>
+              <span class="status">{{ pedido.status }}</span>
             </div>
             <p class="preco-total" v-if="pedido.preco_total !== undefined">
               <strong>Total: </strong> {{ formatarPreco(pedido.preco_total) }}
