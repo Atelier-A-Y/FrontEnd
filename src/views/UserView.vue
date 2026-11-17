@@ -7,6 +7,7 @@ import { getProfile, updateProfile, changePassword } from '../services/user'
 import CadastroSection from '../components/CadastroSection.vue'
 import CarrinhoComponent from '../components/CarrinhoComponent.vue'
 import FavoritosComponent from '../components/FavoritosComponent.vue'
+import PedidosComponent from '../components/PedidosComponent.vue'
 import api from '../api/api'
 
 type Perfil = {
@@ -264,36 +265,10 @@ onMounted(async () => {
 
     <!-- PEDIDOS -->
     <section v-if="menuAtivo === 'pedidos'" class="content">
-      <div class="title">
-        <img src="/img/caminhao.png" alt="">
-        <h2>Pedidos</h2>
-      </div>
-
-      <p v-if="carregandoPedidos" class="empty-message">
-        Carregando seus pedidos...
-      </p>
-
-      <p v-else-if="pedidos.length === 0" class="empty-message">
-        Você ainda não possui pedidos.
-      </p>
-
-      <div v-else class="pedidos-lista">
-        <div
-          v-for="pedido in pedidos"
-          :key="pedido.id"
-          class="pedido-card"
-        >
-          <div class="pedido-icon">
-            <img src="/img/caminhao.png" alt="">
-          </div>
-
-          <div class="pedido-info">
-            <h3>Pedidos a caminho</h3>
-            <p>Pedido #{{ pedido.id }}</p>
-            <span>Seu pedido foi registrado com sucesso!</span>
-          </div>
-        </div>
-      </div>
+      <PedidosComponent 
+        :pedidos="pedidos" 
+        :carregandoPedidos="carregandoPedidos" 
+      />
     </section>
 
     <!-- CADASTRO -->

@@ -49,6 +49,10 @@ const routes = [
     path: '/praia',
     component: () => import('../views/PraiaView.vue')
   },
+  {
+    path: '/detalhesPedidos',
+    component: () => import('../views/DetalhesPedidosView.vue')
+  },
 ]
 
 const router = createRouter({
