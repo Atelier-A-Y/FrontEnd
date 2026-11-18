@@ -204,7 +204,7 @@ onMounted(() => {
   .voltar {
     width: 6vw;
     height: 2vw;
-    margin: 1vw 0 0 1vw;
+    margin: 1vw 0 2vw 1vw;
   }
 }
 </style>
