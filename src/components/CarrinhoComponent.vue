@@ -195,14 +195,10 @@ onMounted(carregarCarrinho);
           R$
           {{ totalCompra().toFixed(2).replace(".", ",") }}
         </strong>
-
-        <button
-          class="botao-finalizar"
-          @click="finalizarCompra"
-        >
+  
+        <button  class="botao-finalizar" @click="$router.push('/compra')">
           Finalizar compra
         </button>
-
       </div>
 
     </section>
