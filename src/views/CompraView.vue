@@ -104,7 +104,7 @@ onMounted(carregarCarrinho);
       <section class="card-secao">
         <h2>Endereço de Entrega</h2>
         <div class="campo">
-          <label for="endereco">Rua, Número, Bairro, Cidade</label>
+          <label for="endereco">Rua e Número</label>
           <input
             id="endereco"
             v-model="endereco"
@@ -112,7 +112,7 @@ onMounted(carregarCarrinho);
             placeholder="Ex: Rua Luiz Maski, 848"
             maxlength="32"
           />
-          <small class="aviso-char">Atenção: Máximo de 32 caracteres (limite atual do banco).</small>
+          <small class="aviso-char">Atenção: Máximo de 32 caracteres.</small>
         </div>
 
         <button
@@ -379,6 +379,21 @@ hr {
 @media (max-width: 768px) {
   .compra-grid {
     grid-template-columns: 1fr;
+  }
+
+  h1{
+    text-align: center;
+  }
+
+  .voltar img{
+    margin: 1vw 0 0 4vw;
+    width: 5vw;
+    height: 5vw;
+  }
+
+  .voltar span{
+    font-size: 14px;
+    margin: 5px 0 0 0;
   }
 }
 </style>

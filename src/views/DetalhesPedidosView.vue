@@ -199,4 +199,12 @@ onMounted(() => {
   font-size: 13px;
   color: #765d53;
 }
+
+@media (max-width: 768px) {
+  .voltar {
+    width: 6vw;
+    height: 2vw;
+    margin: 1vw 0 0 1vw;
+  }
+}
 </style>
