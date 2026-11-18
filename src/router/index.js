@@ -53,6 +53,10 @@ const routes = [
     path: '/pedido/:id',
     component: () => import('../views/DetalhesPedidosView.vue')
   },
+  {
+    path: '/compra',
+    component: () => import('../views/CompraView.vue')
+  },
 ]
 
 const router = createRouter({
