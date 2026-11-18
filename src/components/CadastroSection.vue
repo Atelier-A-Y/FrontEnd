@@ -5,11 +5,29 @@ defineProps<{
     cpf: string
     telefone: string
     email: string
+    data_nascimento: string
   }
   loading: boolean
 }>()
 
 const emit = defineEmits(['salvar'])
+
+function formatarCPF(valor: string) {
+  return valor
+    .replace(/\D/g, '')
+    .slice(0, 11)
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+}
+
+function formatarData(valor: string) {
+  return valor
+    .replace(/\D/g, '')
+    .slice(0, 8)
+    .replace(/(\d{2})(\d)/, '$1/$2')
+    .replace(/(\d{2})(\d)/, '$1/$2')
+}
 </script>
 
 <template>
@@ -32,25 +50,30 @@ const emit = defineEmits(['salvar'])
             <input
             v-model="form.name"
               type="text"
-              placeholder="Ex: Julia Gabriela da Silva"
+              placeholder="Julia Gabriela da Silva"
             >
           </div>
 
           <div class="field">
             <label>CPF*</label>
             <input
-            v-model="form.cpf"
+              v-model="form.cpf"
               type="text"
-              placeholder="Ex: 000.000.000-00"
-            >
+              placeholder="000.000.000-00"
+              maxlength="14"
+              @input="form.cpf = formatarCPF(form.cpf)"
+            />
           </div>
 
           <div class="field">
             <label>Data de Nascimento</label>
             <input
+              v-model="form.data_nascimento"
               type="text"
-              placeholder="Ex: 09/07/1995"
-            >
+              placeholder="DD/MM/AAAA"
+              maxlength="10"
+              @input="form.data_nascimento = formatarData(form.data_nascimento)"
+            />
           </div>
 
           <div class="field">
@@ -58,7 +81,7 @@ const emit = defineEmits(['salvar'])
             <input
             v-model="form.telefone"
               type="text"
-              placeholder="Ex: (DD) + Número"
+              placeholder="(DD) + Número"
             >
           </div>
 
@@ -67,7 +90,7 @@ const emit = defineEmits(['salvar'])
             <input
             v-model="form.email"
               type="email"
-              placeholder="Ex: julia@gmail.com"
+              placeholder="julia@gmail.com"
             >
           </div>
 

@@ -11,7 +11,7 @@ import api from '../api/api'
 const fotoPerfil = ref<string | null>(null)
 const arquivoFoto = ref<File | null>(null)
 const enviandoFoto = ref<boolean>(false)
-  const router = useRouter()
+const router = useRouter()
 const authStore = useAuthStore()
 
 const loading = ref(false)
@@ -44,6 +44,7 @@ const form = ref<Perfil>({
   cpf: '',
   telefone: '',
   email: '',
+  data_nascimento: '',
 })
 
 function selecionarFoto(event: Event): void {
@@ -102,6 +103,7 @@ type Perfil = {
   cpf: string
   telefone: string
   email: string
+  data_nascimento: string
 }
 
 async function carregarUsuario() {
@@ -119,7 +121,10 @@ async function carregarUsuario() {
         name: usuario.name ?? usuario.nome ?? '',
         cpf: usuario.cpf ?? '',
         telefone: usuario.telefone ?? usuario.phone ?? '',
-        email: usuario.email ?? ''
+        email: usuario.email ?? '',
+        data_nascimento: usuario.data_nascimento
+  ? usuario.data_nascimento.split('-').reverse().join('/')
+  : ''
       }
 
       fotoPerfil.value = usuario.foto_perfil ?? null
@@ -177,7 +182,10 @@ async function salvar() {
       name: form.value.name,
       cpf: form.value.cpf,
       telefone: form.value.telefone,
-      email: form.value.email
+      email: form.value.email,
+      data_nascimento: form.value.data_nascimento
+  ? form.value.data_nascimento.split('/').reverse().join('-')
+  : null
     })
 
     alert('Dados atualizados com sucesso!')
@@ -378,7 +386,6 @@ onMounted(async () => {
       </nav>
     </aside>
 
-    <!-- PEDIDOS -->
     <section v-if="menuAtivo === 'pedidos'" class="content">
       <div class="title">
         <img src="/img/caminhao.png" alt="">
@@ -412,7 +419,6 @@ onMounted(async () => {
       </div>
     </section>
 
-    <!-- CADASTRO -->
     <section v-else-if="menuAtivo === 'cadastros'" class="content">
       <CadastroSection
         :form="form"
@@ -421,7 +427,6 @@ onMounted(async () => {
       />
     </section>
 
-    <!-- CARRINHO -->
     <section v-else-if="menuAtivo === 'salvos'" class="content">
       <div class="title">
         <img src="/img/bolsa-solido.png" alt="">
@@ -431,7 +436,6 @@ onMounted(async () => {
       <CarrinhoComponent />
     </section>
 
-    <!-- FAVORITOS -->
     <section v-else-if="menuAtivo === 'favoritos'" class="content">
       <div class="title">
         <img src="/img/coracao-solido.png" alt="">
@@ -441,7 +445,6 @@ onMounted(async () => {
       <FavoritosComponent />
     </section>
 
-    <!-- MODAL DE SENHA -->
     <div v-if="modalSenha" class="modal" @click.self="modalSenha = false">
       <form class="modal-content" @submit.prevent="alterarSenha">
         <h2>Alterar senha</h2>
@@ -594,14 +597,11 @@ onMounted(async () => {
   position: fixed !important;
   inset: 0;
   z-index: 99999;
-
   width: 100vw;
   height: 100vh;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   background: rgba(0, 0, 0, 0.65);
 }
 
@@ -609,10 +609,10 @@ onMounted(async () => {
   position: relative;
   margin: auto;
 
-  width: 90%;
-  max-width: 430px;
+  width: 50%;
+  max-width: 360px;
   box-sizing: border-box;
-  padding: 35px 30px;
+  padding: 25px 50px;
 
   display: flex;
   flex-direction: column;
@@ -622,6 +622,10 @@ onMounted(async () => {
   background: #F5E9E0;
   border-radius: 15px;
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+}
+
+.modal-foto-conteudo h2{
+  color: #311111;
 }
 
 .welcome-card .icon {
@@ -965,8 +969,6 @@ onMounted(async () => {
   color: #311111;
 }
 
-/* ================= MOBILE STYLES ================= */
-
 @media (max-width: 768px) {
   .perfil-container {
     width: 100%;
@@ -1044,6 +1046,41 @@ onMounted(async () => {
     margin: 8px 0;
     font-size: 23px;
     overflow-wrap: anywhere;
+  }
+
+  .modal-foto-overlay {
+    position: fixed !important;
+    inset: 0;
+    z-index: 99999;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.65);
+  }
+
+  .modal-foto-conteudo {
+    position: relative;
+    margin: auto;
+
+    width: 70%;
+    max-width: 360px;
+    box-sizing: border-box;
+    padding: 15px 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+
+    background: #F5E9E0;
+    border-radius: 10px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-foto-conteudo h2{
+    font-size: 5vw;
   }
 
   .email-box {
