@@ -245,32 +245,70 @@ function formatarPreco(preco: number) {
 }
 
 @media (max-width: 768px) {
+
   .pedido-card {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 16px;
+    padding: 14px;
+    gap: 12px;
   }
-  
+
+  .pedido-info h3 {
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .pedido-info span {
+    font-size: 10px;
+  }
+
+  .status {
+    border-radius: 20px;
+    text-align: center;
+    flex-shrink: 0;
+    margin: 0 0 0 25px;
+    padding: 6px 12px;
+  }
+
   .roupas-envolvidas {
+    display: flex;
     width: 100%;
     justify-content: flex-start;
     gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .roupas-envolvidas::-webkit-scrollbar {
+    display: none;
   }
 
   .item-roupa {
-    width: 62px;
+    width: 64px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .item-roupa img, 
   .sem-foto, 
   .extra-box {
-    width: 62px;
-    height: 76px;
+    width: 64px;
+    height: 78px;
+    object-fit: cover;
+    border-radius: 10px;
   }
 
   .roupa-nome {
-    max-width: 62px;
+    max-width: 64px;
     font-size: 11px;
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
   }
 }
+
 </style>
