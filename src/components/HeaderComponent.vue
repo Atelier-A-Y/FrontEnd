@@ -44,9 +44,16 @@ import { useRouter } from "vue-router";
  const navegacao = ref([
    { id: "1", nome: "Casamento", rota: "/casamento" },
    { id: "2", nome: "Formatura", rota: "/formatura" },
-   { id: "3", nome: "Festa", rota: "/" },
+   { id: "3", nome: "Festa", rota: "/produtos" },
    { id: "4", nome: "Madrinha", rota: "/casamento" },
-   { id: "5", nome: "Baile", rota: "/" },
+   { id: "5", nome: "Baile", rota: "/produtos" },
+   { id: "6", nome: "Praia", rota: "/praia"},
+   { id: "7", nome: "Gala", rota: "/produtos"},
+   { id: "8", nome: "Ternos", rota: "/produtos"},
+   { id: "9", nome: "Debutante", rota: "/produtos"},
+   { id: "10", nome: "Curto", rota: "/produtos"},
+   { id: "11", nome: "Longo", rota: "/produtos"},
+   { id: "12", nome: "Víntage", rota: "/produtos"},
  ]);
 
 
@@ -75,7 +82,23 @@ import { useRouter } from "vue-router";
  }
 
 
- function navegar(e: KeyboardEvent) {
+function navegar(e: KeyboardEvent) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+
+    if (resultados.value.length > 0) {
+      const indice = indexAtivo.value >= 0
+        ? indexAtivo.value
+        : 0;
+
+      abrirNavegacao(resultados.value[indice]);
+    } else {
+      pesquisarProdutos();
+    }
+
+    return;
+  }
+
   if (!resultados.value.length) return;
 
   if (e.key === "ArrowDown") {
@@ -90,15 +113,6 @@ import { useRouter } from "vue-router";
     indexAtivo.value =
       (indexAtivo.value - 1 + resultados.value.length) %
       resultados.value.length;
-
-  } else if (e.key === "Enter") {
-    e.preventDefault();
-
-    if (indexAtivo.value >= 0) {
-      abrirNavegacao(resultados.value[indexAtivo.value]);
-    } else {
-      abrirNavegacao(resultados.value[0]);
-    }
   }
 }
 
@@ -144,7 +158,6 @@ import { useRouter } from "vue-router";
            v-model="pesquisa"
            placeholder="Buscar..."
            @keydown="navegar"
-           @keyup.enter="pesquisarProdutos"
            class="search-input"
          />
          <a href="#" @click.prevent="pesquisarProdutos">
@@ -353,7 +366,6 @@ import { useRouter } from "vue-router";
  display: none;
 }
 
-
 .topo {
  position: fixed;
  top: 0;
@@ -377,14 +389,12 @@ import { useRouter } from "vue-router";
  justify-content: space-between;
 }
 
-
 .topo.scrolled {
  background: rgba(245, 230, 222, 0.95);
  backdrop-filter: blur(10px);
  box-shadow:
    0 0.2vw 1vw rgba(0, 0, 0, 0.08);
 }
-
 
 .logo {
  display: flex;
@@ -393,12 +403,10 @@ import { useRouter } from "vue-router";
  cursor: pointer;
 }
 
-
 .logo img {
  width: 60px;
  height: 80px;
 }
-
 
 .texto {
  display: flex;
@@ -406,13 +414,11 @@ import { useRouter } from "vue-router";
  justify-content: center;
 }
 
-
 .titulo {
  font-size: 12px;
  color: white;
  margin: 0;
 }
-
 
 .sigla {
  font-size: 10px;
@@ -421,12 +427,10 @@ import { useRouter } from "vue-router";
  align-self: center;
 }
 
-
 .menu {
  display: flex;
  gap: 2vw;
 }
-
 
 .menu li a {
  text-decoration: none;
@@ -435,11 +439,9 @@ import { useRouter } from "vue-router";
  transition: 0.3s;
 }
 
-
 .menu li a:hover {
  opacity: 0.7;
 }
-
 
 .submenu {
  position: absolute;
@@ -453,22 +455,18 @@ import { useRouter } from "vue-router";
  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-
 .cima {
  display: flex;
 }
-
 
 .baixo {
  display: flex;
 }
 
-
 .submenu li {
  padding: 8px 25px;
  margin-left: 1vw;
 }
-
 
 .submenu li a {
  color: #311111;
@@ -477,22 +475,20 @@ import { useRouter } from "vue-router";
  text-decoration: none;
 }
 
-
 .submenu li a:hover {
  background: #f1f1f1;
  color: #311111;
  font-weight: bold;
 }
 
-
 .search-container {
  position: relative;
  display: flex;
  align-items: center;
- width: 320px;
+ width: 190px;
  max-width: 100%;
+ margin-left: 58vw;
 }
-
 
 .search-input {
  width: 100%;
@@ -504,17 +500,14 @@ import { useRouter } from "vue-router";
  color: white;
 }
 
-
 .search-input::placeholder {
  color: rgba(255, 255, 255, 0.7);
 }
-
 
 .icon-lupa {
  width: 1.5vw;
  height: 1.5vw;
 }
-
 
 .results-list {
  position: absolute;
@@ -528,11 +521,9 @@ import { useRouter } from "vue-router";
    0 1vw 2vw rgba(0, 0, 0, 0.1);
 }
 
-
 .results-list ul {
  list-style: none;
 }
-
 
 .result-item {
  display: flex;
@@ -543,20 +534,14 @@ import { useRouter } from "vue-router";
  transition: 0.3s;
 }
 
-
 .result-item:hover,
 .result-item.ativo {
  background: #f5e9e0;
 }
 
-
 .item-icon img {
  width: 1vw;
 }
-
-
-/* ÍCONES */
-
 
 .icones {
  display: flex;
@@ -566,11 +551,9 @@ import { useRouter } from "vue-router";
  cursor: pointer;
 }
 
-
 .icones li img {
  width: 2vw;
 }
-
 
 .topo.scrolled .titulo,
 .topo.scrolled .sigla,
@@ -578,27 +561,17 @@ import { useRouter } from "vue-router";
  color: #311111;
 }
 
-
 .topo.scrolled .search-input {
  color: #311111;
-
-
  border-bottom:
    0.1vw solid #84453d;
 }
-
 
 .topo.scrolled .search-input::placeholder {
  color: rgba(49, 17, 17, 0.5);
 }
 
-
-/*========================================
-               MOBILE
-=========================================*/
-
-
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .topo{
     display: none;
   }
@@ -707,10 +680,6 @@ import { useRouter } from "vue-router";
     width: 5vw;
   }
 
-  /* ========================================
-          LUPA DO HEADER
-  ======================================== */
-
   .botao-lupa-mobile {
       display: flex;
       align-items: center;
@@ -728,10 +697,6 @@ import { useRouter } from "vue-router";
       height: 4vw;
   }
 
-  /* ========================================
-          PAINEL DE PESQUISA
-  ======================================== */
-
   .painel-pesquisa-mobile {
       position: fixed;
       top: 10vw;
@@ -743,10 +708,6 @@ import { useRouter } from "vue-router";
       overflow-y: auto;
   }
 
-  /* ========================================
-          BARRA DE PESQUISA
-  ======================================== */
-
   .barra-pesquisa-mobile {
       width: 100%;
       height: 14vw;
@@ -757,16 +718,12 @@ import { useRouter } from "vue-router";
       background: #F5E9E0;
   }
 
-  /* LUPA DENTRO DA BARRA */
-
   .lupa-barra-mobile {
       width: 4.5vw;
       height: 4.5vw;
       flex-shrink: 0;
       margin-right: 3vw;
   }
-
-  /* INPUT */
 
   .search-input-mobile {
       flex: 1;
@@ -782,11 +739,6 @@ import { useRouter } from "vue-router";
   .search-input-mobile::placeholder {
       color: #777;
   }
-
-
-  /* ========================================
-          BOTÃO X
-  ======================================== */
 
   .fechar-pesquisa-mobile {
       display: flex;
@@ -805,11 +757,6 @@ import { useRouter } from "vue-router";
       width: 5vw;
       height: 5vw;
   }
-
-
-  /* ========================================
-          RESULTADOS
-  ======================================== */
 
   .results-list-mobile {
       width: 100%;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed ,onMounted, onUnmounted } from 'vue'
 import api from '../api/api'
 import { useRouter } from 'vue-router'
 
@@ -22,6 +22,20 @@ const index = ref(0)
 const isMobile = ref(window.innerWidth <= 768)
 const vestidos = ref<any[]>([])
 const router = useRouter();
+const paginaAtual = ref(1)
+const limitePorPagina = 12
+
+const totalPaginas = ref(1)
+
+const vestidosPaginados = computed(() => {
+  const inicio = (paginaAtual.value - 1) * limitePorPagina
+
+  return vestidos.value.slice(
+    inicio,
+    inicio + limitePorPagina
+  )
+})
+
 
 function abrirProdutos(id: number){
   router.push(`/info_prod/${id}`)
@@ -29,26 +43,40 @@ function abrirProdutos(id: number){
 
 async function buscarVestidos() {
   try {
-    const resposta = await api.get(
-      '/roupas/',
-      {
-        params: {
-    categorias: 'Madrinha,Casamento'
-  }
+    const resposta = await api.get('/roupas/', {
+      params: {
+        categorias: 'Madrinha,Casamento'
       }
-    )
-
-    console.log('STATUS:', resposta.status)
-    console.log('DADOS RECEBIDOS:', resposta.data)
+    })
 
     vestidos.value = resposta.data.results || resposta.data
 
-    console.log('QUANTIDADE:', vestidos.value.length)
-    console.log('Produto recebido:', vestidos.value[0])
-    console.log('Foto recebida:', vestidos.value[0]?.foto)
+    totalPaginas.value = Math.ceil(
+      vestidos.value.length / limitePorPagina
+    )
+
+    paginaAtual.value = 1
 
   } catch (erro) {
     console.error('ERRO:', erro)
+  }
+}
+
+function mudarPagina(pagina: number) {
+  if (pagina >= 1 && pagina <= totalPaginas.value) {
+    paginaAtual.value = pagina
+  }
+}
+
+function proximaPagina() {
+  if (paginaAtual.value < totalPaginas.value) {
+    paginaAtual.value++
+  }
+}
+
+function paginaAnterior() {
+  if (paginaAtual.value > 1) {
+    paginaAtual.value--
   }
 }
 
@@ -99,7 +127,7 @@ onMounted(buscarVestidos)
     <div class="lista-vestidos">
 
       <div
-        v-for="vestido in vestidos"
+        v-for="vestido in vestidosPaginados"
         :key="vestido.id"
         class="card-vestido"
         @click="abrirProdutos(vestido.id)"
@@ -120,6 +148,32 @@ onMounted(buscarVestidos)
 
     </div>
 
+    <div class="paginacao" v-if="totalPaginas > 1">
+
+  <button
+    @click="paginaAnterior"
+    :disabled="paginaAtual === 1"
+  >
+    ❮
+  </button>
+
+  <button
+    v-for="pagina in totalPaginas"
+    :key="pagina"
+    @click="mudarPagina(pagina)"
+    :class="{ ativa: paginaAtual === pagina }"
+  >
+    {{ pagina }}
+  </button>
+
+  <button
+    @click="proximaPagina"
+    :disabled="paginaAtual === totalPaginas"
+  >
+    ❯
+  </button>
+
+</div>
   </section>
   </main>
 </template>
@@ -257,6 +311,36 @@ main {
   letter-spacing: 0.5px;
 }
 
+.paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 55px;
+}
+
+.paginacao button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #311111;
+  background: transparent;
+  color: #311111;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.paginacao button:hover,
+.paginacao button.ativa {
+  background: #311111;
+  color: #fff;
+}
+
+.paginacao button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .carrossel-principal {
     height: 65vw;
@@ -316,6 +400,17 @@ main {
   .card-vestido span {
     font-size: 0.9rem;
     padding: 0 10px 14px;
+  }
+
+  .paginacao {
+    gap: 8px;
+    margin-top: 35px;
+  }
+
+  .paginacao button {
+    width: 35px;
+    height: 35px;
+    font-size: 13px;
   }
 }
 </style>

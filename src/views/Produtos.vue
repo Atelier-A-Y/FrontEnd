@@ -4,12 +4,11 @@ import api from '../api/api'
 import { useRouter, useRoute } from 'vue-router'
 import FiltragemComponent from '../components/FiltragemComponent.vue'
 
-
 const router = useRouter()
 const route = useRoute()
-
-
 const produtos = ref([])
+const paginaAtual = ref(1)
+const produtosPorPagina = 16
 const categorias = ref([])
 const todasAsCoresFixas = ref([])
 
@@ -20,9 +19,7 @@ const filtros = ref({
  precoMaximo: '',
 })
 
-
 const pesquisa = computed(() => String(route.query.search || ''))
-
 
 const carregando = ref(true)
 const erro = ref('')
@@ -125,6 +122,24 @@ const produtosFiltrados = computed(() => {
    return precoMinimoCorreto && precoMaximoCorreto
  })
 })
+
+const totalPaginas = computed(() => {
+  return Math.ceil(produtosFiltrados.value.length / produtosPorPagina)
+})
+
+const produtosPaginados = computed(() => {
+  const inicio = (paginaAtual.value - 1) * produtosPorPagina
+  const fim = inicio + produtosPorPagina
+
+  return produtosFiltrados.value.slice(inicio, fim)
+})
+
+function mudarPagina(pagina){
+  if(pagina < 1 || pagina > totalPaginas.value) return
+
+  paginaAtual.value = pagina
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 
 async function receberFiltros(novosFiltros) {
  filtros.value = {
@@ -284,9 +299,9 @@ onMounted(() => {
      </p>
 
 
-     <section v-if="produtosFiltrados.length > 0" class="container-produtos">
+     <section v-if="produtosPaginados.length > 0" class="container-produtos">
        <article
-         v-for="item in produtosFiltrados"
+         v-for="item in produtosPaginados"
          :key="item.id"
          class="card-produto"
          @click="abrirProdutos(item.id)"
@@ -314,8 +329,34 @@ onMounted(() => {
        </article>
      </section>
 
+     <div v-if="totalPaginas > 1" class="paginacao">
 
-     <section v-else class="sem-produtos">
+  <button
+    @click="mudarPagina(paginaAtual - 1)"
+    :disabled="paginaAtual === 1"
+  >
+    ❮
+  </button>
+
+  <button
+    v-for="pagina in totalPaginas"
+    :key="pagina"
+    @click="mudarPagina(pagina)"
+    :class="{ ativa: paginaAtual === pagina }"
+  >
+    {{ pagina }}
+  </button>
+
+  <button
+    @click="mudarPagina(paginaAtual + 1)"
+    :disabled="paginaAtual === totalPaginas"
+  >
+    ❯
+  </button>
+
+</div>
+
+     <section v-else-if="produtosFiltrados.length === 0" class="sem-produtos">
        <h2>Nenhum produto encontrado.</h2>
        <p>Tente alterar ou limpar os filtros.</p>
      </section>
@@ -350,12 +391,12 @@ onMounted(() => {
     </p>
 
     <section
-      v-if="produtosFiltrados.length > 0"
+      v-if="produtosPaginados.length > 0"
       class="container-produtos-mobile"
     >
       <div
         class="card-produto-mobile"
-        v-for="item in produtosFiltrados"
+        v-for="item in produtosPaginados"
         :key="item.id"
         @click="abrirProdutos(item.id)"
       >
@@ -399,7 +440,34 @@ onMounted(() => {
       </div>
     </section>
 
-    <section v-else class="sem-produtos-mobile">
+    <div v-if="totalPaginas > 1" class="paginacao-mobile">
+
+  <button
+    @click="mudarPagina(paginaAtual - 1)"
+    :disabled="paginaAtual === 1"
+  >
+    ❮
+  </button>
+
+  <button
+    v-for="pagina in totalPaginas"
+    :key="pagina"
+    @click="mudarPagina(pagina)"
+    :class="{ ativa: paginaAtual === pagina }"
+  >
+    {{ pagina }}
+  </button>
+
+  <button
+    @click="mudarPagina(paginaAtual + 1)"
+    :disabled="paginaAtual === totalPaginas"
+  >
+    ❯
+  </button>
+
+</div>
+
+    <section v-else-if="produtosFiltrados.length === 0" class="sem-produtos-mobile">
       <h2>Nenhum produto encontrado.</h2>
       <p>Tente alterar ou limpar os filtros.</p>
     </section>
@@ -534,6 +602,34 @@ onMounted(() => {
  font-weight: 500;
 }
 
+.paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 40px auto;
+}
+
+.paginacao button {
+  background: transparent;
+  border: 1px solid #311111;
+  color: #311111;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.paginacao button:hover,
+.paginacao button.ativa {
+  background: #311111;
+  color: white;
+}
+
+.paginacao button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
 
 @media (max-width: 768px) {
   .produtos {
@@ -706,6 +802,41 @@ onMounted(() => {
   text-align: center;
   margin-top: 2rem;
   color: #311111;
+}
+
+.paginacao-mobile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 25px auto;
+  padding: 0 10px;
+}
+
+.paginacao-mobile button {
+  min-width: 35px;
+  height: 35px;
+  padding: 0 10px;
+
+  background: transparent;
+  border: 1px solid #311111;
+  border-radius: 5px;
+
+  color: #311111;
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+.paginacao-mobile button.ativa {
+  background: #311111;
+  color: white;
+}
+
+.paginacao-mobile button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 }
 </style>

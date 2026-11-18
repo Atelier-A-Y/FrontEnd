@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import api from "../../api/api"
+import { useRouter } from 'vue-router' 
 
 const slidesMobile = ref<any[]>([])
 const indexMobile = ref(0)
 const favoritosMobile = ref<number[]>([])
+const router = useRouter()
 
 async function carregarRoupasMobile() {
   try {
@@ -194,6 +196,10 @@ function getImagem(slide: any): string {
   return slide.foto.url || '/img/sem-imagem.png'
 }
 
+function abrirProdutos(id: number){
+  router.push(`/info_prod/${id}`)
+}
+
 onMounted(async () => {
   await carregarRoupasMobile()
   await carregarFavoritosMobile()
@@ -253,6 +259,7 @@ onMounted(async () => {
               opacity: i === indexMobile ? 1 : 0.45,
               zIndex: i === indexMobile ? 100 : 1
             }"
+            @click="abrirProdutos(slide.id)"
           >
             <div class="imagem-card">
               <img

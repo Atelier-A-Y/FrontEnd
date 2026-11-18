@@ -23,9 +23,9 @@
       <router-link to="/praia"><img src="/img/sunbed.png" alt="sunbed"></router-link>
     </div>
     <div class="bnt-inferiores">
-      <a href="/"><img src="/img/confetti.png" alt="confetti"></a>
-      <a href="/"><img src="/img/suit.png" alt="suit"></a>
-      <a href="/"><img src="/img/wear.png" alt="wear"></a>
+      <a href="/produtos"><img src="/img/confetti.png" alt="confetti"></a>
+      <a href="/produtos"><img src="/img/suit.png" alt="suit"></a>
+      <a href="/produtos"><img src="/img/wear.png" alt="wear"></a>
     </div>
   </div>
 </section>
